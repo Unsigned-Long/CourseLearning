@@ -1,0 +1,27 @@
+.
+├── data
+│   ├── bridges.json
+│   ├── buildings.json
+│   ├── divided_routes.json
+│   ├── island.json
+│   ├── lakes.json
+│   ├── ponds.json
+│   ├── road_segments.json
+│   ├── streams.json
+│   └── zone.json
+├── details
+│   ├── postgis_full_version.json
+│   └── WGS72_UTM14.json
+├── docs
+│   ├── mind.emmx
+│   ├── process.png
+│   └── struct.txt
+├── operations
+│   ├── create_tables.pgsql
+│   ├── inserts.pgsql
+│   ├── querys.pgsql
+│   └── querys_plus.pgsql
+└── qgis
+    └── display.qgz
+
+5 directories, 19 files

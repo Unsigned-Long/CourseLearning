@@ -1,0 +1,130 @@
+.
+├── CMakeLists.txt
+├── data
+│   ├── file_structure.txt
+│   ├── global_1d.csv
+│   ├── inter
+│   │   ├── altFile_inter.txt
+│   │   ├── gravityFile_inter.txt
+│   │   ├── layerCorrFile_inter.txt
+│   │   ├── originalGAFile_inter.txt
+│   │   ├── simpleBouguerGAFile_inter.txt
+│   │   ├── spatialCorrFile_inter.txt
+│   │   └── spatialGAFile_inter.txt
+│   ├── origin
+│   │   ├── altFile.txt
+│   │   ├── data_usa_ohio_dat_110213051620.txt.dat
+│   │   ├── gravityFile.txt
+│   │   ├── interploation
+│   │   ├── layerCorrFile.txt
+│   │   ├── originalGAFile.txt
+│   │   ├── simpleBouguerGAFile.txt
+│   │   ├── spatialCorrFile.txt
+│   │   └── spatialGAFile.txt
+│   ├── SGG-UGM-1.gfc
+│   ├── statistic.txt
+│   ├── taiwan_5m.csv
+│   ├── taiwan_ref.csv
+│   └── temp.csv
+├── docs
+│   ├── Physical geodesy_second edition.pdf
+│   ├── statistic.xlsx
+│   ├── 作业2.pdf
+│   ├── 作业3说明-地球重力场模型计算各种重力场参量与分析.pdf
+│   ├── 作业二-重力归算的归算与改正.docx
+│   ├── 第3章 地球重力场-最终版.pdf
+│   └── 第4章 重力归算.pdf
+├── images
+│   ├── arcgis
+│   │   ├── altitude.png
+│   │   ├── DisPotential.png
+│   │   ├── GeoidHeight.png
+│   │   ├── GoobalDisturbancePotential.png
+│   │   ├── GoobalGeoidHeight.png
+│   │   ├── GoobalGraDisturbance.png
+│   │   ├── GoobalGravityAnomal.png
+│   │   ├── gravityAnomal.png
+│   │   ├── gravityDis.png
+│   │   ├── gravity.png
+│   │   ├── layerCorr.png
+│   │   ├── map.png
+│   │   ├── obverSat.png
+│   │   ├── originGA.png
+│   │   ├── simpleBouguer.png
+│   │   ├── SpatialCorr.png
+│   │   └── spatialGA.png
+│   ├── excel
+│   │   ├── result.png
+│   │   └── time.png
+│   ├── pcl
+│   │   ├── 0,0.png
+│   │   ├── 1,0.png
+│   │   ├── 15,10.png
+│   │   ├── 2,0.png
+│   │   ├── 5,0.png
+│   │   ├── 5,2.png
+│   │   ├── 5,5.png
+│   │   ├── belikov_each_angle.png
+│   │   ├── belikov_loop.png
+│   │   ├── crossOrder_each_angle.png
+│   │   ├── crossOrder_loop.png
+│   │   ├── forwardColumn.png
+│   │   ├── forwardRow.png
+│   │   ├── frowardColumn_each_angle.png
+│   │   ├── frowardRow_each_angle.png
+│   │   ├── img1.png
+│   │   ├── img2.png
+│   │   ├── img3.png
+│   │   ├── img4.png
+│   │   ├── img5.png
+│   │   ├── img6.png
+│   │   ├── img7.png
+│   │   ├── r50.png
+│   │   ├── r53.png
+│   │   └── r55.png
+│   ├── python
+│   │   ├── Altitude.png
+│   │   ├── Gravity.png
+│   │   ├── LayerCorrection.png
+│   │   ├── location.png
+│   │   ├── OriginGA.png
+│   │   ├── SimpleBouguerGA.png
+│   │   ├── SpatialCorrection.png
+│   │   ├── SpatialGA.png
+│   │   └── statistic.png
+│   └── xmind
+│       ├── Gravity Anomality Part.emmx
+│       ├── gravityAnomality.png
+│       ├── GRSGravity.emmx
+│       ├── GRSGravity.png
+│       ├── Legendre Part.emmx
+│       └── legendre.png
+├── include
+│   ├── gravityAnomal.h
+│   ├── gravityField.h
+│   ├── legendre.h
+│   ├── parameter.h
+│   └── surpharmonic.h
+├── main.cpp
+├── pyDrawer
+│   ├── location.py
+│   ├── otherData.py
+│   ├── __pycache__
+│   │   └── reader.cpython-38.pyc
+│   └── reader.py
+├── readme.md
+├── src
+│   ├── gravityAnomal.cpp
+│   ├── gravityField.cpp
+│   ├── legendre.cpp
+│   ├── parameter.cpp
+│   └── surpharmonic.cpp
+└── thirdparty
+    ├── include
+    │   ├── colorPrj.h
+    │   ├── point.h
+    │   └── timer.h
+    └── lib
+        └── libcolorPrj.so
+
+17 directories, 110 files

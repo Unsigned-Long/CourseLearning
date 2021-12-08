@@ -1,0 +1,55 @@
+.
+├── data
+│   ├── class_test.xlsx
+│   ├── class_total.xlsx
+│   └── class_train.xlsx
+├── imgs
+│   ├── prj1
+│   │   ├── f01.png
+│   │   ├── f02.png
+│   │   ├── f03.png
+│   │   ├── f12.png
+│   │   ├── f13.png
+│   │   └── f23.png
+│   └── prj2
+│       ├── f25
+│       │   ├── roc_linear.png
+│       │   ├── roc_regress.png
+│       │   ├── roc_SVM.png
+│       │   ├── test_linear.png
+│       │   ├── test_regress.png
+│       │   ├── test_svm.png
+│       │   ├── train_linear.png
+│       │   ├── train_regress.png
+│       │   └── train_svm.png
+│       └── f43
+│           ├── roc_linear.png
+│           ├── roc_regress.png
+│           └── roc_svm.png
+├── log
+│   ├── codeStruct.txt
+│   ├── prj1
+│   │   ├── linear
+│   │   │   ├── kfold.txt
+│   │   │   └── random.txt
+│   │   ├── logRegress
+│   │   │   ├── kfold.txt
+│   │   │   └── random.txt
+│   │   └── svm
+│   │       ├── kfold.txt
+│   │       └── random.txt
+│   └── prj2
+│       ├── linear
+│       │   └── out.txt
+│       ├── logRegress
+│       │   └── out.txt
+│       └── svm
+│           └── out.txt
+├── main.py
+├── project1.py
+├── project2.py
+└── __pycache__
+    ├── logregress.cpython-38.pyc
+    └── project2.cpython-38.pyc
+
+16 directories, 36 files

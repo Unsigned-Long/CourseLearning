@@ -1,0 +1,20 @@
+min or pos 38.3316 -80.6483
+max or pos 39.5832 -83.4367
+min originGA -197.08183
+max originGA -38.51461
+mean originGA -92.90380520595969
+stdevp originGA 17.148267188068175
+
+min sp pos 41.1525 -83.881
+max sp pos 39.5217 -83.4882
+min spayialGA -57.3588
+max spayialGA 54.5752
+mean spayialGA -8.65432242915571
+stdevp spayialGA 18.781959150775112
+
+min sb pos 41.1525 -83.881
+max sb pos 39.5832 -83.4367
+min simBouGA -82.07751
+max simBouGA 20.76423
+mean simBouGA -39.205662196903305
+stdevp simBouGA 16.15846141380393
