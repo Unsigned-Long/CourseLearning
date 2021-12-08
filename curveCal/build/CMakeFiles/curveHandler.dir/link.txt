@@ -1,1 +1,0 @@
-/bin/x86_64-linux-gnu-g++-9 -fPIC -g  -shared -Wl,-soname,libcurveHandler.so -o libcurveHandler.so CMakeFiles/curveHandler.dir/src/handler.cpp.o   -L/home/csl/Learning/curveCal/./thirdparty/libs 

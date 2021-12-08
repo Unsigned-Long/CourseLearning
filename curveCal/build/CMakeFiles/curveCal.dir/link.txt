@@ -1,1 +1,0 @@
-/bin/x86_64-linux-gnu-g++-9  -g   CMakeFiles/curveCal.dir/main.cpp.o  -o curveCal   -L/home/csl/Learning/curveCal/./thirdparty/libs  -Wl,-rpath,/home/csl/Learning/curveCal/./thirdparty/libs:/home/csl/Learning/curveCal/build -langle libcurveHandler.so 
