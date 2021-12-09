@@ -1,0 +1,36 @@
+from 1 to 8
+1 5 6 7 8 
+cost : 13
+from 1 to 9
+1 5 9 
+cost : 5
+from 1 to 16
+1 5 9 10 11 15 16 
+cost : 14
+from 8 to 1
+8 7 3 2 1 
+cost : 13
+from 8 to 9
+8 7 11 10 9 
+cost : 9
+from 8 to 16
+8 12 16 
+cost : 4
+from 9 to 1
+9 5 1 
+cost : 5
+from 9 to 8
+9 10 11 7 8 
+cost : 9
+from 9 to 16
+9 10 11 15 16 
+cost : 9
+from 16 to 1
+16 15 11 10 9 5 1 
+cost : 14
+from 16 to 8
+16 12 8 
+cost : 4
+from 16 to 9
+16 15 11 10 9 
+cost : 9
