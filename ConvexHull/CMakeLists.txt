@@ -8,4 +8,6 @@ include_directories(./include ./thirdparty/include)
 
 aux_source_directory(./src SRC_DIR)
 
+add_library(convexhull SHARED ${SRC_DIR})
+
 add_executable(convex ./main.cpp ${SRC_DIR})
