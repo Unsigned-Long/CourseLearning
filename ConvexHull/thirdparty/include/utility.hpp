@@ -203,6 +203,31 @@ namespace ns_geo
     using RefLineString3d = RefLineString3<double>;
     using RefLineString3f = RefLineString3<float>;
     using RefLineString3i = RefLineString3<int>;
+
+    template <typename _PointType>
+    class KdTree2;
+    using KdTree2i = KdTree2<Point2i>;
+    using KdTree2f = KdTree2<Point2f>;
+    using KdTree2d = KdTree2<Point2d>;
+
+    template <typename _PointType>
+    class KdTree3;
+    using KdTree3i = KdTree3<Point3i>;
+    using KdTree3f = KdTree3<Point3f>;
+    using KdTree3d = KdTree3<Point3d>;
+
+    template <typename _PointType>
+    class RefKdTree2;
+    using RefKdTree2i = RefKdTree2<RefPoint2i>;
+    using RefKdTree2f = RefKdTree2<RefPoint2f>;
+    using RefKdTree2d = RefKdTree2<RefPoint2d>;
+
+    template <typename _PointType>
+    class RefKdTree3;
+    using RefKdTree3i = RefKdTree3<RefPoint3i>;
+    using RefKdTree3f = RefKdTree3<RefPoint3f>;
+    using RefKdTree3d = RefKdTree3<RefPoint3d>;
+
 #pragma endregion
 
 #pragma region helpers
@@ -232,44 +257,6 @@ namespace ns_geo
     std::array<_Ty, 3> stride(const Point3<_Ty> &from, const Point3<_Ty> &to)
     {
         return std::array<_Ty, 3>{to.x() - from.x(), to.y() - from.y(), to.z() - from.z()};
-    }
-
-    /**
-     * @brief calculate the azimuth according the left hand rule
-     * 
-     * @tparam _Ty the type of value
-     * @param p1 one of two points
-     * @param p2 one of two points
-     * @return float the azimuth[radian]
-     */
-    template <typename _Ty>
-    float azimuthRHR(const Point2<_Ty> &from, const Point2<_Ty> &to)
-    {
-        float detaX = to.x() - from.x();
-        float detaY = to.y() - from.y();
-        float angle = std::atan2(detaX, detaY);
-        if (detaX < 0.0)
-            angle += 2 * M_PI;
-        return angle;
-    }
-
-    /**
-     * @brief calculate the azimuth according the left hand rule
-     * 
-     * @tparam _Ty the type of value
-     * @param p1 one of two points
-     * @param p2 one of two points
-     * @return float the azimuth[radian]
-     */
-    template <typename _Ty>
-    float azimuthLHR(const Point2<_Ty> &from, const Point2<_Ty> &to)
-    {
-        float detaX = to.x() - from.x();
-        float detaY = to.y() - from.y();
-        float angle = std::atan2(detaY, detaX);
-        if (detaY < 0.0)
-            angle += 2 * M_PI;
-        return angle;
     }
 
     /**
@@ -341,6 +328,118 @@ namespace ns_geo
         float dis = std::sqrt(val1 + val2 + val3) / distance(l.p1(), l.p2());
         return dis;
     }
+
+    namespace RHandRule
+    {
+        /**
+         * @brief calculate the azimuth according the left hand rule
+         * 
+         * @tparam _Ty the type of value
+         * @param p1 one of two points
+         * @param p2 one of two points
+         * @return float the azimuth[radian]
+         */
+        template <typename _Ty>
+        float azimuth(const Point2<_Ty> &from, const Point2<_Ty> &to)
+        {
+            float detaX = to.x() - from.x();
+            float detaY = to.y() - from.y();
+            float angle = std::atan2(detaX, detaY);
+            if (detaX < 0.0)
+                angle += 2 * M_PI;
+            return angle;
+        }
+
+        /**
+         * @brief judge whether the point is at the left of the line
+         * 
+         * @tparam _Ty the template type
+         * @param p the point[2d]
+         * @param l the line[2d]
+         * @return true 
+         * @return false 
+         */
+        template <typename _Ty>
+        bool palleft(const Point2<_Ty> &p, const Line2<_Ty> &l)
+        {
+            auto v1 = stride(l.p1(), l.p2());
+            auto v2 = stride(l.p1(), p);
+            return static_cast<float>(v1[0] * v2[1] - v1[1] * v2[0]) > 0.0;
+        }
+
+        /**
+         * @brief judge whether the point is at the right of the line
+         * 
+         * @tparam _Ty the template type
+         * @param p the point[2d]
+         * @param l the line[2d]
+         * @return true 
+         * @return false 
+         */
+        template <typename _Ty>
+        bool palright(const Point2<_Ty> &p, const Line2<_Ty> &l)
+        {
+            auto v1 = stride(l.p1(), l.p2());
+            auto v2 = stride(l.p1(), p);
+            return static_cast<float>(v1[0] * v2[1] - v1[1] * v2[0]) < 0.0;
+        }
+    } // namespace RHandRule
+
+    namespace LHandRule
+    {
+        /**
+         * @brief calculate the azimuth according the left hand rule
+         * 
+         * @tparam _Ty the type of value
+         * @param p1 one of two points
+         * @param p2 one of two points
+         * @return float the azimuth[radian]
+         */
+        template <typename _Ty>
+        float azimuth(const Point2<_Ty> &from, const Point2<_Ty> &to)
+        {
+            float detaX = to.x() - from.x();
+            float detaY = to.y() - from.y();
+            float angle = std::atan2(detaY, detaX);
+            if (detaY < 0.0)
+                angle += 2 * M_PI;
+            return angle;
+        }
+
+        /**
+         * @brief judge whether the point is at the left of the line
+         * 
+         * @tparam _Ty the template type
+         * @param p the point[2d]
+         * @param l the line[2d]
+         * @return true 
+         * @return false 
+         */
+        template <typename _Ty>
+        bool palleft(const Point2<_Ty> &p, const Line2<_Ty> &l)
+        {
+            auto v1 = stride(l.p1(), l.p2());
+            auto v2 = stride(l.p1(), p);
+            return static_cast<float>(v1[0] * v2[1] - v1[1] * v2[0]) < 0.0;
+        }
+
+        /**
+         * @brief judge whether the point is at the right of the line
+         * 
+         * @tparam _Ty the template type
+         * @param p the point[2d]
+         * @param l the line[2d]
+         * @return true 
+         * @return false 
+         */
+        template <typename _Ty>
+        bool palright(const Point2<_Ty> &p, const Line2<_Ty> &l)
+        {
+            auto v1 = stride(l.p1(), l.p2());
+            auto v2 = stride(l.p1(), p);
+            return static_cast<float>(v1[0] * v2[1] - v1[1] * v2[0]) > 0.0;
+        }
+    } // namespace LHandRule
 
 #pragma endregion
 } // namespace ns_geo

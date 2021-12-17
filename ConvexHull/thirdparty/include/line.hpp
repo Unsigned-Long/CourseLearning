@@ -63,9 +63,9 @@ namespace ns_geo
 
         float length() const { return ns_geo::distance(_p1, _p2); }
 
-        float azimuthRHR() const { return ns_geo::azimuthRHR(_p1, _p2); }
+        float azimuthRHR() const { return ns_geo::RHandRule::azimuth(_p1, _p2); }
 
-        float azimuthLHR() const { return ns_geo::azimuthLHR(_p1, _p2); }
+        float azimuthLHR() const { return ns_geo::LHandRule::azimuth(_p1, _p2); }
     };
     /**
      * \brief overload operator "<<" for Line2
@@ -177,9 +177,9 @@ namespace ns_geo
 
         float length() const { return ns_geo::distance(p1(), p2()); }
 
-        float azimuthRHR() const { return ns_geo::azimuthRHR(p1(), p2()); }
+        float azimuthRHR() const { return ns_geo::RHandRule::azimuth(p1(), p2()); }
 
-        float azimuthLHR() const { return ns_geo::azimuthLHR(p1(), p2()); }
+        float azimuthLHR() const { return ns_geo::LHandRule::azimuth(p1(), p2()); }
     };
     /**
      * \brief overload operator "<<" for RefLine2
@@ -228,7 +228,7 @@ namespace ns_geo
     public:
         const refpointset_type *const refPointSet() const { return this->_rps; };
 
-        operator Line3<value_type>(){return Line3<value_type>(this->p1(), this->p2());}
+        operator Line3<value_type>() { return Line3<value_type>(this->p1(), this->p2()); }
 
         const refpoint_type &p1() const { return this->_refpointset->at(this->_pid1); }
 
