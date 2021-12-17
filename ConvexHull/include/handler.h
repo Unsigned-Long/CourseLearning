@@ -18,12 +18,11 @@ namespace ns_ch
     class ConvecHull
     {
     public:
-        static ns_geo::Polygonf genConvecHull(const ns_geo::PointSet2f &ps);
+        static std::vector<std::size_t> genIndex(const ns_geo::PointSet2f &ps);
+
+        static ns_geo::Polygonf genPolygon(const ns_geo::PointSet2f &ps);
 
     private:
         ConvecHull() = delete;
-
-    protected:
-        static bool pointAtLineRight(const ns_geo::Point2f &p, const ns_geo::Line2f &l);
     };
 } // namespace ns_ch

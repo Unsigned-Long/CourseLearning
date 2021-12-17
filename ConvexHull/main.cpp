@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
         ps.push_back({u(e), u(e)});
         opfile << ps.back().x() << ',' << ps.back().y() << std::endl;
     }
-    auto polygon = ns_ch::ConvecHull::genConvecHull(ps);
+    auto polygon = ns_ch::ConvecHull::genPolygon(ps);
     for (const auto &point : polygon)
         chfile << point.x() << ',' << point.y() << std::endl;
     opfile.close();
