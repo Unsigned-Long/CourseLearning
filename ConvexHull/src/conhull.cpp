@@ -8,7 +8,7 @@
  * 
  */
 
-#include "convex.h"
+#include "conhull.h"
 #include "stack"
 #include <set>
 

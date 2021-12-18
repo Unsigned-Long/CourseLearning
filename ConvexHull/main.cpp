@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2021
  */
 
-#include "convex.h"
+#include "conhull.h"
 #include <random>
 #include <fstream>
 
