@@ -1,4 +1,15 @@
+/**
+ * @file eqinterSearch.cpp
+ * @author csl (3079625093@qq.com)
+ * @version 0.1
+ * @date 2022-01-23
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include <iostream>
+#include <cmath>
 
 using fun_type = double (*)(double);
 
@@ -83,20 +94,29 @@ std::pair<double, double> equalIntervalSearch4(const fun_type &fun, double left,
 
 int main(int argc, char const *argv[])
 {
-    auto target = [](double x) -> double
+    auto target1 = [](double x) -> double
     {
         return 8.0 * x * x * x - 2.0 * x * x - 7.0 * x + 3.0;
     };
-    auto res1 = equalIntervalSearch3(target, 0.0, 1.0);
+    auto res1 = equalIntervalSearch3(target1, 0.0, 1.0);
     std::cout << "the result is [minpos: " << res1.first << ", minval: " << res1.second << "]\n";
 
-    auto res2 = equalIntervalSearch4(target, 0.0, 1.0);
+    auto res2 = equalIntervalSearch4(target1, 0.0, 1.0);
     std::cout << "the result is [minpos: " << res2.first << ", minval: " << res2.second << "]\n";
 
+    auto target2 = [](double x) -> double
+    {
+        return std::pow(M_E, x) - 5.0 * x;
+    };
+    auto res3 = equalIntervalSearch4(target2, 1.0, 2.0);
+    std::cout << "the result is [minpos: " << res3.first << ", minval: " << res3.second << "]\n";
+    
     /**
      * @brief output
      * the result is [minpos: 0.629787, minval: -0.203425]
      * the result is [minpos: 0.629787, minval: -0.203425]
+     * the result is [minpos: 1.60944, minval: -3.04719]
      */
     return 0;
 }
+
