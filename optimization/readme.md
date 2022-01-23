@@ -9,7 +9,7 @@
 [【上海交大】最优化方法 18讲视频教程](https://www.bilibili.com/video/BV1nx411x7dY?p=1)。  
 
 目前实现的算法有：   
-+ dichSearch.cpp   
++ [dichSearch.cpp](./src/dichSearch.cpp)   
     二分搜索算法
 
 + 
