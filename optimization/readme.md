@@ -12,4 +12,10 @@
 + [dichSearch.cpp](./src/dichSearch.cpp)   
     二分搜索算法
 
++ [eqinterSearch.cpp](./src/eqinterSearch.cpp)   
+    等分区间搜索算法
+
++ [fibonSearch.cpp](./src/fibonSearch.cpp)   
+    斐波纳切搜索算法
+
 + 
