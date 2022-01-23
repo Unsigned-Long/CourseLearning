@@ -8,7 +8,7 @@
             "name": "g++ - 生成和调试活动文件",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/csl/Learning/optimization/build/optimization_dichSearch",
+            "program": "/home/csl/Learning/CourseLearning/optimization/build/optimization_eqinterSearch",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
