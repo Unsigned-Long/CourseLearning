@@ -5,7 +5,6 @@
  * @date 2022-01-23
  * 
  * @copyright Copyright (c) 2022
- * 
  */
 
 #include <iostream>

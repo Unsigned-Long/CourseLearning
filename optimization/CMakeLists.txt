@@ -16,4 +16,6 @@ set(CMAKE_BUILD_TYPE "Debug")
 
 # add_executable(${CMAKE_PROJECT_NAME}_eqinterSearch ${CMAKE_SOURCE_DIR}/src/eqinterSearch.cpp)
 
-add_executable(${CMAKE_PROJECT_NAME}_fibonSearch ${CMAKE_SOURCE_DIR}/src/fibonSearch.cpp)
+# add_executable(${CMAKE_PROJECT_NAME}_fibonSearch ${CMAKE_SOURCE_DIR}/src/fibonSearch.cpp)
+
+add_executable(${CMAKE_PROJECT_NAME}_glodsectSearch ${CMAKE_SOURCE_DIR}/src/glodsectSearch.cpp)

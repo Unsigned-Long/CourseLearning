@@ -1,3 +1,12 @@
+/**
+ * @file glodsectSearch.cpp
+ * @author csl (3079625093@qq.com)
+ * @version 0.1
+ * @date 2022-01-24
+ * 
+ * @copyright Copyright (c) 2022
+ */
+
 #include <iostream>
 #include <cmath>
 
