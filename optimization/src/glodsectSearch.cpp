@@ -15,7 +15,7 @@ static constexpr double scalar = 0.618;
 using fun_type = double (*)(double);
 
 /**
- * @brief the gloden section search method to find the min value, using four points
+ * @brief the gloden section search method to find the min value
  * 
  * @param fun the target function
  * @param left the left boundary
