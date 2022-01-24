@@ -10,6 +10,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(CMAKE_BUILD_TYPE "Debug")
 
+find_package(Eigen3)
+
+include_directories(${EIGEN_INCLUDE_DIRS})
+
 # algorithms
 
 # add_executable(${CMAKE_PROJECT_NAME}_dichSearch ${CMAKE_SOURCE_DIR}/src/dichSearch.cpp)
@@ -18,4 +22,10 @@ set(CMAKE_BUILD_TYPE "Debug")
 
 # add_executable(${CMAKE_PROJECT_NAME}_fibonSearch ${CMAKE_SOURCE_DIR}/src/fibonSearch.cpp)
 
-add_executable(${CMAKE_PROJECT_NAME}_glodsectSearch ${CMAKE_SOURCE_DIR}/src/glodsectSearch.cpp)
+# add_executable(${CMAKE_PROJECT_NAME}_glodsectSearch ${CMAKE_SOURCE_DIR}/src/glodsectSearch.cpp)
+
+# add_executable(${CMAKE_PROJECT_NAME}_quadInter ${CMAKE_SOURCE_DIR}/src/quadInter.cpp)
+
+add_executable(${CMAKE_PROJECT_NAME}_newtonMethod ${CMAKE_SOURCE_DIR}/src/newtonMethod.cpp)
+
+
