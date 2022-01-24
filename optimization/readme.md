@@ -28,4 +28,7 @@
 + [newtonMethod.cpp](./src/newtonMethod.cpp)   
     牛顿算法
 
++ [gradDescent.cpp](./src/gradDescent.cpp)   
+    梯度下降算法
+
 + 
