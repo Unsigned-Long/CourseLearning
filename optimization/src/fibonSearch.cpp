@@ -49,10 +49,18 @@ using fun_type = double (*)(double);
 std::pair<double, double> fibonacciSearch(const fun_type &fun, double left, double right, double threshold = 1E-8, bool log = false)
 {
     auto l1 = right - left;
-    int iterCount = 0;
-    while (1.0 / fibonacci(++iterCount) > threshold)
+
+    int val1 = 1;
+    int val2 = 1;
+    int iterCount = 1;
+    while (1.0 / val2 > threshold)
     {
+        auto temp = val1 + val2;
+        val1 = val2;
+        val2 = temp;
+        ++iterCount;
     }
+
     auto l2 = fibonacci(iterCount - 1) * l1 / fibonacci(iterCount);
     if (log)
         std::cout << "the iter count is [" << iterCount << "], the l2 is [" << l2 << "]." << std::endl;
