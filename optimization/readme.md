@@ -31,4 +31,7 @@
 + [gradDescent.cpp](./src/gradDescent.cpp)   
     梯度下降算法
 
++ [fletreeConj.cpp](./src/fletreeConj.cpp)   
+    共轭梯度算法
+
 + 

@@ -28,6 +28,8 @@ include_directories(${EIGEN_INCLUDE_DIRS})
 
 # add_executable(${CMAKE_PROJECT_NAME}_newtonMethod ${CMAKE_SOURCE_DIR}/src/newtonMethod.cpp)
 
-add_executable(${CMAKE_PROJECT_NAME}_gradDescent ${CMAKE_SOURCE_DIR}/src/gradDescent.cpp)
+# add_executable(${CMAKE_PROJECT_NAME}_gradDescent ${CMAKE_SOURCE_DIR}/src/gradDescent.cpp)
+
+add_executable(${CMAKE_PROJECT_NAME}_fletreeConj ${CMAKE_SOURCE_DIR}/src/fletreeConj.cpp)
 
 
