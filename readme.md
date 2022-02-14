@@ -25,6 +25,9 @@ If this brings you substantial help, it's really great!
 + netsolver  
     课程：《测量平差》  
     描述：水准网平差计算
++ optimization
+    课程：[最优化理论](https://www.bilibili.com/video/BV1nx411x7dY?p=1)
+    描述：【上海交大】最优化方法 18讲视频教程
 + postgis  
     课程：《空间数据库》  
     描述：课程实习
@@ -40,3 +43,6 @@ If this brings you substantial help, it's really great!
 + UWBInDoor  
     课程：《室内定位》  
     描述：UWB定位算法
++ visual-slam
+    课程：视觉SLAM
+    描述：课程教材代码实践
