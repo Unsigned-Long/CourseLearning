@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/csl/Learning/CourseLearning/visual-slam/chp3-rigid-motion/src/part2-use-geometry/main.cpp
+iomanip
+-
+iostream
+-
+eigen3/Eigen/Core
+/home/csl/Learning/CourseLearning/visual-slam/chp3-rigid-motion/src/part2-use-geometry/eigen3/Eigen/Core
+eigen3/Eigen/Geometry
+/home/csl/Learning/CourseLearning/visual-slam/chp3-rigid-motion/src/part2-use-geometry/eigen3/Eigen/Geometry
+

@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/rigidmotion.dir/main.cpp.o  -o ../bin/rigidmotion 
