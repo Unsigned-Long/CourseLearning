@@ -24,11 +24,15 @@ ___E-Mail : 3079625093@qq.com___
     ├── part2-use-geometry
     │   ├── main.cpp
     │   └── output.log
-    └── part3-case
+    ├── part3-case
+    │   ├── main.cpp
+    │   └── output.log
+    └── part4-visualization
+        ├── data.csv
         ├── main.cpp
-        └── output.log
+        └── visual.png
 
-23 directories, 71 files
+26 directories, 75 files
 ```
 
 ## 2. part1-use-eigen
