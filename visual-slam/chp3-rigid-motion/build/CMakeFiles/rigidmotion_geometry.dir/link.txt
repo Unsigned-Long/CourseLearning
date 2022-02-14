@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/rigidmotion_geometry.dir/src/part2-use-geometry/main.cpp.o  -o ../bin/rigidmotion_geometry 

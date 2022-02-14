@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/rigidmotion_case.dir/src/part3-case/main.cpp.o  -o ../bin/rigidmotion_case 
