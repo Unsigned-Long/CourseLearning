@@ -1,4 +1,4 @@
-# Chp1-pre-slam
+# chp2-pre-slam
 
 ___Author : csl___
 
@@ -82,12 +82,12 @@ the file system of this project named '[preslam]()':
 
 #include <iostream>
 
-namespace ns_chp1 {
+namespace ns_chp2 {
 /**
  * @brief a no-return function to print "hello, slam!"
  */
 void hello_slam();
-}  // namespace ns_chp1
+}  // namespace ns_chp2
 ```
 
 + [helloslam.cpp](./src/helloslam.cpp)
@@ -95,13 +95,13 @@ void hello_slam();
 ```cpp
 #include "helloslam.h"
 
-namespace ns_chp1 {
+namespace ns_chp2 {
 void hello_slam() {
   // print "Hello, slam!"
   std::cout << "Hello, slam!" << std::endl;
   return;
 }
-}  // namespace ns_chp1
+}  // namespace ns_chp2
 ```
 
 + [main.cpp](./main.cpp)
@@ -111,7 +111,7 @@ void hello_slam() {
 
 int main(int argc, char const *argv[]) {
   // call 'hello_slam'
-  ns_chp1::hello_slam();
+  ns_chp2::hello_slam();
   return 0;
 }
 ```
