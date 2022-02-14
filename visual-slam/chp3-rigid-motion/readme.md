@@ -279,7 +279,55 @@ void exp_case() {
 the result is: -0.0309731    0.73499   0.296108
 ```
 
-## 5. Cmake
+## 5. part4-visualization
+
+
+
+### 1. [source code](./src/part4-visualization/main.cpp)
+
+```cpp
+void visualization() {
+  auto data =
+      CSV_READ_FILE("../src/part4-visualization/data.csv", ' ', Item, double,
+                    double, double, double, double, double, double, double);
+  std::cout << std::fixed << std::setprecision(5);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(
+      new pcl::PointCloud<pcl::PointXYZ>());
+
+  pcl::visualization::PCLVisualizer viewer("win");
+  viewer.setSize(1000, 640);
+  viewer.setBackgroundColor(255, 255, 255);
+  viewer.setPointCloudRenderingProperties(
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 4, "cloud");
+
+  for (const auto &elem : data) {
+    Eigen::Vector3d pos(elem.tx(), elem.ty(), elem.tz());
+    Eigen::Quaterniond q(elem.qw(), elem.qx(), elem.qy(), elem.qz());
+    q.normalize();
+    Eigen::Isometry3d T(q);
+    T.pretranslate(pos);
+
+    viewer.addCoordinateSystem(0.04, Eigen::Affine3f(T.cast<float>().affine()));
+
+    cloud->push_back(pcl::PointXYZ(elem.tx(), elem.ty(), elem.tz()));
+    std::cout << "{'t': " << elem.time() << ", 'pos': " << cloud->back()
+              << "}\n";
+  }
+  viewer.addPointCloud(cloud, "cloud");
+  while (!viewer.wasStopped()) {
+    viewer.spin();
+  }
+  return;
+}
+```
+
+
+
+### 2. [output](./src/part4-visualization/visual.png)
+
+<img src= "./src/part4-visualization/visual.png">
+
+## 6. Cmake
 
 ```cmake
 cmake_minimum_required(VERSION 3.10)
@@ -290,16 +338,20 @@ find_package(Eigen3)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
+find_package(PCL 1.3 REQUIRED COMPONENTS common io visualization)
+
 add_executable(${CMAKE_PROJECT_NAME}_eigen ${CMAKE_SOURCE_DIR}/src/part1-use-eigen/main.cpp)
-
-add_executable(${CMAKE_PROJECT_NAME}_geometry ${CMAKE_SOURCE_DIR}/src/part2-use-geometry/main.cpp)
-
-add_executable(${CMAKE_PROJECT_NAME}_case ${CMAKE_SOURCE_DIR}/src/part3-case/main.cpp)
-
 target_include_directories(${CMAKE_PROJECT_NAME}_eigen PRIVATE ${EIGEN_INCLUDE_DIRS})
 
+add_executable(${CMAKE_PROJECT_NAME}_geometry ${CMAKE_SOURCE_DIR}/src/part2-use-geometry/main.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME}_geometry PRIVATE ${EIGEN_INCLUDE_DIRS})
 
+add_executable(${CMAKE_PROJECT_NAME}_case ${CMAKE_SOURCE_DIR}/src/part3-case/main.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME}_case PRIVATE ${EIGEN_INCLUDE_DIRS})
+
+add_definitions(${PCL_DEFINITIONS})
+add_executable(${CMAKE_PROJECT_NAME}_visual ${CMAKE_SOURCE_DIR}/src/part4-visualization/main.cpp)
+target_include_directories(${CMAKE_PROJECT_NAME}_visual PRIVATE ${EIGEN_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
+target_link_libraries(${CMAKE_PROJECT_NAME}_visual PRIVATE ${PCL_LIBRARIES})
 ```
 
