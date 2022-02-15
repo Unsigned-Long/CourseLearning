@@ -17,7 +17,6 @@ target_include_directories(${CMAKE_PROJECT_NAME}_geometry PRIVATE ${EIGEN_INCLUD
 add_executable(${CMAKE_PROJECT_NAME}_case ${CMAKE_SOURCE_DIR}/src/part3-case/main.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME}_case PRIVATE ${EIGEN_INCLUDE_DIRS})
 
-add_definitions(${PCL_DEFINITIONS})
 add_executable(${CMAKE_PROJECT_NAME}_visual ${CMAKE_SOURCE_DIR}/src/part4-visualization/main.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME}_visual PRIVATE ${EIGEN_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 target_link_libraries(${CMAKE_PROJECT_NAME}_visual PRIVATE ${PCL_LIBRARIES})
