@@ -1,0 +1,25 @@
+[ test for 'SeqList' ]
+
+SeqList: {'len': 0, 'max-len': 2, 'elem(s)': []}
+SeqList: {'len': 2, 'max-len': 2, 'elem(s)': [13, 12]}
+SeqList: {'len': 3, 'max-len': 4, 'elem(s)': [16, 13, 12]}
+SeqList: {'len': 2, 'max-len': 4, 'elem(s)': [13, 12]}
+the elem I get at '0' is: 13
+the elem '12' is at: 1
+12 has prior elem equals to 13
+12 hasn't next elem
+SeqList: {'len': 2, 'max-len': 4, 'elem(s)': [26, 24]}
+SeqList: {'len': 0, 'max-len': 4, 'elem(s)': []}
+
+[ test for 'LinkList' ]
+
+LinkList: {'len': 0, 'elem(s)': []}
+LinkList: {'len': 2, 'elem(s)': [13, 12]}
+LinkList: {'len': 3, 'elem(s)': [16, 13, 12]}
+LinkList: {'len': 2, 'elem(s)': [13, 12]}
+the elem I get at '0' is: 13
+the elem '12' is at: 1
+12 has prior elem equals to 13
+12 hasn't next elem
+LinkList: {'len': 2, 'elem(s)': [26, 24]}
+LinkList: {'len': 0, 'elem(s)': []}
