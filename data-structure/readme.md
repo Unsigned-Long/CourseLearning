@@ -201,3 +201,46 @@ Stack: {'len': 0, 'elem(s)': []}
 now the stack is empty? (true)
 ```
 
+### 4. queue
+
+test case
+
+```cpp
+void test_queue() {
+  ns_ds::Queue<int> q;
+  q.push(12);
+  q.push(2);
+  q.push(1);
+  q.push(9);
+  q.status();
+
+  q.pop();
+  q.pop();
+  q.status();
+  int head;
+  q.head(head);
+  std::cout << "now the head elem is: " << head << '\n';
+
+  q.traverse([](int &val) { val *= 2; });
+  q.status();
+
+  q.clear();
+  q.status();
+
+  std::cout << "now the queue is empty? (" << std::boolalpha << q.empty() << ")\n";
+}
+```
+
+outptu
+
+```cpp
+[ test for 'Queue' ]
+
+Queue: {'len': 4, 'elem(s)': [12, 2, 1, 9]}
+Queue: {'len': 2, 'elem(s)': [1, 9]}
+now the head elem is: 1
+Queue: {'len': 2, 'elem(s)': [2, 18]}
+Queue: {'len': 0, 'elem(s)': []}
+now the queue is empty? (true)
+```
+
