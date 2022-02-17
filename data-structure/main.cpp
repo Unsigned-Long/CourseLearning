@@ -1,6 +1,8 @@
+#include "Queue.h"
 #include "linklist.h"
 #include "seqlist.h"
 #include "stack.h"
+
 void test_seqlist() {
   ns_ds::SqeList<int> l(2);
   l.status();
@@ -37,7 +39,7 @@ void test_seqlist() {
     std::cout << "12 hasn't next elem" << std::endl;
   }
 
-  l.traverse([](int& val) { val *= 2; });
+  l.traverse([](int &val) { val *= 2; });
   l.status();
 
   l.clear();
@@ -81,14 +83,38 @@ void test_linklist() {
     std::cout << "12 hasn't next elem" << std::endl;
   }
 
-  l.traverse([](int& val) { val *= 2; });
+  l.traverse([](int &val) { val *= 2; });
   l.status();
 
   l.clear();
   l.status();
 }
 
-void test_stack(){
+void test_queue() {
+  ns_ds::Queue<int> q;
+  q.push(12);
+  q.push(2);
+  q.push(1);
+  q.push(9);
+  q.status();
+
+  q.pop();
+  q.pop();
+  q.status();
+  int head;
+  q.head(head);
+  std::cout << "now the head elem is: " << head << '\n';
+
+  q.traverse([](int &val) { val *= 2; });
+  q.status();
+
+  q.clear();
+  q.status();
+
+  std::cout << "now the queue is empty? (" << std::boolalpha << q.empty() << ")\n";
+}
+
+void test_stack() {
   ns_ds::Stack<int> s;
   s.push(12);
   s.push(2);
@@ -110,15 +136,16 @@ void test_stack(){
   s.status();
 
   std::cout << "now the stack is empty? (" << std::boolalpha << s.empty() << ")\n";
-
 }
 
-int main(int argc, char const* argv[]) {
+int main(int argc, char const *argv[]) {
   std::cout << "[ test for 'SeqList' ]\n\n";
   test_seqlist();
   std::cout << "\n[ test for 'LinkList' ]\n\n";
   test_linklist();
   std::cout << "\n[ test for 'Stack' ]\n\n";
   test_stack();
+  std::cout << "\n[ test for 'Queue' ]\n\n";
+  test_queue();
   return 0;
 }
