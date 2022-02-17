@@ -140,7 +140,7 @@ void test_linklist() {
 }
 ```
 
-outptu
+output
 
 ```cpp
 [ test for 'LinkList' ]
@@ -155,5 +155,49 @@ the elem '12' is at: 1
 12 hasn't next elem
 LinkList: {'len': 2, 'elem(s)': [26, 24]}
 LinkList: {'len': 0, 'elem(s)': []}
+```
+
+### 3. stack
+
+test case
+
+```cpp
+void test_stack(){
+  ns_ds::Stack<int> s;
+  s.push(12);
+  s.push(2);
+  s.push(1);
+  s.push(9);
+  s.status();
+
+  s.pop();
+  s.pop();
+  s.status();
+  int top;
+  s.top(top);
+  std::cout << "now the top elem is: " << top << '\n';
+
+  s.traverse([](int &val) { val *= 2; });
+  s.status();
+
+  s.clear();
+  s.status();
+
+  std::cout << "now the stack is empty? (" << std::boolalpha << s.empty() << ")\n";
+
+}
+```
+
+output
+
+```cpp
+[ test for 'Stack' ]
+
+Stack: {'len': 4, 'elem(s)': [12, 2, 1, 9]}
+Stack: {'len': 2, 'elem(s)': [12, 2]}
+now the top elem is: 2
+Stack: {'len': 2, 'elem(s)': [24, 4]}
+Stack: {'len': 0, 'elem(s)': []}
+now the stack is empty? (true)
 ```
 
