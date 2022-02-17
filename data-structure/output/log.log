@@ -23,3 +23,12 @@ the elem '12' is at: 1
 12 hasn't next elem
 LinkList: {'len': 2, 'elem(s)': [26, 24]}
 LinkList: {'len': 0, 'elem(s)': []}
+
+[ test for 'Stack' ]
+
+Stack: {'len': 4, 'elem(s)': [12, 2, 1, 9]}
+Stack: {'len': 2, 'elem(s)': [12, 2]}
+now the top elem is: 2
+Stack: {'len': 2, 'elem(s)': [24, 4]}
+Stack: {'len': 0, 'elem(s)': []}
+now the stack is empty? (true)
