@@ -43,10 +43,9 @@ namespace ns_ds {
           break;
         }
       } else {
-        if (j == 0) {
-          ++i;
-        } else {
-          j = next[j];
+        j = next[j];
+        if (j == -1) {
+          ++i, j = 0;
         }
       }
     }
