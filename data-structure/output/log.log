@@ -1,4 +1,7 @@
-[ test for 'SeqList' ]
+i   j   next
+0   0   0
+1   1   1
+2   1[ test for 'SeqList' ]
 
 SeqList: {'len': 0, 'max-len': 2, 'elem(s)': []}
 SeqList: {'len': 2, 'max-len': 2, 'elem(s)': [13, 12]}
@@ -41,3 +44,15 @@ now the head elem is: 1
 Queue: {'len': 2, 'elem(s)': [2, 18]}
 Queue: {'len': 0, 'elem(s)': []}
 now the queue is empty? (true)
+
+[ test for 'BF' ]
+
+SeqList: {'len': 13, 'max-len': 13, 'elem(s)': [s, t, a, r, t, e, n, d, e, n, g, o, k]}
+SeqList: {'len': 3, 'max-len': 3, 'elem(s)': [e, n, g]}
+the pos is at: 8
+
+[ test for 'KMP' ]
+
+SeqList: {'len': 13, 'max-len': 13, 'elem(s)': [s, t, a, r, t, e, n, d, e, n, g, o, k]}
+SeqList: {'len': 3, 'max-len': 3, 'elem(s)': [e, n, g]}
+the pos is at: 8

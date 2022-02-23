@@ -1,3 +1,5 @@
+#include "BF.h"
+#include "KMP.h"
 #include "Queue.h"
 #include "linklist.h"
 #include "seqlist.h"
@@ -138,6 +140,26 @@ void test_stack() {
   std::cout << "now the stack is empty? (" << std::boolalpha << s.empty() << ")\n";
 }
 
+void test_BF() {
+  const char *chr1 = "startendengok";
+  ns_ds::char_stream str1(chr1, 13);
+  str1.status();
+  const char *chr2 = "eng";
+  ns_ds::char_stream str2(chr2, 3);
+  str2.status();
+  std::cout << "the pos is at: " << ns_ds::matchBF(str1, str2, 3) << std::endl;
+}
+
+void test_KMP() {
+  const char *chr1 = "startendengok";
+  ns_ds::char_stream str1(chr1, 13);
+  str1.status();
+  const char *chr2 = "eng";
+  ns_ds::char_stream str2(chr2, 3);
+  str2.status();
+  std::cout << "the pos is at: " << ns_ds::matchKMP(str1, str2, 3) << std::endl;
+}
+
 int main(int argc, char const *argv[]) {
   std::cout << "[ test for 'SeqList' ]\n\n";
   test_seqlist();
@@ -147,5 +169,9 @@ int main(int argc, char const *argv[]) {
   test_stack();
   std::cout << "\n[ test for 'Queue' ]\n\n";
   test_queue();
+  std::cout << "\n[ test for 'BF' ]\n\n";
+  test_BF();
+  std::cout << "\n[ test for 'KMP' ]\n\n";
+  test_KMP();
   return 0;
 }

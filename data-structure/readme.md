@@ -244,3 +244,58 @@ Queue: {'len': 0, 'elem(s)': []}
 now the queue is empty? (true)
 ```
 
+### 5. BM && KMP
+
+#### a. BM
+
+test case
+
+```cpp
+void test_BF() {
+  const char *chr1 = "startendengok";
+  ns_ds::char_stream str1(chr1, 13);
+  str1.status();
+  const char *chr2 = "eng";
+  ns_ds::char_stream str2(chr2, 3);
+  str2.status();
+  std::cout << "the pos is at: " << ns_ds::matchBF(str1, str2, 3) << std::endl;
+}
+```
+
+outptu
+
+```cpp
+
+[ test for 'BF' ]
+
+SeqList: {'len': 13, 'max-len': 13, 'elem(s)': [s, t, a, r, t, e, n, d, e, n, g, o, k]}
+SeqList: {'len': 3, 'max-len': 3, 'elem(s)': [e, n, g]}
+the pos is at: 8
+```
+
+#### b. KMP
+
+test case
+
+```cpp
+void test_KMP() {
+  const char *chr1 = "startendengok";
+  ns_ds::char_stream str1(chr1, 13);
+  str1.status();
+  const char *chr2 = "eng";
+  ns_ds::char_stream str2(chr2, 3);
+  str2.status();
+  std::cout << "the pos is at: " << ns_ds::matchKMP(str1, str2, 3) << std::endl;
+}
+```
+
+```cpp
+[ test for 'KMP' ]
+
+SeqList: {'len': 13, 'max-len': 13, 'elem(s)': [s, t, a, r, t, e, n, d, e, n, g, o, k]}
+SeqList: {'len': 3, 'max-len': 3, 'elem(s)': [e, n, g]}
+the pos is at: 8
+```
+
+
+
