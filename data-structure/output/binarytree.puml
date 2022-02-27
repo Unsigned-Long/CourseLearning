@@ -1,0 +1,17 @@
+@startmindmap BinaryTree
+skinparam DefaultFontName "Ubuntu Mono"
+scale 20
+* A
+** ^
+** B
+*** D
+**** F
+***** F
+***** ^
+**** E
+***** G
+***** E
+****** G
+****** ^
+*** C
+@endmindmap

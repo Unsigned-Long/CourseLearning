@@ -1,7 +1,4 @@
-i   j   next
-0   0   0
-1   1   1
-2   1[ test for 'SeqList' ]
+[ test for 'SeqList' ]
 
 SeqList: {'len': 0, 'max-len': 2, 'elem(s)': []}
 SeqList: {'len': 2, 'max-len': 2, 'elem(s)': [13, 12]}
@@ -56,3 +53,25 @@ the pos is at: 8
 SeqList: {'len': 13, 'max-len': 13, 'elem(s)': [s, t, a, r, t, e, n, d, e, n, g, o, k]}
 SeqList: {'len': 3, 'max-len': 3, 'elem(s)': [e, n, g]}
 the pos is at: 8
+
+[ test for 'Binary Tree' ]
+
+A B C D E E G G F F 
+@startmindmap BinaryTree
+skinparam DefaultFontName "Ubuntu Mono"
+scale 20
+* A
+** ^
+** B
+*** D
+**** F
+***** F
+***** ^
+**** E
+***** G
+***** E
+****** G
+****** ^
+*** C
+@endmindmap
+
