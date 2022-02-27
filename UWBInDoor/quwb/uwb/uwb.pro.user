@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 5.0.0, 2021-11-05T17:17:30. -->
+<!-- Written by QtCreator 5.0.0, 2022-02-25T23:38:52. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -235,9 +235,8 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">uwb2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/csl/StudyCPP/UWBInDoor/quwb/uwb/uwb.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/csl/StudyCPP/UWBInDoor/quwb/uwb/uwb.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/csl/Learning/CourseLearning/UWBInDoor/quwb/uwb/uwb.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/csl/Learning/CourseLearning/UWBInDoor/quwb/uwb/uwb.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
