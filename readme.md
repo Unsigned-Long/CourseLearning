@@ -42,26 +42,27 @@ If this brings you substantial help, it's really great!
     课程：[《最优化理论》](https://www.bilibili.com/video/BV1nx411x7dY?p=1)     
     描述：【上海交大】最优化方法 18讲视频教程
     
++ [PDR](./PDR)
+
+    课程：《位置服务与实践》
+
+    描述：行人航迹推算
+
 + [postgis](./postgis/)  
     课程：《空间数据库》  
     描述：课程实习
-    
 + [PyGeo](./PyGeo/)  
     课程：《物理大地测量学》  
     描述：三次课程实习
-    
 + [resectionForInDoor](./resectionForInDoor/)  
     课程：《室内定位》  
     描述：基于视觉的定位算法
-    
 + [tinCreator](./tinCreator/)  
     课程：《空间可视化》  
     描述：TIN不规则三角网生成算法
-    
 + [UWBInDoor](./UWBInDoor/) 
     课程：《室内定位》  
     描述：UWB定位算法
-    
 + [visual-slam](./visual-slam/)   
     课程：视觉SLAM
     描述：课程教材代码实践

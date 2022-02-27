@@ -18,38 +18,38 @@ Based on the Android operating system, this project uses Java as the development
 
 ### 1. Coordinate system
 
-![image-20220227162648402](/home/csl/.config/Typora/typora-user-images/image-20220227162648402.png)
+![image-20220227162648402](./imgs/image-20220227162648402.png)
 
 ### 2. Calculate azimuth
 
 The calculation of azimuth mainly depends on the accelerometer and magnetometer inside the mobile phone:
 
-![image-20220227162605911](/home/csl/.config/Typora/typora-user-images/image-20220227162605911.png)
+![image-20220227162605911](./imgs/image-20220227162605911.png)
 
-![image-20220227162728437](/home/csl/.config/Typora/typora-user-images/image-20220227162728437.png)
+![image-20220227162728437](./imgs/image-20220227162728437.png)
 
 ### 3. Smoothing of acceleration
 
 We use HMA algorithm for smoothing：
 
-![image-20220227162911094](/home/csl/.config/Typora/typora-user-images/image-20220227162911094.png)
+![image-20220227162911094](./imgs/image-20220227162911094.png)
 
-![image-20220227163156318](/home/csl/.config/Typora/typora-user-images/image-20220227163156318.png)
+![image-20220227163156318](./imgs/image-20220227163156318.png)
 
-![image-20220227163220965](/home/csl/.config/Typora/typora-user-images/image-20220227163220965.png)
+![image-20220227163220965](./imgs/image-20220227163220965.png)
 
 ### 4. Azimuth smoothing
 
 We use the EMA algorithm：
 
-![image-20220227163002138](/home/csl/.config/Typora/typora-user-images/image-20220227163002138.png)
+![image-20220227163002138](./imgs/image-20220227163002138.png)
 
-![image-20220227163311276](/home/csl/.config/Typora/typora-user-images/image-20220227163311276.png)
+![image-20220227163311276](./imgs/image-20220227163311276.png)
 
 ### 5. SF-SL Model
 
-![image-20220227163353243](/home/csl/.config/Typora/typora-user-images/image-20220227163353243.png)
+![image-20220227163353243](./imgs/image-20220227163353243.png)
 
 ## 3. Result
 
-![image-20220227163120486](/home/csl/.config/Typora/typora-user-images/image-20220227163120486.png)
+![image-20220227163120486](./imgs/image-20220227163120486.png)
