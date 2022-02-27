@@ -1,7 +1,8 @@
 #include "BF.h"
 #include "KMP.h"
-#include "Queue.h"
+#include "binarytree.h"
 #include "linklist.h"
+#include "queue.h"
 #include "seqlist.h"
 #include "stack.h"
 
@@ -160,6 +161,23 @@ void test_KMP() {
   std::cout << "the pos is at: " << ns_ds::matchKMP(str1, str2, 3) << std::endl;
 }
 
+void test_btree() {
+  ns_ds::BinaryTree<char> bt('A');
+  auto B = bt.insertLeftChild('B');
+  B->insertLeftChild('C');
+  auto D = B->insertRightChild('D');
+  D->insertLeftChild('E')->insertRightChild('G');
+  D->insertRightChild('F');
+  D->insertLeftChild('E')->insertRightChild('G');
+  D->insertRightChild('F');
+  bt.traverse([](char &val) {
+    std::cout << val << ' ';
+  });
+  std::cout << '\n'
+            << bt.toPlantUML() << std::endl;
+  return;
+}
+
 int main(int argc, char const *argv[]) {
   std::cout << "[ test for 'SeqList' ]\n\n";
   test_seqlist();
@@ -173,5 +191,7 @@ int main(int argc, char const *argv[]) {
   test_BF();
   std::cout << "\n[ test for 'KMP' ]\n\n";
   test_KMP();
+  std::cout << "\n[ test for 'Binary Tree' ]\n\n";
+  test_btree();
   return 0;
 }

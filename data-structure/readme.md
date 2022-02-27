@@ -297,5 +297,55 @@ SeqList: {'len': 3, 'max-len': 3, 'elem(s)': [e, n, g]}
 the pos is at: 8
 ```
 
+### 6. Binary Tree
 
+test case
+
+```cpp
+void test_btree() {
+  ns_ds::BinaryTree<char> bt('A');
+  auto B = bt.insertLeftChild('B');
+  B->insertLeftChild('C');
+  auto D = B->insertRightChild('D');
+  D->insertLeftChild('E')->insertRightChild('G');
+  D->insertRightChild('F');
+  D->insertLeftChild('E')->insertRightChild('G');
+  D->insertRightChild('F');
+  bt.traverse([](char &val) {
+    std::cout << val << ' ';
+  });
+  std::cout << '\n'
+            << bt.toPlantUML() << std::endl;
+  return;
+}
+```
+
+output
+
+```cpp
+[ test for 'Binary Tree' ]
+
+A B C D E E G G F F 
+@startmindmap BinaryTree
+skinparam DefaultFontName "Ubuntu Mono"
+scale 20
+* A
+** ^
+** B
+*** D
+**** F
+***** F
+***** ^
+**** E
+***** G
+***** E
+****** G
+****** ^
+*** C
+@endmindmap
+```
+
+images
+
+<img src="./imgs/BinaryTree.png">
 
