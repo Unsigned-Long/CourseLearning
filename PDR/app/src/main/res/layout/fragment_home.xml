@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/LinearLayout_padding">
+
+            <TextView
+                android:id="@+id/time_display"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/TextView_height"
+
+                android:background="@drawable/my_norm_border"
+                android:fontFamily="@font/ubuntu_mono"
+
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/time_display"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_start"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="@dimen/margin_small"
+
+                    android:layout_weight="1"
+                    android:background="@drawable/my_btn_start"
+
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:text="START"
+                    android:textSize="20sp"
+                    android:textStyle="bold"></Button>
+
+                <Button
+                    android:id="@+id/btn_stop"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+
+                    android:background="@drawable/my_btn_stop"
+                    android:fontFamily="@font/ubuntu_mono"
+
+                    android:text="STOP"
+                    android:textSize="20sp"
+                    android:textStyle="bold"></Button>
+
+                <Button
+                    android:id="@+id/btn_clear"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/margin_small"
+
+                    android:layout_weight="1"
+                    android:background="@drawable/my_btn_clear"
+
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:text="CLEAR"
+                    android:textSize="20sp"
+                    android:textStyle="bold"></Button>
+
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/margin_small"
+
+                    android:layout_weight="1"
+                    android:background="@drawable/my_btn_save"
+
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:text="SAVE"
+                    android:textSize="20sp"
+                    android:textStyle="bold"></Button>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_desc_left"
+                        android:fontFamily="@font/ubuntu_mono"
+
+                        android:gravity="center"
+                        android:text="SF"
+                        android:textColor="#ffffff"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_desc_right"
+                        android:fontFamily="@font/ubuntu_mono"
+
+                        android:gravity="center"
+                        android:text="SL"
+                        android:textColor="#ffffff"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"
+                        android:layout_marginRight="@dimen/margin_small"></TextView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_desc_left"
+                        android:fontFamily="@font/ubuntu_mono"
+
+                        android:gravity="center"
+                        android:text="X POS"
+                        android:textColor="#ffffff"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_desc_right"
+                        android:fontFamily="@font/ubuntu_mono"
+
+                        android:gravity="center"
+                        android:text="Y POS"
+                        android:textColor="#ffffff"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"></TextView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textview_sf"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_left"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="HZ"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textview_sl"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_right"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="M"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"
+                        android:layout_marginRight="@dimen/margin_small"></TextView>
+
+                    <TextView
+                        android:id="@+id/textview_xpos"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_left"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="M"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textview_ypos"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_right"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="M"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/TextView_height"
+                    android:background="@drawable/my_sensor_desc"
+                    android:text="Settings"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:fontFamily="@font/ubuntu_mono">
+
+                </TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/TextView_height"
+                        android:background="@drawable/my_setting"
+                        android:text="Height"
+                        android:textColor="#ffffff"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:fontFamily="@font/ubuntu_mono">
+
+                    </TextView>
+
+                    <EditText
+                        android:id="@+id/height"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/my_norm_border_right"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:inputType="numberDecimal"
+
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:hint="M"
+                        android:text="1.75"
+                        android:fontFamily="@font/ubuntu_mono"></EditText>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/TextView_height"
+                        android:background="@drawable/my_setting"
+                        android:text="SF-SL Param C"
+                        android:textColor="#ffffff"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:fontFamily="@font/ubuntu_mono">
+
+                    </TextView>
+
+                    <EditText
+                        android:id="@+id/param_c"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/my_norm_border_right"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:inputType="numberDecimal"
+
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:hint="(0.0, 1.0)"
+                        android:text="0.75"
+                        android:fontFamily="@font/ubuntu_mono"></EditText>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="380dp"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_gravity="center">
+                <com.github.mikephil.charting.charts.ScatterChart
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/my_norm_border"
+                    android:id="@+id/chart">
+
+                </com.github.mikephil.charting.charts.ScatterChart>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"></TextView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.dashboard.DashboardFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/LinearLayout_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/TextView_height"
+                    android:background="@drawable/my_sensor_desc"
+                    android:fontFamily="@font/ubuntu_mono"
+
+                    android:gravity="center"
+                    android:text="Accelerometer"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/acce_x"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_left"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="x-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/acce_y"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_middle"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="y-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/acce_z"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_right"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="z-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/linechart_acce"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/LineChart_height"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@drawable/my_norm_border"></com.github.mikephil.charting.charts.LineChart>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/TextView_height"
+                    android:background="@drawable/my_sensor_desc"
+                    android:fontFamily="@font/ubuntu_mono"
+
+                    android:gravity="center"
+                    android:text="Gyroscope"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/gyro_x"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_left"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="x-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/gyro_y"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_middle"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="y-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/gyro_z"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_right"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="z-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/linechart_gyro"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/LineChart_height"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@drawable/my_norm_border"></com.github.mikephil.charting.charts.LineChart>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/TextView_height"
+                    android:background="@drawable/my_sensor_desc"
+                    android:fontFamily="@font/ubuntu_mono"
+
+                    android:gravity="center"
+                    android:text="Magnetic Field"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/magn_x"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_left"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="x-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/magn_y"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_middle"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="y-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/magn_z"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_right"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="z-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/linechart_magn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/LineChart_height"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@drawable/my_norm_border"></com.github.mikephil.charting.charts.LineChart>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/TextView_height"
+                    android:background="@drawable/my_sensor_desc"
+                    android:fontFamily="@font/ubuntu_mono"
+
+                    android:gravity="center"
+                    android:text="Orientation(System)"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/orien_x"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_left"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="x-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/orien_y"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_middle"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="y-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/orien_z"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_right"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="z-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/linechart_orien"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/LineChart_height"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@drawable/my_norm_border"></com.github.mikephil.charting.charts.LineChart>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/TextView_height"
+                    android:background="@drawable/my_sensor_desc"
+                    android:fontFamily="@font/ubuntu_mono"
+
+                    android:gravity="center"
+                    android:text="Orientation(Customer)"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/orien_x_cust"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_left"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="x-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/orien_y_cust"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_val_middle"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="y-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/orien_z_cust"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/TextView_height"
+                        android:layout_marginLeft="@dimen/margin_small"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_sensor_right"
+                        android:fontFamily="@font/ubuntu_mono"
+                        android:gravity="center"
+                        android:hint="z-dir"
+                        android:textColor="#E63C3C"
+                        android:textSize="@dimen/text_size_small"
+                        android:textStyle="bold"></TextView>
+
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/linechart_orien_cust"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/LineChart_height"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@drawable/my_norm_border"></com.github.mikephil.charting.charts.LineChart>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"></TextView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable-design/sensor_desc.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/btn_clear.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/ic_baseline_filter_1_24.xml" value="0.1885" />
+        <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.1885" />
+        <entry key="app/src/main/res/drawable/my_alpha.xml" value="0.1885" />
+        <entry key="app/src/main/res/drawable/my_btn_clear.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/my_btn_save.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/my_btn_start.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/my_btn_stop.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/my_height.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/my_menu.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/my_norm_border.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/my_norm_border_bottom.xml" value="0.1885" />
+        <entry key="app/src/main/res/drawable/my_norm_border_left.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/my_norm_border_right.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/my_sensor_desc.xml" value="0.147" />
+        <entry key="app/src/main/res/drawable/my_sensor_desc_left.xml" value="0.1885" />
+        <entry key="app/src/main/res/drawable/my_sensor_desc_middle.xml" value="0.1885" />
+        <entry key="app/src/main/res/drawable/my_sensor_desc_right.xml" value="0.1885" />
+        <entry key="app/src/main/res/drawable/my_sensor_right.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/my_sensor_val_left.xml" value="0.179" />
+        <entry key="app/src/main/res/drawable/my_sensor_val_middle.xml" value="0.179" />
+        <entry key="app/src/main/res/font/ubuntu_mono.xml" value="0.3490740740740741" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.30462962962962964" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.35625" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.35625" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1885" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1885" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Juster</string>
+    <string name="title_home">Main</string>
+    <string name="title_dashboard">Sensor</string>
+    <string name="title_notifications">Note</string>
+
+</resources>

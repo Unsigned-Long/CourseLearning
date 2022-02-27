@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CsvFileAttributes">
+    <option name="attributeMap">
+      <map>
+        <entry key="$USER_HOME$/.cache/Google/AndroidStudio2021.1/device-explorer/huawei-yal_al10-ERLDU19613009051/data/data/com.example.juster/files/acceleration.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/.cache/Google/AndroidStudio2021.1/device-explorer/huawei-yal_al10-ERLDU19613009051/data/data/com.example.juster/files/orientation.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
