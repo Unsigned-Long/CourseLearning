@@ -159,21 +159,7 @@ ae: 0.941871, be: 2.09463, ce: 0.965554
 {cost time: 15.079847(ms)}
 ```
 
-## 4. GGO
-
-### source code
-
-```cpp
-```
-
-### output
-
-```cpp
-```
-
-
-
-## 5. Cmake
+## 4. CMake
 
 ```cmake
 cmake_minimum_required(VERSION 3.10)
