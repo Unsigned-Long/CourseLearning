@@ -17,6 +17,8 @@
 // the suffix used when print variables
 #define MC_SUFFIX ""
 
+#define MC_ENDL std::cout << std::endl
+
 // throw some information about current error [detail version]
 #define MC_THROW_M(what)                                                   \
   throw std::runtime_error(                                                \
