@@ -1,5 +1,5 @@
+#include "fusion.h"
 #include "logger/logger.h"
-#include "opencv2/core.hpp"
 #include "timer/timer.h"
 #include <iostream>
 
