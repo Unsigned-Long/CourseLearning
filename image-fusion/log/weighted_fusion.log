@@ -1,0 +1,47 @@
+csl@whu-ubuntu:~/Learning/CourseLearning/image-fusion/build$ ./fusion --method 2 --oImg ../img/weighted_fusion.tif
+-- mutiBandsImgName: ../img/DOM-100CM-ROI.tif
+-- panImgName: ../img/DOM-5CM-ROI-FPAN.tif
+-- method: WEIGHT_FUSION
+-- outputImgName: ../img/weighted_fusion.tif
+[ info ]-[ 1652534057.780962(s) ] load images...
+-- imgName: muti-bands image
+-- img.channels(): 4, img.type(): 24
+-- img.size(): [167 x 341], img.rows: 341, img.cols: 167
+
+-- imgName: pan image
+-- img.channels(): 1, img.type(): 0
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+{'load image cost': 211.08371(MS)}
+[ info ]-[ 1652534057.992078(s) ] load images finished, display images(waiting key)...
+{'display image cost': 596.15552(MS)}
+[ process ]-[ 1652534058.588286(s) ] resize the muti-bands image...
+-- imgName: muti-bands image
+-- img.channels(): 4, img.type(): 24
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+{'resize muti-bands image cost': 16.18046(MS)}
+[ process ]-[ 1652534058.604492(s) ] split the muti-bands image...
+-- imgName: band-1
+-- img.channels(): 1, img.type(): 0
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+
+-- imgName: band-2
+-- img.channels(): 1, img.type(): 0
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+
+-- imgName: band-3
+-- img.channels(): 1, img.type(): 0
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+
+-- imgName: band-4
+-- img.channels(): 1, img.type(): 0
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+
+{'split muti-bands image cost': 90.24012(MS)}
+[ process ]-[ 1652534059.402973(s) ] Weighted Fusion...
+-- pb1Rel: 0.774847, pb2Rel: 0.863948, pb3Rel: 0.841607
+-- wpb1: 0.887424, wb1: 0.112576
+-- wpb2: 0.931974, wb2: 0.068026
+-- wpb3: 0.920803, wb3: 0.0791966
+{'cost': 481.78882(MS)}
+[ info ]-[ 1652534060.618222(s) ] writing image
+{'cost': 877.54846(MS)}

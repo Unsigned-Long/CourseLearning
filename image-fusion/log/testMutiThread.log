@@ -1,5 +1,0 @@
--- imgName: testImg
--- img.channels(): 3, img.type(): 16
--- img.size(): [440 x 440], img.rows: 440, img.cols: 440
-{'no muti thread': 10813.31152(MS)}
-{'muti thread': 191.92741(MS)}
