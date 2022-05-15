@@ -26,6 +26,8 @@ Remote sensing image fusion refers to the process of generating new images from 
 
 <img src="./log/ratio_trans.png" width=60%>
 
+<img src="./log/ratio_trans_noeq.png" width=60%>
+
 <img src="./log/product_trans.png" width=60%>
 
 <img src="./log/weighted_fusion.png" width=60%>

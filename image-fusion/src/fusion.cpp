@@ -1,5 +1,5 @@
-#include "flags/flags.hpp"
 #include "fusion.h"
+#include "flags/flags.hpp"
 #include "logger/logger.h"
 #include "muti_thread.h"
 #include "timer/timer.h"
@@ -105,6 +105,15 @@ int main(int argc, char const *argv[]) {
       // Ratio Transformation
       ns_log::process("Ratio Transformation...");
       ns_fusion::Fusion::ratioTrans(pImg, bands[0], bands[1], bands[2], &dst);
+
+      // equalizeHist
+      cv::Mat eqBands[3];
+      cv::split(dst, eqBands);
+      cv::equalizeHist(eqBands[0], eqBands[0]);
+      cv::equalizeHist(eqBands[1], eqBands[1]);
+      cv::equalizeHist(eqBands[2], eqBands[2]);
+      cv::merge(eqBands, 3, dst);
+
       ns_fusion::showImg("Ratio Transformation", dst);
     } else if (method == ns_fusion::Fusion::Methods::PRODUCT_TRANS) {
       // Product Transformation
