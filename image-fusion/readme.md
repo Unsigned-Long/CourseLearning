@@ -195,27 +195,34 @@ csl@whu-ubuntu:~/Learning/CourseLearning/image-fusion/build$ ./fusion --method 2
 ### 2) Evaluate
 
 ```apl
-csl@whu-ubuntu:~/Learning/CourseLearning/image-fusion/build$ ./fusion_evaluate --imgs ../img/product_trans.tif ../img/ratio_trans.tif ../img/weighted_fusion.tif 
-[ process ]-[ 1652581320.841077(s) ] process new image [../img/product_trans.tif]
+csl@whu-ubuntu:~/Learning/CourseLearning/image-fusion/build$ ./fusion_evaluate --imgs ../img/product_trans.tif ../img/ratio_trans.tif ../img/weighted_fusion.tif ../img/ratio_trans_noeq.tif 
+[ process ]-[ 1652585879.329769(s) ] process new image [../img/product_trans.tif]
 -- imgName: ../img/product_trans.tif
 -- img.channels(): 3, img.type(): 16
 -- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
--- avgGradient: 10.5138, entropy: 15.1195
-{'cost': 412.45740(MS)}
+-- avgGradient: 10.5138, entropy: 15.1241
+{'cost': 424.13974(MS)}
 
-[ process ]-[ 1652581321.624930(s) ] process new image [../img/ratio_trans.tif]
+[ process ]-[ 1652585880.195418(s) ] process new image [../img/ratio_trans.tif]
 -- imgName: ../img/ratio_trans.tif
 -- img.channels(): 3, img.type(): 16
 -- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
--- avgGradient: 7.39764, entropy: 13.3064
-{'cost': 362.00037(MS)}
+-- avgGradient: 35.4304, entropy: 13.1505
+{'cost': 376.18869(MS)}
 
-[ process ]-[ 1652581322.357218(s) ] process new image [../img/weighted_fusion.tif]
+[ process ]-[ 1652585880.937629(s) ] process new image [../img/weighted_fusion.tif]
 -- imgName: ../img/weighted_fusion.tif
 -- img.channels(): 3, img.type(): 16
 -- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
--- avgGradient: 19.5935, entropy: 12.0411
-{'cost': 386.94882(MS)}
+-- avgGradient: 19.5935, entropy: 12.045
+{'cost': 431.54398(MS)}
+
+[ process ]-[ 1652585881.756246(s) ] process new image [../img/ratio_trans_noeq.tif]
+-- imgName: ../img/ratio_trans_noeq.tif
+-- img.channels(): 3, img.type(): 16
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+-- avgGradient: 7.39764, entropy: 13.3105
+{'cost': 407.70837(MS)}
 ```
 
 
