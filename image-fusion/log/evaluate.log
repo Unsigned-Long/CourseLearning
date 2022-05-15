@@ -1,0 +1,21 @@
+csl@whu-ubuntu:~/Learning/CourseLearning/image-fusion/build$ ./fusion_evaluate --imgs ../img/product_trans.tif ../img/ratio_trans.tif ../img/weighted_fusion.tif 
+[ process ]-[ 1652581320.841077(s) ] process new image [../img/product_trans.tif]
+-- imgName: ../img/product_trans.tif
+-- img.channels(): 3, img.type(): 16
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+-- avgGradient: 10.5138, entropy: 15.1195
+{'cost': 412.45740(MS)}
+
+[ process ]-[ 1652581321.624930(s) ] process new image [../img/ratio_trans.tif]
+-- imgName: ../img/ratio_trans.tif
+-- img.channels(): 3, img.type(): 16
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+-- avgGradient: 7.39764, entropy: 13.3064
+{'cost': 362.00037(MS)}
+
+[ process ]-[ 1652581322.357218(s) ] process new image [../img/weighted_fusion.tif]
+-- imgName: ../img/weighted_fusion.tif
+-- img.channels(): 3, img.type(): 16
+-- img.size(): [3340 x 6820], img.rows: 6820, img.cols: 3340
+-- avgGradient: 19.5935, entropy: 12.0411
+{'cost': 386.94882(MS)}
