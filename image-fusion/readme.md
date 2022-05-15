@@ -12,7 +12,7 @@ Remote sensing image fusion refers to the process of generating new images from 
 
 ## 2. Source Data
 
-<img src="./docs/latex/pan.png" width=50%><img src="./docs/latex/mss.png" width=50%>
+<img src="./docs/latex/pan.png" width=30%><img src="./docs/latex/mss.png" width=30%>
 
 ## 3. RunTime
 
