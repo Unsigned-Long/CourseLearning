@@ -177,4 +177,52 @@ namespace ns_fusion {
     }
     return;
   }
+
+  double Fusion::avgGradient(cv::Mat img) {
+    CV_Assert(!img.empty() && img.channels() == 3);
+    auto grad2 = [](const cv::Vec3b &v1, const cv::Vec3b &v2) -> double {
+      return std::pow(double(v1[0]) - v2[0], 2) +
+             std::pow(double(v1[1]) - v2[1], 2) +
+             std::pow(double(v1[2]) - v2[2], 2);
+    };
+    int rows = img.rows, cols = img.cols;
+    double g = 0.0;
+    for (int i = 0; i != rows - 1; ++i) {
+      for (int j = 0; j != cols - 1; ++j) {
+        auto cp = img.at<cv::Vec3b>(i, j);
+        auto rp = img.at<cv::Vec3b>(i, j + 1);
+        auto lp = img.at<cv::Vec3b>(i + 1, j);
+        g += std::sqrt(grad2(cp, rp) + grad2(cp, lp));
+      }
+    }
+    g /= (rows * cols - rows - cols + 1);
+    return g;
+  }
+
+  double Fusion::entropy(cv::Mat img) {
+    CV_Assert(!img.empty() && img.channels() == 3);
+    int rows = img.rows, cols = img.cols;
+    std::vector<std::vector<std::vector<std::size_t>>>
+        bins(255, std::vector<std::vector<std::size_t>>(255, std::vector<std::size_t>(255, 0)));
+    for (int i = 0; i != rows - 1; ++i) {
+      for (int j = 0; j != cols - 1; ++j) {
+        auto cp = img.at<cv::Vec3b>(i, j);
+        ++bins[cp[0]][cp[1]][cp[2]];
+      }
+    }
+    double h = 0.0;
+    double factor = 1.0 / (rows * cols);
+    for (int i = 0; i != 255; ++i) {
+      for (int j = 0; j != 255; ++j) {
+        for (int k = 0; k != 255; ++k) {
+          if (bins[i][j][k] == 0) {
+            continue;
+          }
+          double p = bins[i][j][k] * factor;
+          h -= p * std::log2(p);
+        }
+      }
+    }
+    return h;
+  }
 } // namespace ns_fusion

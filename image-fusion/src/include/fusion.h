@@ -103,6 +103,11 @@ namespace ns_fusion {
      * @param dstImg the fusion image
      */
     static void weightedFusion(cv::Mat pImg, cv::Mat b1Img, cv::Mat b2Img, cv::Mat b3Img, cv::Mat *dstImg);
+
+  public:
+    static double avgGradient(cv::Mat img);
+
+    static double entropy(cv::Mat img);
   };
 
   /**

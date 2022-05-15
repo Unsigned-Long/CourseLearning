@@ -23,7 +23,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}_fusion PRIVATE
   pthread
 )
 
-add_executable(${CMAKE_PROJECT_NAME}_evaluate evaluate.cpp)
+add_executable(${CMAKE_PROJECT_NAME}_evaluate evaluate.cpp ${SRC_FILES})
 
 target_include_directories(${CMAKE_PROJECT_NAME}_evaluate PRIVATE
   ${OpenCV_INCLUDE_DIRS}
