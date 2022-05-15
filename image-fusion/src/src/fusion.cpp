@@ -203,9 +203,9 @@ namespace ns_fusion {
     CV_Assert(!img.empty() && img.channels() == 3);
     int rows = img.rows, cols = img.cols;
     std::vector<std::vector<std::vector<std::size_t>>>
-        bins(255, std::vector<std::vector<std::size_t>>(255, std::vector<std::size_t>(255, 0)));
-    for (int i = 0; i != rows - 1; ++i) {
-      for (int j = 0; j != cols - 1; ++j) {
+        bins(256, std::vector<std::vector<std::size_t>>(256, std::vector<std::size_t>(256, 0)));
+    for (int i = 0; i != rows; ++i) {
+      for (int j = 0; j != cols; ++j) {
         auto cp = img.at<cv::Vec3b>(i, j);
         ++bins[cp[0]][cp[1]][cp[2]];
       }
