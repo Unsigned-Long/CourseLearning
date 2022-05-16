@@ -104,7 +104,9 @@ namespace ns_fusion {
       dstImg->create(rows, cols, CV_8UC3);
     }
     int channels = dstImg->channels();
-    int maxVal = 0, minVal = 255;
+    int maxVal1 = 0, minVal1 = 255;
+    int maxVal2 = 0, minVal2 = 255;
+    int maxVal3 = 0, minVal3 = 255;
     for (int i = 0; i != rows; ++i) {
       auto pPtr = pImg.ptr<uchar>(i);
       auto b1Ptr = b1Img.ptr<uchar>(i);
@@ -116,16 +118,26 @@ namespace ns_fusion {
         int nb1 = (int)(b1)*p;
         int nb2 = (int)(b2)*p;
         int nb3 = (int)(b3)*p;
-        auto minmax = std::minmax({nb1, nb2, nb3});
-        if (minmax.first < minVal) {
-          minVal = minmax.first;
+        if (nb1 < minVal1) {
+          minVal1 = nb1;
+        } else if (nb1 > maxVal1) {
+          maxVal1 = nb1;
         }
-        if (minmax.second > maxVal) {
-          maxVal = minmax.second;
+        if (nb2 < minVal2) {
+          minVal2 = nb2;
+        } else if (nb2 > maxVal2) {
+          maxVal2 = nb2;
+        }
+        if (nb3 < minVal3) {
+          minVal3 = nb3;
+        } else if (nb3 > maxVal3) {
+          maxVal3 = nb3;
         }
       }
     }
-    double factor = 255.0f / (maxVal - minVal);
+    double factor1 = 255.0f / (maxVal1 - minVal1);
+    double factor2 = 255.0f / (maxVal2 - minVal2);
+    double factor3 = 255.0f / (maxVal3 - minVal3);
     for (int i = 0; i != rows; ++i) {
       auto pPtr = pImg.ptr<uchar>(i);
       auto b1Ptr = b1Img.ptr<uchar>(i);
@@ -137,9 +149,9 @@ namespace ns_fusion {
         int nb1 = (int)(b1)*p;
         int nb2 = (int)(b2)*p;
         int nb3 = (int)(b3)*p;
-        dstPtr[j * channels + 0] = (uchar)((int(nb1) - minVal) * factor);
-        dstPtr[j * channels + 1] = (uchar)((int(nb2) - minVal) * factor);
-        dstPtr[j * channels + 2] = (uchar)((int(nb3) - minVal) * factor);
+        dstPtr[j * channels + 0] = (uchar)((int(nb1) - minVal1) * factor1);
+        dstPtr[j * channels + 1] = (uchar)((int(nb2) - minVal2) * factor2);
+        dstPtr[j * channels + 2] = (uchar)((int(nb3) - minVal3) * factor3);
       }
     }
     return;
