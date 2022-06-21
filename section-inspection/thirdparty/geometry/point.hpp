@@ -1,4 +1,5 @@
-#pragma once
+#ifndef POINT_HPP
+#define POINT_HPP
 
 /**
  * @file point.hpp
@@ -11,6 +12,7 @@
  */
 
 #include "utility.hpp"
+#include <functional>
 
 namespace ns_geo {
 #pragma region geometry
@@ -29,6 +31,7 @@ namespace ns_geo {
     RECTANGLE,
     TRIANGLE2,
     TRIANGLE3,
+    CIRCLE,
     // for geometry with reference
     REF_POINT2,
     REF_POINT3,
@@ -80,6 +83,9 @@ namespace ns_geo {
       break;
     case GeoType::TRIANGLE3:
       os << "TRIANGLE3";
+      break;
+    case GeoType::CIRCLE:
+      os << "CIRCLE";
       break;
     case GeoType::REF_POINT2:
       os << "REF-POINT2";
@@ -255,7 +261,7 @@ namespace ns_geo {
     using container_type::container_type;
     using self_type = PointSet2<value_type>;
 
-    using selector = bool (*)(const point_type &);
+    using selector = std::function<bool(const point_type &)>;
 
   public:
     /**
@@ -363,7 +369,7 @@ namespace ns_geo {
     using container_type::container_type;
     using self_type = PointSet3<value_type>;
 
-    using selector = bool (*)(const point_type &);
+    using selector = std::function<bool(const point_type &)>;
 
   public:
     /**
@@ -558,7 +564,7 @@ namespace ns_geo {
      * @brief using container_type's constructors
      */
     using container_type::container_type;
-    using selector = bool (*)(const refpoint_type &);
+    using selector = std::function<bool(const refpoint_type &)>;
 
     using self_type = RefPointSet2<value_type>;
 
@@ -741,7 +747,7 @@ namespace ns_geo {
      */
     using container_type::container_type;
 
-    using selector = bool (*)(const refpoint_type &);
+    using selector = std::function<bool(const refpoint_type &)>;
 
     using self_type = RefPointSet3<value_type>;
 
@@ -901,3 +907,5 @@ namespace ns_geo {
 
 #pragma endregion
 } // namespace ns_geo
+
+#endif
