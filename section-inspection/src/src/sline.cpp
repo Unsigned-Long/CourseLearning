@@ -1,26 +1,32 @@
 #include "sline.h"
-#include "eigen3/Eigen/Dense"
 #include "logger/logger.h"
 
 namespace ns_section {
 
+  SLine SLine::ransac(const ns_geo::PointSet2d &pts, const ushort iter) {
+    std::vector<std::pair<SLine, double>> lines;
+    std::default_random_engine e;
+    for (int i = 0; i != iter; ++i) {
+      auto tp = ns_geo::samplingWoutReplace(e, pts, 2);
+      SLine l(pts[tp[0]], pts[tp[1]]);
+      double error = 0.0;
+      for (const auto &p : pts) {
+        error += l.distance(p);
+      }
+      lines.push_back({l, error});
+    }
+    auto tar = std::min_element(lines.cbegin(), lines.cend(),
+                                [](const std::pair<SLine, double> &p1, const std::pair<SLine, double> &p2) {
+                                  return p1.second < p2.second;
+                                });
+    return tar->first;
+  }
+
   SLine SLine::fit(const ns_geo::PointSet2d &pts) {
-    // using svd to find the init value
-    Eigen::MatrixXd A(pts.size(), 3);
-    for (int i = 0; i != pts.size(); ++i) {
-      A(i, 0) = pts[i].x;
-      A(i, 1) = pts[i].y;
-      A(i, 2) = 1.0;
-    }
-    Eigen::JacobiSVD<Eigen::MatrixXd> svd(A, Eigen::ComputeFullV);
-    Eigen::Matrix3d vMatrix = svd.matrixV();
-    Eigen::Vector3d param = vMatrix.col(vMatrix.cols() - 1);
-    // if the sline is Vertical, than gauss newton is useless
-    if (std::abs(param(1)) < 1E-10) {
-      return SLine(param(0), param(1), param(2));
-    }
+    // ransac
+    SLine l = SLine::ransac(pts);
     // gauss newton [assign init value]
-    double k = -param(0) / param(1), b = -param(2) / param(0);
+    double k = -l.a / l.b, b = -l.c / l.b;
     for (int i = 0; i != 10; ++i) {
       Eigen::Matrix2d H = Eigen::Matrix2d::Zero();
       Eigen::Vector2d g = Eigen::Vector2d::Zero();
