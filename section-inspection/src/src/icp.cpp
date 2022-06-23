@@ -37,9 +37,9 @@ namespace ns_section {
 
     // kdtree
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
-    cloud->resize(pointCloud2.size());
-    for (int i = 0; i != pointCloud2.size(); ++i) {
-      (*cloud)[i] = pcl::PointXYZ(pointCloud2[i].x, pointCloud2[i].y, pointCloud2[i].z);
+    cloud->resize(normPointCloud2.size());
+    for (int i = 0; i != normPointCloud2.size(); ++i) {
+      (*cloud)[i] = pcl::PointXYZ(normPointCloud2[i].x, normPointCloud2[i].y, normPointCloud2[i].z);
     }
     pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
     kdtree.setInputCloud(cloud);
@@ -53,8 +53,15 @@ namespace ns_section {
         const auto &np1_pt = normPointCloud1[j];
         // trans
         Eigen::Vector3d prime = R21 * ICP::toVec3d(np1_pt);
+
         // find nearest
-        ns_geo::Point3d np2_pt = ICP::nearest(normPointCloud2, ICP::fromVec3d(prime));
+        pcl::PointXYZ searchPoint(prime(0), prime(1), prime(2));
+        std::vector<int> pointIdxKNNSearch(1);
+        std::vector<float> pointKNNSquaredDistance(1);
+        int state = kdtree.nearestKSearch(searchPoint, 1, pointIdxKNNSearch, pointKNNSquaredDistance);
+        pcl::PointXYZ target = (*cloud)[pointIdxKNNSearch[0]];
+        ns_geo::Point3d np2_pt(target.x, target.y, target.z);
+        
         // compute error
         Eigen::Vector3d error = prime - ICP::toVec3d(np2_pt);
         // compute jacobi
