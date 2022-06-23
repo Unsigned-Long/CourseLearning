@@ -11,7 +11,7 @@
 namespace ns_section {
   struct ICP {
   public:
-    static Sophus::SE3d solve(const ns_geo::PointSet3d &pc1, const ns_geo::PointSet3d &pc2, const ushort iter = 50);
+    static Sophus::SE3d solve(const ns_geo::PointSet3d &pc1, const ns_geo::PointSet3d &pc2);
 
   protected:
     static std::pair<ns_geo::PointSet3d, ns_geo::Point3d> normalize(const ns_geo::PointSet3d &pc);

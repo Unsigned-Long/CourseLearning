@@ -4,6 +4,16 @@
 #include "icp.h"
 #include "logger/logger.h"
 
+ns_geo::PointSet3d readXYZPts(const std::string &filename) {
+  auto reader = ns_csv::CSVReader::create(filename);
+  ns_geo::PointSet3d pts;
+  double x, y, z;
+  while (reader->readLine(' ', x, y, z)) {
+    pts.push_back(ns_geo::Point3d(x, y, z));
+  }
+  return pts;
+}
+
 void test_sline_fit() {
   ns_section::SLine tl(1, 0, -5);
   auto pts = ns_geo::PointSet2d::randomGenerator(50, 0, 10, 0, 10, [&tl](const ns_geo::Point2d &p) {
@@ -15,17 +25,15 @@ void test_sline_fit() {
 }
 
 void test_icp() {
-  auto pc1 = ns_geo::PointSet3d::randomGenerator(1000, 0.0, 10, 0.0, 10, 0.0, 10, [](const ns_geo::Point3d &p) {
-    return std::abs(p.x + p.y + p.z - 10) < 0.2;
-  });
+  auto pc1 = readXYZPts("../qt/data/new.xyz");
   std::default_random_engine e;
-  std::normal_distribution<> n(0.0, 0.1);
-  Eigen::Quaterniond r(Eigen::AngleAxisd(M_PI / 8, Eigen::Vector3d(-1, 2, 3)));
-  Sophus::SE3d T21(r, Eigen::Vector3d(3, 2, 1));
+  std::normal_distribution<> n(0.0, 0.05);
+  Eigen::Quaterniond r(Eigen::AngleAxisd(M_PI / 10, Eigen::Vector3d(0, 0, 1)));
+  Sophus::SE3d T21(r, Eigen::Vector3d(3, 0.5, 1.5));
   auto pc2 = ns_geo::PointSet3d(pc1.size());
   for (int i = 0; i != pc1.size(); ++i) {
     const auto &p1 = pc1[i];
-    auto p2 = T21 * Eigen::Vector3d(p1.x, p1.y, p1.z) + Eigen::Vector3d(n(e), n(e), n(e));
+    Eigen::Vector3d p2 = T21 * Eigen::Vector3d(p1.x, p1.y, p1.z) + Eigen::Vector3d(n(e), n(e), n(e));
     pc2[i] = ns_geo::Point3d(p2(0), p2(1), p2(2));
   }
   auto solve = ns_section::ICP::solve(pc1, pc2);
@@ -40,19 +48,8 @@ void test_icp() {
   result.write("../pyDrawer/result.csv", std::ios::out);
 }
 
-ns_geo::PointSet3d readXYZPts(const std::string &filename) {
-  auto reader = ns_csv::CSVReader::create(filename);
-  ns_geo::PointSet3d pts;
-  double x, y, z;
-  while (reader->readLine(' ', x, y, z)) {
-    pts.push_back(ns_geo::Point3d(x, 0.0, z));
-  }
-  return pts;
-}
-
 int main(int argc, char const *argv[]) {
-  // auto laser = readXYZPts("../qt/data/laser.xyz");
-  // LOG_VAR(laser.size());
   test_icp();
+
   return 0;
 }

@@ -28,7 +28,7 @@ namespace ns_section {
     return *iter;
   }
 
-  Sophus::SE3d ICP::solve(const ns_geo::PointSet3d &pointCloud1, const ns_geo::PointSet3d &pointCloud2, const ushort iter) {
+  Sophus::SE3d ICP::solve(const ns_geo::PointSet3d &pointCloud1, const ns_geo::PointSet3d &pointCloud2) {
     // normalize the point clouds
     auto [normPointCloud1, center1_pt] = ICP::normalize(pointCloud1);
     auto [normPointCloud2, center2_pt] = ICP::normalize(pointCloud2);
@@ -46,22 +46,23 @@ namespace ns_section {
 
     // compute rotation
     Sophus::SO3d R21;
-    for (int i = 0; i != iter; ++i) {
+    while (true) {
       Eigen::Matrix3d HMat = Eigen::Matrix3d::Zero();
       Eigen::Vector3d gVec = Eigen::Vector3d::Zero();
-      for (int j = 0; j != pointCloud1.size(); ++j) {
+      for (int j = 0; j != normPointCloud1.size(); ++j) {
         const auto &np1_pt = normPointCloud1[j];
+
         // trans
         Eigen::Vector3d prime = R21 * ICP::toVec3d(np1_pt);
-
         // find nearest
         pcl::PointXYZ searchPoint(prime(0), prime(1), prime(2));
         std::vector<int> pointIdxKNNSearch(1);
         std::vector<float> pointKNNSquaredDistance(1);
         int state = kdtree.nearestKSearch(searchPoint, 1, pointIdxKNNSearch, pointKNNSquaredDistance);
         pcl::PointXYZ target = (*cloud)[pointIdxKNNSearch[0]];
+
         ns_geo::Point3d np2_pt(target.x, target.y, target.z);
-        
+
         // compute error
         Eigen::Vector3d error = prime - ICP::toVec3d(np2_pt);
         // compute jacobi
@@ -78,10 +79,12 @@ namespace ns_section {
         break;
       }
     }
+
     // compute translation
     Eigen::Vector3d cen1 = ICP::toVec3d(center1_pt);
     Eigen::Vector3d cen2 = ICP::toVec3d(center2_pt);
     Eigen::Vector3d t21 = cen2 - R21 * cen1;
+
     return Sophus::SE3d(R21.matrix(), t21);
   }
 

@@ -24,7 +24,7 @@ def draw(filename, figname):
 
 
 draw("./pyDrawer/pc1.csv", "Point Cloud1")
-draw("./pyDrawer/pc2.csv", "Point Cloud1")
+draw("./pyDrawer/pc2.csv", "Point Cloud2")
 draw("./pyDrawer/result.csv", "From PC1 To PC2")
 
 ax.set_xlabel('X Label')
