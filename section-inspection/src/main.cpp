@@ -61,8 +61,10 @@ void test_icp() {
 
 int main(int argc, char const *argv[]) {
   auto laser = readPointsLaser("../qt/data/new.xyz");
+  for (auto &p : laser) {
+    p.y = 0.0;
+  }
   auto station = readPointsStation("../qt/data/2019302141103.txt");
-  LOG_VAR(laser.size(), station.size());
   auto Tls = ns_section::ICP::solve(station, laser);
   LOG_VAR(Tls.log().transpose());
   auto result = ns_geo::PointSet3d(station.size());

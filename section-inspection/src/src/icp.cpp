@@ -74,7 +74,6 @@ namespace ns_section {
       Eigen::Vector<double, 6> delta = HMat.ldlt().solve(gVec);
       // update
       T21 = Sophus::SE3d::exp(delta) * T21;
-      LOG_VAR(delta.norm());
       if (delta.norm() < 1E-10) {
         break;
       }

@@ -20,13 +20,36 @@ set(PROJECT_SOURCES
         mainwindow.h
         mainwindow.ui
 )
+# -- customer
 
-include_directories(${CMAKE_SOURCE_DIR}/../../thirdparty)
+find_package(Eigen3 REQUIRED)
+
+find_package(Sophus REQUIRED)
+
+find_package(PCL REQUIRED)
+
+include_directories(
+  ${CMAKE_SOURCE_DIR}/../../thirdparty
+  ${CMAKE_SOURCE_DIR}/../../src/include
+  ${Sophus_INCLUDE_DIRS}
+  ${EIGEN_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
+)
+
+link_directories(${PCL_LIBRARY_DIRS})
+
+add_definitions(${PCL_DEFINITIONS})
+
+aux_source_directory(${CMAKE_SOURCE_DIR}/../../src/src SRC_FILES)
+
+# --
+
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(QSection
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        ${SRC_FILES}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET QSection APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -36,12 +59,14 @@ else()
     if(ANDROID)
         add_library(QSection SHARED
             ${PROJECT_SOURCES}
+            ${SRC_FILES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(QSection
             ${PROJECT_SOURCES}
+            ${SRC_FILES}
         )
     endif()
 endif()
@@ -49,6 +74,10 @@ endif()
 target_link_libraries(QSection PRIVATE
   Qt${QT_VERSION_MAJOR}::Widgets
   Qt${QT_VERSION_MAJOR}::DataVisualization
+  # --customer
+  Sophus::Sophus
+  ${PCL_LIBRARIES}
+  # --
 )
 
 

@@ -5,6 +5,7 @@
 #include "logger/logger.h"
 #include <QMainWindow>
 #include <QMap>
+#include <QTableWidget>
 #include <QtDataVisualization/Q3DScatter>
 
 QT_BEGIN_NAMESPACE
@@ -28,6 +29,8 @@ class MainWindow : public QMainWindow {
 
     ns_geo::PointSet3d readPointsStation(const std::string &filename);
 
+    void displayPtsInfo(QTableWidget *tab, const ns_geo::PointSet3d &pts);
+
     void connection();
 
     void init();
@@ -37,8 +40,8 @@ class MainWindow : public QMainWindow {
     Q3DScatter *graphLaser;
     Q3DScatter *graphStation;
     Q3DScatter *graphCoord;
-    Q3DScatter *graphICP;
     ns_geo::PointSet3d laserPts;
     ns_geo::PointSet3d stationPts;
+    ns_geo::PointSet3d newStationPts;
 };
 #endif // MAINWINDOW_H
