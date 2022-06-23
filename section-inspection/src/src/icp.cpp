@@ -51,16 +51,14 @@ namespace ns_section {
       Eigen::Vector3d gVec = Eigen::Vector3d::Zero();
       for (int j = 0; j != pointCloud1.size(); ++j) {
         const auto &np1_pt = normPointCloud1[j];
+        // trans
+        Eigen::Vector3d prime = R21 * ICP::toVec3d(np1_pt);
+        // find nearest
+        ns_geo::Point3d np2_pt = ICP::nearest(normPointCloud2, ICP::fromVec3d(prime));
         // compute error
-        // pcl::PointXYZ searchPoint(np1_pt.x, np1_pt.y, np1_pt.z);
-        // std::vector<int> pointIdxKNNSearch(1);
-        // std::vector<float> pointKNNSquaredDistance(1);
-        // kdtree.nearestKSearch(searchPoint, 1, pointIdxKNNSearch, pointKNNSquaredDistance)
-        Eigen::Vector3d np1 = ICP::toVec3d(np1_pt);
-        ns_geo::Point3d np2_pt = ICP::nearest(normPointCloud2, ICP::fromVec3d(R21 * np1));
-        Eigen::Vector3d error = R21 * np1 - ICP::toVec3d(np2_pt);
+        Eigen::Vector3d error = prime - ICP::toVec3d(np2_pt);
         // compute jacobi
-        Eigen::Matrix3d jacobi = -Sophus::SO3d::hat(R21 * np1);
+        Eigen::Matrix3d jacobi = -Sophus::SO3d::hat(prime);
         HMat += jacobi.transpose() * jacobi;
         gVec -= jacobi.transpose() * error;
       }

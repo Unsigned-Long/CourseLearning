@@ -15,7 +15,7 @@ void test_sline_fit() {
 }
 
 void test_icp() {
-  auto pc1 = ns_geo::PointSet3d::randomGenerator(20000, 0.0, 10, 0.0, 10, 0.0, 10, [](const ns_geo::Point3d &p) {
+  auto pc1 = ns_geo::PointSet3d::randomGenerator(100, 0.0, 10, 0.0, 10, 0.0, 10, [](const ns_geo::Point3d &p) {
     return std::abs(p.x + p.y + p.z - 10) < 0.2;
   });
   std::default_random_engine e;
