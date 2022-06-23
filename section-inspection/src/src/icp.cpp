@@ -32,8 +32,6 @@ namespace ns_section {
     // normalize the point clouds
     auto [normPointCloud1, center1_pt] = ICP::normalize(pointCloud1);
     auto [normPointCloud2, center2_pt] = ICP::normalize(pointCloud2);
-    pointCloud1.write("../pyDrawer/pc1.csv", std::ios::out);
-    pointCloud2.write("../pyDrawer/pc2.csv", std::ios::out);
 
     // kdtree
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);

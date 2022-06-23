@@ -67,7 +67,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>laser Point Cloud</string>
+                <string>Laser Point Cloud</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -119,7 +119,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>station Points</string>
+                <string>Station Points</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -166,7 +166,7 @@
            </font>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -184,7 +184,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Init</string>
+                 <string>Laser</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -192,11 +192,34 @@
                </widget>
               </item>
               <item>
-               <layout class="QGridLayout" name="layout_3dgraph_init"/>
+               <layout class="QGridLayout" name="layout_3dgraph_laser"/>
               </item>
              </layout>
             </item>
             <item row="0" column="1">
+             <layout class="QVBoxLayout" name="verticalLayout_3">
+              <item>
+               <widget class="QLabel" name="label_5">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>In Same Coord</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="layout_3dgraph_same_coord"/>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="2">
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
                <widget class="QLabel" name="label_4">
@@ -207,7 +230,37 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>After ICP</string>
+                 <string>Station</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="layout_3dgraph_station"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="title">
+            <string>Result</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <widget class="QLabel" name="label_6">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>ICP</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -220,11 +273,6 @@
              </layout>
             </item>
            </layout>
-          </widget>
-          <widget class="QWidget" name="tab_2">
-           <attribute name="title">
-            <string>Tab 2</string>
-           </attribute>
           </widget>
          </widget>
         </item>

@@ -31,7 +31,6 @@ Q3DScatter *MainWindow::create3DScatterGraph() {
 
 void MainWindow::addDataSeries(Q3DScatter *graph, const ns_geo::PointSet3d &pts, const QColor &color) {
     QScatter3DSeries *series = new QScatter3DSeries(new QScatterDataProxy);
-    series->setItemLabelFormat(QStringLiteral("@xTitle: @xLabel @yTitle: @yLabel @zTitle: @zLabel"));
     series->setMeshSmooth(true);
     series->setBaseColor(color);
     graph->addSeries(series);
@@ -48,11 +47,22 @@ void MainWindow::addDataSeries(Q3DScatter *graph, const ns_geo::PointSet3d &pts,
     graph->seriesList().at(graph->seriesList().size() - 1)->dataProxy()->resetArray(dataArray);
 }
 
-ns_geo::PointSet3d MainWindow::readXYZPts(const std::string &filename) {
+ns_geo::PointSet3d MainWindow::readPointsLaser(const std::string &filename) {
     auto reader = ns_csv::CSVReader::create(filename);
     ns_geo::PointSet3d pts;
     double x, y, z;
     while (reader->readLine(' ', x, y, z)) {
+        pts.push_back(ns_geo::Point3d(x, y, z));
+    }
+    return pts;
+}
+
+ns_geo::PointSet3d MainWindow::readPointsStation(const std::string &filename) {
+    auto reader = ns_csv::CSVReader::create(filename);
+    ns_geo::PointSet3d pts;
+    double x, y, z;
+    std::string id, code;
+    while (reader->readLine(',', id, x, y, z, code)) {
         pts.push_back(ns_geo::Point3d(x, y, z));
     }
     return pts;
@@ -64,12 +74,12 @@ void MainWindow::connection() {
         if (filename.isEmpty()) {
             return;
         }
-        this->laserPts = this->readXYZPts(filename.toStdString());
-        this->addDataSeries(this->graphInit, this->laserPts, QColor(255, 0, 0));
+        this->laserPts = this->readPointsLaser(filename.toStdString());
+        this->addDataSeries(this->graphLaser, this->laserPts, QColor(0, 255, 0));
         ui->lineEdit_laser->setText(filename);
-        // remove the y axis
-        for (auto &p : this->laserPts) {
-            p.y = 0.0;
+        if (!this->stationPts.empty()) {
+            this->addDataSeries(this->graphCoord, this->laserPts, QColor(0, 255, 0));
+            this->addDataSeries(this->graphCoord, this->stationPts, QColor(255, 0, 0));
         }
     });
     connect(ui->btn_load_station, &QPushButton::clicked, this, [=]() {
@@ -77,19 +87,33 @@ void MainWindow::connection() {
         if (filename.isEmpty()) {
             return;
         }
-        this->stationPts = this->readXYZPts(filename.toStdString());
-        this->addDataSeries(this->graphInit, this->stationPts, QColor(0, 255, 0));
+        this->stationPts = this->readPointsStation(filename.toStdString());
+        this->addDataSeries(this->graphStation, this->stationPts, QColor(255, 0, 0));
         ui->lineEdit_station->setText(filename);
+        if (!this->laserPts.empty()) {
+            this->addDataSeries(this->graphCoord, this->laserPts, QColor(0, 255, 0));
+            this->addDataSeries(this->graphCoord, this->stationPts, QColor(255, 0, 0));
+        }
     });
 }
 
 void MainWindow::init() {
     {
-        this->graphInit = this->create3DScatterGraph();
-        QWidget *container = QWidget::createWindowContainer(graphInit);
-        ui->layout_3dgraph_init->addWidget(container);
+        this->graphLaser = this->create3DScatterGraph();
+        QWidget *container = QWidget::createWindowContainer(graphLaser);
+        ui->layout_3dgraph_laser->addWidget(container);
     }
 
+    {
+        this->graphStation = this->create3DScatterGraph();
+        QWidget *container = QWidget::createWindowContainer(graphStation);
+        ui->layout_3dgraph_station->addWidget(container);
+    }
+    {
+        this->graphCoord = this->create3DScatterGraph();
+        QWidget *container = QWidget::createWindowContainer(graphCoord);
+        ui->layout_3dgraph_same_coord->addWidget(container);
+    }
     {
         this->graphICP = this->create3DScatterGraph();
         QWidget *container = QWidget::createWindowContainer(graphICP);

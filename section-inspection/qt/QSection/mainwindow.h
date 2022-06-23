@@ -24,7 +24,9 @@ class MainWindow : public QMainWindow {
 
     void addDataSeries(Q3DScatter *graph, const ns_geo::PointSet3d &pts, const QColor &color);
 
-    ns_geo::PointSet3d readXYZPts(const std::string &filename);
+    ns_geo::PointSet3d readPointsLaser(const std::string &filename);
+
+    ns_geo::PointSet3d readPointsStation(const std::string &filename);
 
     void connection();
 
@@ -32,7 +34,9 @@ class MainWindow : public QMainWindow {
 
   private:
     Ui::MainWindow *ui;
-    Q3DScatter *graphInit;
+    Q3DScatter *graphLaser;
+    Q3DScatter *graphStation;
+    Q3DScatter *graphCoord;
     Q3DScatter *graphICP;
     ns_geo::PointSet3d laserPts;
     ns_geo::PointSet3d stationPts;
