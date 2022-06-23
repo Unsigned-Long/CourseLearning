@@ -43,15 +43,15 @@ namespace ns_section {
     kdtree.setInputCloud(cloud);
 
     // compute rotation
-    Sophus::SO3d R21;
+    Sophus::SE3d T21;
     while (true) {
-      Eigen::Matrix3d HMat = Eigen::Matrix3d::Zero();
-      Eigen::Vector3d gVec = Eigen::Vector3d::Zero();
+      Eigen::Matrix<double, 6, 6> HMat = Eigen::Matrix<double, 6, 6>::Zero();
+      Eigen::Vector<double, 6> gVec = Eigen::Vector<double, 6>::Zero();
       for (int j = 0; j != normPointCloud1.size(); ++j) {
         const auto &np1_pt = normPointCloud1[j];
 
         // trans
-        Eigen::Vector3d prime = R21 * ICP::toVec3d(np1_pt);
+        Eigen::Vector3d prime = T21 * ICP::toVec3d(np1_pt);
         // find nearest
         pcl::PointXYZ searchPoint(prime(0), prime(1), prime(2));
         std::vector<int> pointIdxKNNSearch(1);
@@ -64,14 +64,16 @@ namespace ns_section {
         // compute error
         Eigen::Vector3d error = prime - ICP::toVec3d(np2_pt);
         // compute jacobi
-        Eigen::Matrix3d jacobi = -Sophus::SO3d::hat(prime);
+        Eigen::Matrix<double, 3, 6> jacobi;
+        jacobi.block(0, 0, 3, 3) = Eigen::Matrix3d::Identity();
+        jacobi.block(0, 3, 3, 3) = -Sophus::SO3d::hat(prime);
         HMat += jacobi.transpose() * jacobi;
         gVec -= jacobi.transpose() * error;
       }
       // solve
-      Eigen::Vector3d delta = HMat.ldlt().solve(gVec);
+      Eigen::Vector<double, 6> delta = HMat.ldlt().solve(gVec);
       // update
-      R21 = Sophus::SO3d::exp(delta) * R21;
+      T21 = Sophus::SE3d::exp(delta) * T21;
       LOG_VAR(delta.norm());
       if (delta.norm() < 1E-10) {
         break;
@@ -79,11 +81,14 @@ namespace ns_section {
     }
 
     // compute translation
+    // pc2 - c2 = R21 * (pc1 - c1) + t21
+    // pc2 = R21 * pc1 - R21 * c1 + t21 + c2
+    // new t21 = - R21 * c1 + t21 + c2 
     Eigen::Vector3d cen1 = ICP::toVec3d(center1_pt);
     Eigen::Vector3d cen2 = ICP::toVec3d(center2_pt);
-    Eigen::Vector3d t21 = cen2 - R21 * cen1;
+    Eigen::Vector3d t21 = -T21.rotationMatrix() * cen1 + T21.translation() + cen2;
 
-    return Sophus::SE3d(R21.matrix(), t21);
+    return Sophus::SE3d(T21.rotationMatrix(), t21);
   }
 
   Eigen::Vector3d ICP::toVec3d(const ns_geo::Point3d &p) {
