@@ -67,12 +67,12 @@ for i in range(len(lasLeftX)):
 
 axs[0].grid(ls='--', alpha=0.5)
 axs[0].set_xlabel('X(M)')
-axs[0].set_ylabel('X(M)')
+axs[0].set_ylabel('Z(M)')
 axs[0].set_title('Laser Point Data')
 
 axs[1].grid(ls='--', alpha=0.5)
 axs[1].set_xlabel('X(M)')
-axs[1].set_ylabel('X(M)')
+axs[1].set_ylabel('Z(M)')
 axs[1].set_title('Station Point Data')
 
 fig.suptitle('Section')

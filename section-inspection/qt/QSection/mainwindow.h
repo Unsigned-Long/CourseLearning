@@ -62,17 +62,17 @@ class MainWindow : public QMainWindow {
     void addDataSeries(Q3DScatter *graph, const ns_geo::PointSet3d &pts,
                        const QColor &color, float size);
 
-    ns_geo::PointSet3d readPointsLaser(const std::string &filename);
+    ns_geo::PointSet3d readLasPts(const std::string &filename);
 
-    ns_geo::PointSet3d readPointsStation(const std::string &filename);
+    ns_geo::PointSet3d readStaPts(const std::string &filename);
 
-    void displayPtsInfo(QTableWidget *tab, const ns_geo::PointSet3d &pts);
+    void displayPtsInTable(QTableWidget *tab, const ns_geo::PointSet3d &pts);
 
     void connection();
 
     void init();
 
-    void selectRadiusPoints(const pcl::PointXYZ &p);
+    void selectPtsByRadius(const pcl::PointXYZ &p);
 
   private:
     Ui::MainWindow *ui;
@@ -80,15 +80,15 @@ class MainWindow : public QMainWindow {
     Q3DScatter *graphStation;
     Q3DScatter *graphCoord;
     Q3DScatter *graphICP;
-    ns_geo::PointSet3d laserPts;
-    ns_geo::PointSet3d stationPts;
-    ns_geo::PointSet3d newStationPts;
+    ns_geo::PointSet3d lasPts;
+    ns_geo::PointSet3d staPts;
+    ns_geo::PointSet3d newStaPts;
     pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
-    ns_geo::PointSet3d selectedPts;
-    int selectedMainPtIdx;
-    int selectedLeftPtIdx;
-    int selectedRightPtIdx;
-    std::vector<SectionPair> pairs;
+    ns_geo::PointSet3d selectedLasPts;
+    int selectedStaMainPtIdx;
+    int selectedStaLeftPtIdx;
+    int selectedStaRightPtIdx;
+    std::vector<SectionPair> ptsPairs;
 };
 
 #endif // MAINWINDOW_H

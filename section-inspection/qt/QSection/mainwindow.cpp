@@ -51,7 +51,7 @@ void MainWindow::addDataSeries(Q3DScatter *graph, const ns_geo::PointSet3d &pts,
     graph->seriesList().at(graph->seriesList().size() - 1)->dataProxy()->resetArray(dataArray);
 }
 
-ns_geo::PointSet3d MainWindow::readPointsLaser(const std::string &filename) {
+ns_geo::PointSet3d MainWindow::readLasPts(const std::string &filename) {
     auto reader = ns_csv::CSVReader::create(filename);
     ns_geo::PointSet3d pts;
     double x, y, z;
@@ -61,7 +61,7 @@ ns_geo::PointSet3d MainWindow::readPointsLaser(const std::string &filename) {
     return pts;
 }
 
-ns_geo::PointSet3d MainWindow::readPointsStation(const std::string &filename) {
+ns_geo::PointSet3d MainWindow::readStaPts(const std::string &filename) {
     auto reader = ns_csv::CSVReader::create(filename);
     ns_geo::PointSet3d pts;
     double x, y, z;
@@ -72,7 +72,7 @@ ns_geo::PointSet3d MainWindow::readPointsStation(const std::string &filename) {
     return pts;
 }
 
-void MainWindow::displayPtsInfo(QTableWidget *tab, const ns_geo::PointSet3d &pts) {
+void MainWindow::displayPtsInTable(QTableWidget *tab, const ns_geo::PointSet3d &pts) {
     tab->setRowCount(pts.size());
     tab->setColumnCount(3);
     tab->setHorizontalHeaderLabels({"X(M)", "Y(M)", "Z(M)"});
@@ -99,13 +99,13 @@ void MainWindow::connection() {
         if (filename.isEmpty()) {
             return;
         }
-        this->laserPts = this->readPointsLaser(filename.toStdString());
-        this->addDataSeries(this->graphLaser, this->laserPts, QColor(0, 255, 0), 0.09f);
+        this->lasPts = this->readLasPts(filename.toStdString());
+        this->addDataSeries(this->graphLaser, this->lasPts, QColor(0, 255, 0), 0.09f);
         ui->lineEdit_laser->setText(filename);
-        this->displayPtsInfo(ui->tab_laser, this->laserPts);
-        if (!this->stationPts.empty()) {
-            this->addDataSeries(this->graphCoord, this->laserPts, QColor(0, 255, 0), 0.09f);
-            this->addDataSeries(this->graphCoord, this->stationPts, QColor(255, 0, 0), 0.09f);
+        this->displayPtsInTable(ui->tab_laser, this->lasPts);
+        if (!this->staPts.empty()) {
+            this->addDataSeries(this->graphCoord, this->lasPts, QColor(0, 255, 0), 0.09f);
+            this->addDataSeries(this->graphCoord, this->staPts, QColor(255, 0, 0), 0.09f);
         }
         ui->tabWidget->setCurrentIndex(0);
     });
@@ -114,33 +114,33 @@ void MainWindow::connection() {
         if (filename.isEmpty()) {
             return;
         }
-        this->stationPts = this->readPointsStation(filename.toStdString());
-        this->addDataSeries(this->graphStation, this->stationPts, QColor(255, 0, 0), 0.09f);
-        this->displayPtsInfo(ui->tab_station_init, this->stationPts);
+        this->staPts = this->readStaPts(filename.toStdString());
+        this->addDataSeries(this->graphStation, this->staPts, QColor(255, 0, 0), 0.09f);
+        this->displayPtsInTable(ui->tab_station_init, this->staPts);
         ui->lineEdit_station->setText(filename);
-        if (!this->laserPts.empty()) {
-            this->addDataSeries(this->graphCoord, this->laserPts, QColor(0, 255, 0), 0.09f);
-            this->addDataSeries(this->graphCoord, this->stationPts, QColor(255, 0, 0), 0.09f);
+        if (!this->lasPts.empty()) {
+            this->addDataSeries(this->graphCoord, this->lasPts, QColor(0, 255, 0), 0.09f);
+            this->addDataSeries(this->graphCoord, this->staPts, QColor(255, 0, 0), 0.09f);
         }
         ui->tabWidget->setCurrentIndex(0);
     });
     connect(ui->btn_icp, &QPushButton::clicked, this, [=]() {
         // check
-        if (this->laserPts.empty()) {
+        if (this->lasPts.empty()) {
             return;
         }
-        if (this->stationPts.empty()) {
+        if (this->staPts.empty()) {
             return;
         }
 
         // pre
-        ns_geo::PointSet3d newLaserPts(this->laserPts.size());
-        for (int i = 0; i != this->laserPts.size(); ++i) {
-            newLaserPts[i].x = laserPts[i].x;
+        ns_geo::PointSet3d newLaserPts(this->lasPts.size());
+        for (int i = 0; i != this->lasPts.size(); ++i) {
+            newLaserPts[i].x = lasPts[i].x;
             newLaserPts[i].y = 0.0;
-            newLaserPts[i].z = laserPts[i].z;
+            newLaserPts[i].z = lasPts[i].z;
         }
-        auto Tls = ns_section::ICP::solve(this->stationPts, newLaserPts);
+        auto Tls = ns_section::ICP::solve(this->staPts, newLaserPts);
 
         // kd tree
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
@@ -151,26 +151,26 @@ void MainWindow::connection() {
         kdtree.setInputCloud(cloud);
 
         // visual
-        this->newStationPts = ns_geo::PointSet3d(stationPts.size());
-        for (int i = 0; i != stationPts.size(); ++i) {
-            const auto &p1 = stationPts[i];
+        this->newStaPts = ns_geo::PointSet3d(staPts.size());
+        for (int i = 0; i != staPts.size(); ++i) {
+            const auto &p1 = staPts[i];
             auto p2 = Tls * Eigen::Vector3d(p1.x, p1.y, p1.z);
-            newStationPts[i] = ns_geo::Point3d(p2(0), p2(1), p2(2));
+            newStaPts[i] = ns_geo::Point3d(p2(0), p2(1), p2(2));
         }
-        this->addDataSeries(this->graphICP, this->laserPts, QColor(0, 255, 0), 0.09f);
-        this->addDataSeries(this->graphICP, this->newStationPts, QColor(255, 0, 0), 0.1f);
+        this->addDataSeries(this->graphICP, this->lasPts, QColor(0, 255, 0), 0.09f);
+        this->addDataSeries(this->graphICP, this->newStaPts, QColor(255, 0, 0), 0.1f);
         connect(this->graphICP->seriesList().at(1), &QScatter3DSeries::selectedItemChanged, this, [=](int index) {
             if (index == -1) {
                 return;
             }
-            auto p = this->newStationPts.at(index);
-            this->selectedMainPtIdx = index;
-            this->selectRadiusPoints(pcl::PointXYZ(p.x, p.y, p.z));
+            auto p = this->newStaPts.at(index);
+            this->selectedStaMainPtIdx = index;
+            this->selectPtsByRadius(pcl::PointXYZ(p.x, p.y, p.z));
         });
         ui->tabWidget->setCurrentIndex(2);
 
         // display
-        this->displayPtsInfo(ui->tab_station_reg, this->newStationPts);
+        this->displayPtsInTable(ui->tab_station_reg, this->newStaPts);
         Eigen::Matrix4d trans = Tls.matrix();
         ui->tab_trans->setRowCount(4);
         ui->tab_trans->setColumnCount(4);
@@ -184,16 +184,16 @@ void MainWindow::connection() {
         }
     });
     connect(ui->btn_fit, &QPushButton::clicked, this, [=]() {
-        if (selectedPts.size() < 2) {
+        if (selectedLasPts.size() < 2) {
             return;
         }
-        ns_geo::PointSet2d ptsToFit(selectedPts.size());
-        for (int i = 0; i != selectedPts.size(); ++i) {
-            ptsToFit[i].x = selectedPts[i].x;
-            ptsToFit[i].y = selectedPts[i].z;
+        ns_geo::PointSet2d ptsToFit(selectedLasPts.size());
+        for (int i = 0; i != selectedLasPts.size(); ++i) {
+            ptsToFit[i].x = selectedLasPts[i].x;
+            ptsToFit[i].y = selectedLasPts[i].z;
         }
         auto line = ns_section::SLine::fit(ptsToFit);
-        auto np = line.nearest({newStationPts[selectedMainPtIdx].x, newStationPts[selectedMainPtIdx].z});
+        auto np = line.nearest({newStaPts[selectedStaMainPtIdx].x, newStaPts[selectedStaMainPtIdx].z});
         this->addDataSeries(this->graphICP, {{np.x, 0.0, np.y}}, QColor(255, 255, 0), 0.11f);
         ui->lineEdit_x->setText(QString::number(np.x, 'f', 3));
         ui->lineEdit_z->setText(QString::number(np.y, 'f', 3));
@@ -201,14 +201,14 @@ void MainWindow::connection() {
     connect(ui->btn_left, &QPushButton::clicked, this, [=]() {
         ui->left_x->setText(ui->lineEdit_x->text());
         ui->left_z->setText(ui->lineEdit_z->text());
-        this->selectedLeftPtIdx = this->selectedMainPtIdx;
+        this->selectedStaLeftPtIdx = this->selectedStaMainPtIdx;
         ui->lineEdit_x->clear();
         ui->lineEdit_z->clear();
     });
     connect(ui->btn_right, &QPushButton::clicked, this, [=]() {
         ui->right_x->setText(ui->lineEdit_x->text());
         ui->right_z->setText(ui->lineEdit_z->text());
-        this->selectedRightPtIdx = this->selectedMainPtIdx;
+        this->selectedStaRightPtIdx = this->selectedStaMainPtIdx;
         ui->lineEdit_x->clear();
         ui->lineEdit_z->clear();
     });
@@ -230,7 +230,7 @@ void MainWindow::connection() {
         SectionPair p;
         {
             // station left
-            auto psl = this->newStationPts[selectedLeftPtIdx];
+            auto psl = this->newStaPts[selectedStaLeftPtIdx];
             p.staLeft.x = psl.x;
             p.staLeft.y = psl.z;
 
@@ -267,7 +267,7 @@ void MainWindow::connection() {
         rowIdx += 1;
         {
             // station right
-            auto psr = this->newStationPts[selectedRightPtIdx];
+            auto psr = this->newStaPts[selectedStaRightPtIdx];
             p.staRight.x = psr.x;
             p.staRight.y = psr.z;
             item = new QTableWidgetItem("STA_R_" + QString::number(pairIdx));
@@ -300,7 +300,7 @@ void MainWindow::connection() {
             p.lasRight.x = ui->right_x->text().toDouble();
             p.lasRight.y = ui->right_z->text().toDouble();
         }
-        pairs.push_back(p);
+        ptsPairs.push_back(p);
 
         ui->left_x->clear();
         ui->left_z->clear();
@@ -311,7 +311,7 @@ void MainWindow::connection() {
         {
             // to release the 'writer'
             auto writer = ns_csv::CSVWriter::create("../../pyDrawer/section/pairs.csv");
-            for (const auto &elem : pairs) {
+            for (const auto &elem : ptsPairs) {
                 writer->writeLine(',', elem.lasLeft.x, elem.lasLeft.y, elem.staLeft.x, elem.staLeft.y,
                                   elem.lasRight.x, elem.lasRight.y, elem.staRight.x, elem.staRight.y);
             }
@@ -351,7 +351,7 @@ void MainWindow::init() {
     }
 }
 
-void MainWindow::selectRadiusPoints(const pcl::PointXYZ &p) {
+void MainWindow::selectPtsByRadius(const pcl::PointXYZ &p) {
     double radius = ui->doubleSpinBox->value();
     std::vector<int> pointIdxRadiusSearch;
     std::vector<float> pointRadiusSquaredDistance;
@@ -361,10 +361,10 @@ void MainWindow::selectRadiusPoints(const pcl::PointXYZ &p) {
             this->graphICP->seriesList().at(
                 this->graphICP->seriesList().size() - 1));
     }
-    selectedPts.resize(pointIdxRadiusSearch.size());
+    selectedLasPts.resize(pointIdxRadiusSearch.size());
     for (int i = 0; i != pointIdxRadiusSearch.size(); ++i) {
-        selectedPts[i] = laserPts.at(pointIdxRadiusSearch[i]);
+        selectedLasPts[i] = lasPts.at(pointIdxRadiusSearch[i]);
     }
-    this->addDataSeries(this->graphICP, selectedPts, QColor(0, 0, 255), 0.1f);
+    this->addDataSeries(this->graphICP, selectedLasPts, QColor(0, 0, 255), 0.1f);
     return;
 }
