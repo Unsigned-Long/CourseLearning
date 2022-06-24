@@ -202,11 +202,15 @@ void MainWindow::connection() {
         ui->left_x->setText(ui->lineEdit_x->text());
         ui->left_z->setText(ui->lineEdit_z->text());
         this->selectedLeftPtIdx = this->selectedMainPtIdx;
+        ui->lineEdit_x->clear();
+        ui->lineEdit_z->clear();
     });
     connect(ui->btn_right, &QPushButton::clicked, this, [=]() {
         ui->right_x->setText(ui->lineEdit_x->text());
         ui->right_z->setText(ui->lineEdit_z->text());
         this->selectedRightPtIdx = this->selectedMainPtIdx;
+        ui->lineEdit_x->clear();
+        ui->lineEdit_z->clear();
     });
     connect(ui->btn_make_pair, &QPushButton::clicked, this, [=]() {
         // check
@@ -297,9 +301,26 @@ void MainWindow::connection() {
             p.lasRight.y = ui->right_z->text().toDouble();
         }
         pairs.push_back(p);
+
+        ui->left_x->clear();
+        ui->left_z->clear();
+        ui->right_x->clear();
+        ui->right_z->clear();
     });
     connect(ui->btn_compute, &QPushButton::clicked, this, [=]() {
-        LOG_VAR(pairs);
+        {
+            // to release the 'writer'
+            auto writer = ns_csv::CSVWriter::create("../../pyDrawer/section/pairs.csv");
+            for (const auto &elem : pairs) {
+                writer->writeLine(',', elem.lasLeft.x, elem.lasLeft.y, elem.staLeft.x, elem.staLeft.y,
+                                  elem.lasRight.x, elem.lasRight.y, elem.staRight.x, elem.staRight.y);
+            }
+        }
+        this->statusBar()->showMessage("Drawing!");
+        auto re = system("/bin/python3 ../../pyDrawer/section/section.py");
+        this->statusBar()->showMessage("Done!");
+        ui->label_img->setPixmap(QPixmap("../../pyDrawer/section/img.png"));
+        ui->tabWidget->setCurrentIndex(3);
     });
 }
 
