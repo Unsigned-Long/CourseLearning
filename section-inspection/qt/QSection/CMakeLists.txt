@@ -14,11 +14,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets DataVisualization)
 
+# add resource file
+file(GLOB_RECURSE QRC_SOURCE_FILES ${CMAKE_SOURCE_DIR}/resource.qrc)
+
+qt6_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
+
+source_group("Resource Files" FILES ${QRC_SOURCE_FILES})
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        ${QRC_FILES}
 )
 # -- customer
 
