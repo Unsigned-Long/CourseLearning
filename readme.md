@@ -43,9 +43,7 @@ If this brings you substantial help, it's really great!
     描述：【上海交大】最优化方法 18讲视频教程
     
 + [PDR](./PDR)
-
     课程：《位置服务与实践》
-
     描述：行人航迹推算
 
 + [postgis](./postgis/)  
@@ -73,5 +71,13 @@ If this brings you substantial help, it's really great!
     描述：课程教材代码实践
     
 + [image-fusion](./image-fusion/)   
-    课程：专业实习
+    课程：综合实习
     描述：遥感图像融合代码实践
+    
++ [section-inspection](./section-inspection)
+    课程：专业实习2
+    描述：断面收敛性计算
+
++ [GPS-StaPos-solver](./GPS-StaPos-solver/)
+    课程：GNSS原理与应用
+    描述：根据GPS观测文件计算卫星位置
