@@ -9,6 +9,11 @@
 
 namespace ns_gps {
 
+  namespace ns_param {
+    static constexpr double GM = 3.986005E14;
+    static constexpr double OMEGA_E = 7.292115E-5;
+  } // namespace ns_param
+
   struct GSatData {
   public:
     /**

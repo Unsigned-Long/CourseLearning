@@ -52,12 +52,9 @@ namespace ns_gps {
 
   Point3d GSatData::staInstantPos(GPST gpst) const {
     // step 0
-    double ref_JS = TOC.julianSed();
-    double cur_JS = gpst.julianSed();
-    double Delta_t = (cur_JS - ref_JS);
+    double Delta_t = (gpst.GPSWeek() * 604800.0) - (gpsWeek * 604800.0 + TOE);
     // step 1
-    constexpr double GM = 3.986005E14;
-    double n0 = std::sqrt(GM) / std::pow(sqrtA, 3);
+    double n0 = std::sqrt(ns_param::GM) / std::pow(sqrtA, 3);
     double n = n0 + Delta_n;
     // step 2
     double M = M0 + n * Delta_t;
@@ -88,9 +85,7 @@ namespace ns_gps {
     double x = r * std::cos(u);
     double y = r * std::sin(u);
     // step 9
-    constexpr double omega_e = 7.292115E-5;
-    double weekSed = gpst.GPSSedInWeek();
-    double L = OMEGA0 + dotOMEGA * Delta_t - omega_e * weekSed;
+    double L = OMEGA0 + dotOMEGA * Delta_t - ns_param::OMEGA_E * TOE;
     // step 10
     double sinL = std::sin(L), cosL = std::cos(L);
     double sini = std::sin(i), cosi = std::cos(i);
