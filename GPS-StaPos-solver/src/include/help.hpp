@@ -34,6 +34,19 @@ namespace ns_gps {
     }
     return vec;
   }
+
+  static double julianDay(std::size_t year, std::size_t month, std::size_t day,
+                          std::size_t hour = 0, std::size_t minute = 0, double second = 0.0) {
+    if (month == 1 || month == 2) {
+      year -= 1;
+      month += 12;
+    }
+    int A = int(year / 100.0);
+    int B = 2 - A + int(A / 4.0);
+    return int(365.25 * (year + 4716)) + int(30.6001 * (month + 1)) + day +
+           ((second / 60.0 + minute) / 60.0 + hour) / 24.0 + B - 1524.5;
+  }
+
 } // namespace ns_gps
 
 #endif

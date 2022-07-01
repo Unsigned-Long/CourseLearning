@@ -3,25 +3,29 @@
 
 #include <iostream>
 
-struct Point3d {
-public:
-  /**
-   * @brief the members
-   */
-  double x;
-  double y;
-  double z;
+namespace ns_gps {
 
-public:
+  struct Point3d {
+  public:
+    /**
+     * @brief the members
+     */
+    double x;
+    double y;
+    double z;
+
+  public:
+    /**
+     * @brief construct a new Point3d object
+     */
+    Point3d(const double &x, const double &y, const double &z)
+        : x(x), y(y), z(z) {}
+  };
   /**
-   * @brief construct a new Point3d object
+   * @brief override operator '<<' for type 'Point3d'
    */
-  Point3d(const double &x, const double &y, const double &z)
-      : x(x), y(y), z(z) {}
-};
-/**
- * @brief override operator '<<' for type 'Point3d'
- */
-std::ostream &operator<<(std::ostream &os, const Point3d &obj);
+  std::ostream &operator<<(std::ostream &os, const Point3d &obj);
+
+} // namespace ns_gps
 
 #endif

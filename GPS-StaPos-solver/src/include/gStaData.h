@@ -17,7 +17,7 @@ namespace ns_gps {
     // Satellite system (G), sat number (PRN)
     std::string PRN;
     // Epoch: Toc - Time of Clock (GPS)
-    DateTime TOC;
+    GPST TOC;
     // SV clock bias (seconds)
     double cBias;
     // SV clock drift (sec/sec)
@@ -83,7 +83,7 @@ namespace ns_gps {
      */
     GSatData(const std::string &staStrItem);
 
-    // Point3d staPosition(DateTime gpst) const;
+    Point3d staInstantPos(GPST gpst) const;
   };
   /**
    * @brief override operator '<<' for type 'GSatData'

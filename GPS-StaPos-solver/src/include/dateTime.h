@@ -28,11 +28,28 @@ namespace ns_gps {
           hour(hour), minute(minute), second(second) {}
 
     DateTime() = default;
+
+    double julianDay() const;
+
+    double julianSed() const;
   };
   /**
    * @brief override operator '<<' for type 'Date'
    */
   std::ostream &operator<<(std::ostream &os, const DateTime &obj);
+
+  struct GPST : public DateTime {
+  public:
+    using DateTime::DateTime;
+
+    double sedSinceEpoch() const;
+
+    double GPSWeek() const;
+
+    double GPSSedInWeek() const;
+
+    double GPSDayInWeek() const;
+  };
 
 } // namespace ns_gps
 

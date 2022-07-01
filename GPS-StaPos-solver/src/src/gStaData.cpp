@@ -1,4 +1,5 @@
 #include "gStaData.h"
+#include <cmath>
 
 namespace ns_gps {
   GSatData::GSatData(const std::string &staStrItem) {
@@ -47,6 +48,56 @@ namespace ns_gps {
     // line[7]
     this->transTime = std::stod(ls[7].substr(4, 19));
     this->fitInterval = std::stod(ls[7].substr(23, 19));
+  }
+
+  Point3d GSatData::staInstantPos(GPST gpst) const {
+    // step 0
+    double ref_JS = TOC.julianSed();
+    double cur_JS = gpst.julianSed();
+    double Delta_t = (cur_JS - ref_JS);
+    // step 1
+    constexpr double GM = 3.986005E14;
+    double n0 = std::sqrt(GM) / std::pow(sqrtA, 3);
+    double n = n0 + Delta_n;
+    // step 2
+    double M = M0 + n * Delta_t;
+    // step 3
+    double E = M, delta_M;
+    do {
+      double lastE = E;
+      E = M + e * std::sin(E);
+      delta_M = std::abs(E - lastE);
+    } while (delta_M > 1E-8);
+    // step 4
+    double cosf = (std::cos(E) - e) / (1.0 - e * std::cos(E));
+    double sinf = (std::sqrt(1 - e * e) * std::sin(E)) / (1.0 - e * std::cos(E));
+    double f = std::atan2(std::sqrt(1 - e * e) * std::sin(E), std::cos(E) - e);
+    // step 5
+    double u_prime = omega + f;
+    // step 6
+    double cos2u_prime = std::cos(2.0 * u_prime);
+    double sin2u_prime = std::sin(2.0 * u_prime);
+    double delta_u = Cuc * cos2u_prime + Cus * sin2u_prime;
+    double delta_r = Crc * cos2u_prime + Crs * sin2u_prime;
+    double delta_i = Cic * cos2u_prime + Cis * sin2u_prime;
+    // step 7
+    double u = u_prime + delta_u;
+    double r = sqrtA * sqrtA * (1.0 - e * std::cos(E)) + delta_r;
+    double i = i0 + delta_i + IDOT * Delta_t;
+    // step 8
+    double x = r * std::cos(u);
+    double y = r * std::sin(u);
+    // step 9
+    constexpr double omega_e = 7.292115E-5;
+    double weekSed = gpst.GPSSedInWeek();
+    double L = OMEGA0 + dotOMEGA * Delta_t - omega_e * weekSed;
+    // step 10
+    double sinL = std::sin(L), cosL = std::cos(L);
+    double sini = std::sin(i), cosi = std::cos(i);
+    double X = x * cosL - y * cosi * sinL;
+    double Y = x * sinL + y * cosi * cosL;
+    double Z = y * sini;
+    return Point3d(X, Y, Z);
   }
 
   std::ostream &operator<<(std::ostream &os, const GSatData &obj) {
