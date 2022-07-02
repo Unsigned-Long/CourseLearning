@@ -12,11 +12,11 @@ namespace ns_gps {
      * @brief the members
      */
     int year;
-    int month;
+    int mon;
     int day;
     int hour;
-    int minute;
-    int second;
+    int min;
+    int sed;
 
   public:
     /**
@@ -24,8 +24,8 @@ namespace ns_gps {
      */
     DateTime(const int &year, const int &month, const int &day,
              const int &hour, const int &minute, const int &second)
-        : year(year), month(month), day(day),
-          hour(hour), minute(minute), second(second) {}
+        : year(year), mon(month), day(day),
+          hour(hour), min(minute), sed(second) {}
 
     DateTime() = default;
 

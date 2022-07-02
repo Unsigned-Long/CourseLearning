@@ -2,16 +2,24 @@
 #include <cmath>
 
 namespace ns_gps {
+  std::ostream &operator<<(std::ostream &os, const SatPRN &obj) {
+    os << '{';
+    os << "'flag': " << obj.flag << ", 'id': " << obj.id;
+    os << '}';
+    return os;
+  }
+
   GSatData::GSatData(const std::string &staStrItem) {
     const auto ls = split(staStrItem, '\n');
     // line[0]
-    this->PRN = ls[0].substr(0, 3);
+    this->PRN.flag = ls[0].at(0);
+    this->PRN.id = std::stoi(ls[0].substr(1, 2));
     this->TOC.year = std::stoi(ls[0].substr(4, 4));
-    this->TOC.month = std::stoi(ls[0].substr(9, 2));
+    this->TOC.mon = std::stoi(ls[0].substr(9, 2));
     this->TOC.day = std::stoi(ls[0].substr(12, 2));
     this->TOC.hour = std::stoi(ls[0].substr(15, 2));
-    this->TOC.minute = std::stoi(ls[0].substr(18, 2));
-    this->TOC.second = std::stoi(ls[0].substr(21, 2));
+    this->TOC.min = std::stoi(ls[0].substr(18, 2));
+    this->TOC.sed = std::stoi(ls[0].substr(21, 2));
     this->cBias = std::stod(ls[0].substr(23, 19));
     this->cDrift = std::stod(ls[0].substr(42, 19));
     this->cDriftRate = std::stod(ls[0].substr(61, 19));

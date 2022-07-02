@@ -4,15 +4,15 @@
 namespace ns_gps {
   std::ostream &operator<<(std::ostream &os, const DateTime &obj) {
     os << '{';
-    os << "'year': " << obj.year << ", 'month': " << obj.month
+    os << "'year': " << obj.year << ", 'mon': " << obj.mon
        << ", 'day': " << obj.day << ", 'hour': " << obj.hour
-       << ", 'minute': " << obj.minute << ", 'second': " << obj.second;
+       << ", 'min': " << obj.min << ", 'sed': " << obj.sed;
     os << '}';
     return os;
   }
 
   double DateTime::julianDay() const {
-    return ns_gps::julianDay(year, month, day, hour, minute, second);
+    return ns_gps::julianDay(year, mon, day, hour, min, sed);
   }
 
   double DateTime::julianSed() const {

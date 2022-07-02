@@ -14,13 +14,34 @@ namespace ns_gps {
     static constexpr double OMEGA_E = 7.292115E-5;
   } // namespace ns_param
 
+  struct SatPRN {
+  public:
+    /**
+     * @brief the members
+     */
+    char flag;
+    std::size_t id;
+
+  public:
+    /**
+     * @brief construct a new SatPRN object
+     */
+    SatPRN(const char &flag, const std::size_t &id) : flag(flag), id(id) {}
+
+    SatPRN() = default;
+  };
+  /**
+   * @brief override operator '<<' for type 'SatPRN'
+   */
+  std::ostream &operator<<(std::ostream &os, const SatPRN &obj);
+
   struct GSatData {
   public:
     /**
      * @brief the members
      */
     // Satellite system (G), sat number (PRN)
-    std::string PRN;
+    SatPRN PRN;
     // Epoch: Toc - Time of Clock (GPS)
     GPST TOC;
     // SV clock bias (seconds)
