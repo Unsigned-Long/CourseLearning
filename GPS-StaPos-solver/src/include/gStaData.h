@@ -60,15 +60,15 @@ namespace ns_gps {
     // omega (radians)
     double omega;
     // OMEGA DOT (radians/sec)
-    double dotOMEGA;
+    double OMEGA_DOT;
     // IDOT (radians/sec)
     double IDOT;
     // Codes on L2 channel
-    double codeL2;
+    double L2_CODE;
     // GPS Week
-    double gpsWeek;
+    double GPSW;
     // L2 P data flag
-    double flagL2P;
+    double L2P_DF;
     // SV accuracy (meters)
     double accu;
     // SV health

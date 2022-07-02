@@ -2,7 +2,7 @@
 #include <iomanip>
 
 int main(int argc, char const *argv[]) {
-  std::fstream file("../data/gps.o", std::ios::in);
+  std::fstream file("../data/gps.n", std::ios::in);
   auto str = ns_gps::readString(file);
   file.close();
   ns_gps::GSatData gData(str);

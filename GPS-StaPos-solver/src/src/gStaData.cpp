@@ -34,12 +34,12 @@ namespace ns_gps {
     this->i0 = std::stod(ls[4].substr(4, 19));
     this->Crc = std::stod(ls[4].substr(23, 19));
     this->omega = std::stod(ls[4].substr(42, 19));
-    this->dotOMEGA = std::stod(ls[4].substr(61, 19));
+    this->OMEGA_DOT = std::stod(ls[4].substr(61, 19));
     // line[5]
     this->IDOT = std::stod(ls[5].substr(4, 19));
-    this->codeL2 = std::stod(ls[5].substr(23, 19));
-    this->gpsWeek = std::stod(ls[5].substr(42, 19));
-    this->flagL2P = std::stod(ls[5].substr(61, 19));
+    this->L2_CODE = std::stod(ls[5].substr(23, 19));
+    this->GPSW = std::stod(ls[5].substr(42, 19));
+    this->L2P_DF = std::stod(ls[5].substr(61, 19));
     // line[6]
     this->accu = std::stod(ls[6].substr(4, 19));
     this->health = std::stod(ls[6].substr(23, 19));
@@ -52,7 +52,7 @@ namespace ns_gps {
 
   Point3d GSatData::staInstantPos(GPST gpst) const {
     // step 0
-    double Delta_t = (gpst.GPSWeek() * 604800.0) - (gpsWeek * 604800.0 + TOE);
+    double Delta_t = (gpst.GPSWeek() * 604800.0) - (GPSW * 604800.0 + TOE);
     // step 1
     double n0 = std::sqrt(ns_param::GM) / std::pow(sqrtA, 3);
     double n = n0 + Delta_n;
@@ -85,7 +85,7 @@ namespace ns_gps {
     double x = r * std::cos(u);
     double y = r * std::sin(u);
     // step 9
-    double L = OMEGA0 + dotOMEGA * Delta_t - ns_param::OMEGA_E * TOE;
+    double L = OMEGA0 + OMEGA_DOT * Delta_t - ns_param::OMEGA_E * TOE;
     // step 10
     double sinL = std::sin(L), cosL = std::cos(L);
     double sini = std::sin(i), cosi = std::cos(i);
@@ -106,9 +106,9 @@ namespace ns_gps {
        << ", 'TOE': " << obj.TOE << ", 'Cic': " << obj.Cic
        << ", 'OMEGA0': " << obj.OMEGA0 << ", 'Cis': " << obj.Cis
        << ", 'i0': " << obj.i0 << ", 'Crc': " << obj.Crc
-       << ", 'omega': " << obj.omega << ", 'dotOMEGA': " << obj.dotOMEGA
-       << ", 'IDOT': " << obj.IDOT << ", 'codeL2': " << obj.codeL2
-       << ", 'gpsWeek': " << obj.gpsWeek << ", 'flagL2P': " << obj.flagL2P
+       << ", 'omega': " << obj.omega << ", 'OMEGA_DOT': " << obj.OMEGA_DOT
+       << ", 'IDOT': " << obj.IDOT << ", 'L2_CODE': " << obj.L2_CODE
+       << ", 'GPSW': " << obj.GPSW << ", 'L2P_DF': " << obj.L2P_DF
        << ", 'accu': " << obj.accu << ", 'health': " << obj.health
        << ", 'TGD': " << obj.TGD << ", 'IODC': " << obj.IODC
        << ", 'transTime': " << obj.transTime
