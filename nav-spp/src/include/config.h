@@ -22,12 +22,14 @@ namespace ns_spp {
 
         struct Threshold {
             static long double DOUBLE_EQ;
+            static long double POSITION;
             static long double ITERATE;
+
         };
         struct TimeSystem {
             static ModJulianDay GPSTOrigin;
             static ModJulianDay BDTOrigin;
-        };
+;        };
 
         struct RefEllipsoid {
             static ns_spp::RefEllipsoid WGS1984;

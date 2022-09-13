@@ -12,6 +12,7 @@ std::string ns_spp::Config::Author::name = "";
 std::string ns_spp::Config::Author::e_mail = "";
 
 long double ns_spp::Config::Threshold::DOUBLE_EQ = 0.0;
+long double ns_spp::Config::Threshold::POSITION = 0.0;
 long double ns_spp::Config::Threshold::ITERATE = 0.0;
 
 ns_spp::ModJulianDay ns_spp::Config::TimeSystem::GPSTOrigin = ModJulianDay(BigDouble("0.0"));
@@ -32,6 +33,7 @@ void ns_spp::Config::loadConfigure(const std::string &configPath) {
     // thresholdValue
     rapidjson::Value &thresholdValue = doc["threshold"];
     Config::Threshold::DOUBLE_EQ = thresholdValue["DOUBLE_EQ"].GetDouble();
+    Config::Threshold::POSITION = thresholdValue["POSITION"].GetDouble();
     Config::Threshold::ITERATE = thresholdValue["ITERATE"].GetDouble();
 
     // time system

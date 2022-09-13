@@ -4,8 +4,6 @@
 
 #include "coordinate.h"
 #include "config.h"
-#include "boost/multiprecision/cpp_dec_float.hpp"
-#include "boost/multiprecision/detail/default_ops.hpp"
 
 ns_spp::RefEllipsoid::RefEllipsoid(double longRadius, double oblateness) : a(longRadius), f(oblateness) {
     b = (1.0 - f) * a;
@@ -17,20 +15,18 @@ ns_spp::RefEllipsoid::RefEllipsoid(double longRadius, double oblateness) : a(lon
 }
 
 ns_spp::PointXYZ ns_spp::RefEllipsoid::BLH2XYZ(const ns_spp::PointBLH &p) const {
-    using BigDouble = boost::multiprecision::cpp_dec_float_50;
 
-    BigDouble B = p.B, L = p.L, H = p.H;
+    double B = p.B, L = p.L, H = p.H;
 
-    BigDouble N = this->N(B);
-    BigDouble X = (N + H) * cos(B) * cos(L);
-    BigDouble Y = (N + H) * cos(B) * sin(L);
-    BigDouble Z = (N * (1.0 - efir2) + H) * sin(B);
+    double N = this->N(B);
+    double X = (N + H) * cos(B) * cos(L);
+    double Y = (N + H) * cos(B) * sin(L);
+    double Z = (N * (1.0 - efir2) + H) * sin(B);
 
     return {static_cast<double>(X), static_cast<double>(Y), static_cast<double>(Z)};
 }
 
 ns_spp::PointBLH ns_spp::RefEllipsoid::XYZ2BLH(const ns_spp::PointXYZ &p) const {
-    using BigDouble = boost::multiprecision::cpp_dec_float_50;
 
     double X = p.X, Y = p.Y, Z = p.Z;
     double rxy = std::sqrt(X * X + Y * Y);
@@ -88,9 +84,9 @@ bool ns_spp::RefEllipsoid::operator!=(const ns_spp::RefEllipsoid &rhs) const {
 }
 
 bool ns_spp::PointBLH::operator==(const ns_spp::PointBLH &rhs) const {
-    return std::abs(B - rhs.B) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(L - rhs.L) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(H - rhs.H) < Config::Threshold::DOUBLE_EQ;
+    return std::abs(B - rhs.B) < Config::Threshold::POSITION &&
+           std::abs(L - rhs.L) < Config::Threshold::POSITION &&
+           std::abs(H - rhs.H) < Config::Threshold::POSITION;
 }
 
 bool ns_spp::PointBLH::operator!=(const ns_spp::PointBLH &rhs) const {
@@ -98,9 +94,9 @@ bool ns_spp::PointBLH::operator!=(const ns_spp::PointBLH &rhs) const {
 }
 
 bool ns_spp::PointXYZ::operator==(const ns_spp::PointXYZ &rhs) const {
-    return std::abs(X - rhs.X) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(Y - rhs.Y) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(Z - rhs.Z) < Config::Threshold::DOUBLE_EQ;
+    return std::abs(X - rhs.X) < Config::Threshold::POSITION &&
+           std::abs(Y - rhs.Y) < Config::Threshold::POSITION &&
+           std::abs(Z - rhs.Z) < Config::Threshold::POSITION;
 }
 
 bool ns_spp::PointXYZ::operator!=(const ns_spp::PointXYZ &rhs) const {

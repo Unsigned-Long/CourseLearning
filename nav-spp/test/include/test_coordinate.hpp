@@ -41,8 +41,6 @@ TEST(coordinate, RefEllipsoid) {
 
     EXPECT_EQ(Config::RefEllipsoid::WGS1984.XYZ2BLH(p_xyz), p_blh);
 
-    LOG_VAR(Config::RefEllipsoid::WGS1984.XYZ2BLH(p_xyz));
-    LOG_VAR(p_blh);
 }
 
 #endif //SPP_TEST_COORDINATE_HPP

@@ -43,7 +43,6 @@ namespace ns_spp {
         bool operator!=(const PointBLH &rhs) const;
 
         friend std::ostream &operator<<(std::ostream &os, const PointBLH &blh) {
-            os << std::fixed << std::setprecision(15);
             os << "PointBLH['B': " << blh.B << ", 'L': " << blh.L << ", 'H': " << blh.H << ']';
             return os;
         }

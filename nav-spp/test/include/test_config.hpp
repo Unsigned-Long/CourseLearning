@@ -16,6 +16,7 @@ TEST(config, Config) {
     EXPECT_EQ(Config::Author::e_mail, "3079625093@qq.com");
 
     EXPECT_DOUBLE_EQ(Config::Threshold::DOUBLE_EQ, 1E-15);
+    EXPECT_DOUBLE_EQ(Config::Threshold::POSITION, 1E-5);
     EXPECT_DOUBLE_EQ(Config::Threshold::ITERATE, 1E-12);
 
     EXPECT_EQ(Config::TimeSystem::GPSTOrigin,
