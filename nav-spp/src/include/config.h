@@ -7,26 +7,43 @@
 
 #include <ostream>
 #include "string"
+#include "memory"
 
 namespace ns_spp {
+    struct ModJulianDay;
+    struct RefEllipsoid;
+
     struct Config {
     public:
-        struct {
-            std::string name;
-            std::string e_mail;
-        } author;
+        struct Author {
+            static std::string name;
+            static std::string e_mail;
+        };
+
+        struct Threshold {
+            static long double DOUBLE_EQ;
+            static long double ITERATE;
+        };
+        struct TimeSystem {
+            static ModJulianDay GPSTOrigin;
+            static ModJulianDay BDTOrigin;
+        };
+
+        struct RefEllipsoid {
+            static ns_spp::RefEllipsoid WGS1984;
+            static ns_spp::RefEllipsoid CGCS2000;
+        };
 
     public:
-        static Config loadConfigure(const std::string &configPath);
 
-        friend std::ostream &operator<<(std::ostream &os, const Config &config);
+        static void loadConfigure(const std::string &configPath);
 
     private:
-
-        Config() = default;
-
         static std::string readString(const std::string &filePath);
+
+        Config() = delete;
     };
+
 }
 
 #endif //NAV_SPP_CONFIG_H

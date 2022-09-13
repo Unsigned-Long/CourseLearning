@@ -6,11 +6,17 @@
 #define SPP_DATETIME_H
 
 #include <ostream>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include "config.h"
 
 namespace ns_spp {
+    struct DateTime;
     struct Julian;
     struct JulianDay;
     struct ModJulianDay;
+    struct GPSTime;
+
+    using BigDouble = boost::multiprecision::cpp_dec_float_50;
 
     struct DateTime {
         unsigned short year;
@@ -18,10 +24,11 @@ namespace ns_spp {
         unsigned short day;
         unsigned short hour;
         unsigned short minute;
-        long double second;
+        BigDouble second;
 
         DateTime(unsigned short year, unsigned short month, unsigned short day,
-                 unsigned short hour = 0, unsigned short minute = 0, long double sec = 0.0)
+                 unsigned short hour = 0, unsigned short minute = 0,
+                 const BigDouble &sec = BigDouble("0.0"))
                 : year(year), month(month), day(day),
                   hour(hour), minute(minute), second(sec) {}
 
@@ -29,38 +36,53 @@ namespace ns_spp {
 
         JulianDay toJulianDay() const;
 
-        static DateTime fromJulianDay(const JulianDay &julianDay);
-
         ModJulianDay toModJulianDay() const;
 
-        static DateTime fromModJulianDay(const ModJulianDay &modJulianDay);
+        GPSTime toGPSTime() const;
 
-        friend std::ostream &operator<<(std::ostream &os, const DateTime &dateTime);
+    public:
+        friend std::ostream &operator<<(std::ostream &os, const DateTime &dateTime) {
+            os << "DateTime['y': " << dateTime.year << ", 'mon': " << dateTime.month << ", 'd': " << dateTime.day
+               << ", 'h': " << dateTime.hour << ", 'min': " << dateTime.minute << ", 's': " << dateTime.second << ']';
+            return os;
+        }
 
-        bool operator==(const DateTime &rhs) const;
+        bool operator==(const ns_spp::DateTime &rhs) const {
+            return year == rhs.year &&
+                   month == rhs.month &&
+                   day == rhs.day &&
+                   hour == rhs.hour &&
+                   minute == rhs.minute &&
+                    std::abs(static_cast<long double>(second - rhs.second)) < Config::Threshold::DOUBLE_EQ;
+        }
 
-        bool operator!=(const DateTime &rhs) const;
+        bool operator!=(const ns_spp::DateTime &rhs) const {
+            return !(rhs == *this);
+        }
 
     };
 
     struct Julian {
     public:
-        unsigned int days;
-        long double fracDays;
+        BigDouble days;
 
-        virtual DateTime toDateTime() = 0;
+    public:
 
-    protected:
-
-        Julian(unsigned int days, long double fracDays) : days(days), fracDays(fracDays) {}
+        explicit Julian(const BigDouble &days) : days(days) {}
 
         Julian() = default;
 
-    public:
-        friend std::ostream &operator<<(std::ostream &os, const Julian &julian) {
-            os << "days: " << julian.days << " fracDays: " << julian.fracDays;
-            return os;
+        bool operator==(const Julian &rhs) const {
+            return std::abs(static_cast<long double>(days - rhs.days)) < Config::Threshold::DOUBLE_EQ;
         }
+
+        bool operator!=(const Julian &rhs) const {
+            return !(rhs == *this);
+        }
+
+    protected:
+
+        virtual DateTime toDateTime() const = 0;
 
     };
 
@@ -68,34 +90,73 @@ namespace ns_spp {
 
     public:
 
-        JulianDay(unsigned int days, long double fracDays) : Julian(days, fracDays) {}
+        explicit JulianDay(const BigDouble &days) : Julian(days) {}
 
         JulianDay();
 
-        DateTime toDateTime() override;
+        DateTime toDateTime() const override;
 
-        static JulianDay fromDateTime(const DateTime &dateTime);
+        ModJulianDay toModJulianDay() const;
 
-        bool operator==(const JulianDay &rhs) const;
+        GPSTime toGPSTime() const;
 
-        bool operator!=(const JulianDay &rhs) const;
+        friend std::ostream &operator<<(std::ostream &os, const JulianDay &day) {
+            os << "JulianDay['d': " << day.days << "]";
+            return os;
+        }
     };
 
     struct ModJulianDay : public Julian {
 
     public:
 
-        ModJulianDay(unsigned int days, long double fracDays) : Julian(days, fracDays) {}
+        explicit ModJulianDay(const BigDouble &days) : Julian(days) {}
 
         ModJulianDay();
 
-        DateTime toDateTime() override;
+        DateTime toDateTime() const override;
 
-        static ModJulianDay fromDateTime(const DateTime &dateTime);
+        JulianDay toJulianDay() const;
 
-        bool operator==(const ModJulianDay &rhs) const;
+        GPSTime toGPSTime() const;
 
-        bool operator!=(const ModJulianDay &rhs) const;
+        friend std::ostream &operator<<(std::ostream &os, const ModJulianDay &day) {
+            os << "ModJulianDay['d': " << day.days << "]";
+            return os;
+        }
+    };
+
+    struct GPSTime {
+    public:
+        unsigned short week;
+        BigDouble secOfWeek;
+
+        static GPSTime origin;
+
+        GPSTime(unsigned short week = 0, const BigDouble &secOfWeek = BigDouble("0.0"))
+                : week(week), secOfWeek(secOfWeek) {}
+
+        ModJulianDay toModJulianDay() const;
+
+        DateTime toDateTime() const;
+
+        JulianDay toJulianDay() const;
+
+        friend std::ostream &operator<<(std::ostream &os, const GPSTime &gpsTime) {
+            os << "GPSTime['w': " << gpsTime.week << ", 'sow': " << gpsTime.secOfWeek << ']';
+            return os;
+        }
+
+
+        bool operator==(const ns_spp::GPSTime &rhs) const {
+            return week == rhs.week &&
+                    std::abs(static_cast<long double>(secOfWeek - rhs.secOfWeek)) < Config::Threshold::DOUBLE_EQ;
+        }
+
+        bool operator!=(const ns_spp::GPSTime &rhs) const {
+            return !(rhs == *this);
+        }
+
     };
 
 }
