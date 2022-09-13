@@ -1,0 +1,39 @@
+{
+  "author": {
+    "name": "unsigned-long2",
+    "e_mail": "3079625093@qq.com"
+  },
+  "threshold": {
+    "DOUBLE_EQ": 1E-15,
+    "POSITION": 1E-5,
+    "ITERATE": 1E-12
+  },
+  "timeSystem": {
+    "GPSTOrigin": {
+      "year": 1980,
+      "month": 1,
+      "day": 6,
+      "hour": 0,
+      "minute": 0,
+      "second": 0
+    },
+    "BDTOrigin": {
+      "year": 2006,
+      "month": 1,
+      "day": 1,
+      "hour": 0,
+      "minute": 0,
+      "second": 0
+    }
+  },
+  "RefEllipsoid": {
+    "WGS1984": {
+      "longRadius": 6378137.0,
+      "oblateness_inv": 298.257223563
+    },
+    "CGCS2000": {
+      "longRadius": 6378137.0,
+      "oblateness_inv": 298.257222101
+    }
+  }
+}
