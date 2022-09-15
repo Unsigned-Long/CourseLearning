@@ -12,13 +12,13 @@
 #include "artwork/logger/logger.h"
 #include "config.h"
 
-TEST(datetime, DateTime) {
+TEST(datetime, Gregorian) {
     using namespace ns_spp;
     Config::loadConfigure("../config/spp.json");
 
     BigDouble second("0");
 
-    DateTime dt(2000, 6, 30, 0, 0, second);
+    Gregorian dt(2000, 6, 30, 0, 0, second);
 
     EXPECT_EQ(dt.year, 2000);
     EXPECT_EQ(dt.month, 6);
@@ -27,7 +27,10 @@ TEST(datetime, DateTime) {
     EXPECT_EQ(dt.minute, 0);
     EXPECT_EQ(dt.second, second);
 
-    LOG_VAR(DateTime());
+    LOG_VAR(Gregorian());
+
+    EXPECT_EQ(static_cast<int>(dt.toJulianDay().days), 2451726);
+    EXPECT_EQ(static_cast<int>(dt.toModJulianDay().days), 51725);
 
     EXPECT_EQ(dt.toJulianDay().toDateTime(), dt);
     EXPECT_EQ(dt.toModJulianDay().toDateTime(), dt);
@@ -36,9 +39,9 @@ TEST(datetime, DateTime) {
 TEST(datetime, JulianDay) {
     using namespace ns_spp;
 
-    JulianDay julianDay(BigDouble("3333333"));
+    JulianDay julianDay(BigDouble("2451726"));
 
-    EXPECT_EQ(julianDay.days, BigDouble("3333333"));
+    EXPECT_EQ(julianDay.days, BigDouble("2451726"));
 
     LOG_VAR(julianDay);
 
@@ -49,9 +52,9 @@ TEST(datetime, JulianDay) {
 TEST(datetime, ModJulianDay) {
     using namespace ns_spp;
 
-    ModJulianDay modJulianDay(BigDouble("333333"));
+    ModJulianDay modJulianDay(BigDouble("51725"));
 
-    EXPECT_EQ(modJulianDay.days, BigDouble("333333"));
+    EXPECT_EQ(modJulianDay.days, BigDouble("51725"));
 
     LOG_VAR(modJulianDay);
 
