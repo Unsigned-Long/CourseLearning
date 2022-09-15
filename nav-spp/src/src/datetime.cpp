@@ -4,12 +4,10 @@
 #include "datetime.h"
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "config.h"
 
+// Gregorian
 
-// DateTime
-
-ns_spp::DateTime::DateTime() {
+ns_spp::Gregorian::Gregorian() {
     using namespace boost::gregorian;
     using namespace boost::posix_time;
 
@@ -26,7 +24,7 @@ ns_spp::DateTime::DateTime() {
     this->second = daytime.seconds();
 }
 
-ns_spp::JulianDay ns_spp::DateTime::toJulianDay() const {
+ns_spp::JulianDay ns_spp::Gregorian::toJulianDay() const {
     using namespace boost::gregorian;
 
     date d(year, month, day);
@@ -36,7 +34,7 @@ ns_spp::JulianDay ns_spp::DateTime::toJulianDay() const {
     return JulianDay(fracDay + d.julian_day());
 }
 
-ns_spp::ModJulianDay ns_spp::DateTime::toModJulianDay() const {
+ns_spp::ModJulianDay ns_spp::Gregorian::toModJulianDay() const {
     using namespace boost::gregorian;
 
     date d(year, month, day);
@@ -46,37 +44,52 @@ ns_spp::ModJulianDay ns_spp::DateTime::toModJulianDay() const {
     return ModJulianDay(fracDay + d.modjulian_day());
 }
 
-ns_spp::GPSTime ns_spp::DateTime::toGPSTime() const {
+ns_spp::GPSTime ns_spp::Gregorian::toGPSTime() const {
     return this->toModJulianDay().toGPSTime();
 }
 
+ns_spp::Gregorian::Gregorian(unsigned short year, unsigned short month, unsigned short day, unsigned short hour,
+                             unsigned short minute, const std::string &sec)
+        : year(year), month(month), day(day),
+          hour(hour), minute(minute), second(sec) {}
+
+ns_spp::Gregorian::Gregorian(unsigned short year, unsigned short month, unsigned short day, unsigned short hour,
+                             unsigned short minute, const ns_spp::BigDouble &sec)
+        : year(year), month(month), day(day),
+          hour(hour), minute(minute), second(sec) {}
+
+// Julian
+
+ns_spp::Julian::Julian(const std::string &days) : days(days) {}
+
+ns_spp::Julian::Julian(const ns_spp::BigDouble &days) : days(days) {}
+
 // JulianDay
 
-ns_spp::DateTime ns_spp::JulianDay::toDateTime() const {
+ns_spp::Gregorian ns_spp::JulianDay::toDateTime() const {
     using namespace boost;
 
-    auto now = gregorian::day_clock::local_day();
-    auto iDays = static_cast<unsigned int>(this->days);
-    auto d = now - gregorian::days(now.julian_day() - iDays);
+    auto iDays = static_cast<int>(this->days);
+    auto ymd =
+            gregorian::date::calendar_type::from_julian_day_number(iDays);
 
-    DateTime dt(0, 0, 0);
-    dt.year = d.year();
-    dt.month = d.month();
-    dt.day = d.day();
+    auto year = ymd.year;
+    auto month = ymd.month;
+    auto day = ymd.day;
 
     auto fracHour = (days - iDays) * ns_spp::BigDouble("24.0");
-    dt.hour = static_cast<unsigned int>(fracHour);
+    auto hour = static_cast<unsigned int>(fracHour);
 
-    auto fracMinute = (fracHour - dt.hour) * ns_spp::BigDouble("60.0");
-    dt.minute = static_cast<unsigned int>(fracMinute);
+    auto fracMinute = (fracHour - hour) * ns_spp::BigDouble("60.0");
+    auto minute = static_cast<unsigned int>(fracMinute);
 
-    dt.second = (fracMinute - dt.minute) * ns_spp::BigDouble("60.0");
+    auto second = (fracMinute - minute) * ns_spp::BigDouble("60.0");
 
-    return dt;
+    return Gregorian(year, month, day, hour, minute, second);
 }
 
 ns_spp::JulianDay::JulianDay() {
-    *this = DateTime().toJulianDay();
+    *this = Gregorian().toJulianDay();
 }
 
 ns_spp::ModJulianDay ns_spp::JulianDay::toModJulianDay() const {
@@ -87,33 +100,36 @@ ns_spp::GPSTime ns_spp::JulianDay::toGPSTime() const {
     return this->toModJulianDay().toGPSTime();
 }
 
+ns_spp::JulianDay::JulianDay(const std::string &days) : Julian(days) {}
+
+ns_spp::JulianDay::JulianDay(const ns_spp::BigDouble &days) : Julian(days) {}
+
 // ModJulianDay
 
-ns_spp::DateTime ns_spp::ModJulianDay::toDateTime() const {
+ns_spp::Gregorian ns_spp::ModJulianDay::toDateTime() const {
     using namespace boost;
 
-    auto now = gregorian::day_clock::local_day();
-    auto iDays = static_cast<unsigned int>(this->days);
-    auto d = now - gregorian::days(now.modjulian_day() - iDays);
+    auto iDays = static_cast<int>(this->days);
+    auto ymd =
+            gregorian::date::calendar_type::from_modjulian_day_number(iDays);
 
-    DateTime dt(0, 0, 0);
-    dt.year = d.year();
-    dt.month = d.month();
-    dt.day = d.day();
+    auto year = ymd.year;
+    auto month = ymd.month;
+    auto day = ymd.day;
 
     auto fracHour = (days - iDays) * ns_spp::BigDouble("24.0");
-    dt.hour = static_cast<unsigned int>(fracHour);
+    auto hour = static_cast<unsigned int>(fracHour);
 
-    auto fracMinute = (fracHour - dt.hour) * ns_spp::BigDouble("60.0");
-    dt.minute = static_cast<unsigned int>(fracMinute);
+    auto fracMinute = (fracHour - hour) * ns_spp::BigDouble("60.0");
+    auto minute = static_cast<unsigned int>(fracMinute);
 
-    dt.second = (fracMinute - dt.minute) * ns_spp::BigDouble("60.0");
+    auto second = (fracMinute - minute) * ns_spp::BigDouble("60.0");
 
-    return dt;
+    return Gregorian(year, month, day, hour, minute, second);
 }
 
 ns_spp::ModJulianDay::ModJulianDay() {
-    *this = DateTime().toModJulianDay();
+    *this = Gregorian().toModJulianDay();
 }
 
 ns_spp::JulianDay ns_spp::ModJulianDay::toJulianDay() const {
@@ -123,10 +139,14 @@ ns_spp::JulianDay ns_spp::ModJulianDay::toJulianDay() const {
 ns_spp::GPSTime ns_spp::ModJulianDay::toGPSTime() const {
     auto days = this->days - Config::TimeSystem::GPSTOrigin.days;
     GPSTime gpsTime;
-    gpsTime.week = static_cast<unsigned short >(days / BigDouble("7"));
+    gpsTime.week = static_cast<unsigned short>(days / BigDouble("7"));
     gpsTime.secOfWeek = (days - gpsTime.week * BigDouble("7")) * BigDouble("86400");
     return gpsTime;
 }
+
+ns_spp::ModJulianDay::ModJulianDay(const std::string &days) : Julian(days) {}
+
+ns_spp::ModJulianDay::ModJulianDay(const ns_spp::BigDouble &days) : Julian(days) {}
 
 // GPSTime
 
@@ -135,7 +155,7 @@ ns_spp::ModJulianDay ns_spp::GPSTime::toModJulianDay() const {
     return ModJulianDay(Config::TimeSystem::GPSTOrigin.days + days);
 }
 
-ns_spp::DateTime ns_spp::GPSTime::toDateTime() const {
+ns_spp::Gregorian ns_spp::GPSTime::toDateTime() const {
     return this->toModJulianDay().toDateTime();
 }
 
@@ -143,3 +163,8 @@ ns_spp::JulianDay ns_spp::GPSTime::toJulianDay() const {
     return this->toModJulianDay().toJulianDay();
 }
 
+ns_spp::GPSTime::GPSTime(unsigned short week, const std::string &secOfWeek)
+        : week(week), secOfWeek(secOfWeek) {}
+
+ns_spp::GPSTime::GPSTime(unsigned short week, const ns_spp::BigDouble &secOfWeek)
+        : week(week), secOfWeek(secOfWeek) {}

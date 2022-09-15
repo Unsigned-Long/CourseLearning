@@ -10,7 +10,7 @@
 #include "config.h"
 
 namespace ns_spp {
-    struct DateTime;
+    struct Gregorian;
     struct Julian;
     struct JulianDay;
     struct ModJulianDay;
@@ -18,7 +18,7 @@ namespace ns_spp {
 
     using BigDouble = boost::multiprecision::cpp_dec_float_50;
 
-    struct DateTime {
+    struct Gregorian {
         unsigned short year;
         unsigned short month;
         unsigned short day;
@@ -26,13 +26,15 @@ namespace ns_spp {
         unsigned short minute;
         BigDouble second;
 
-        DateTime(unsigned short year, unsigned short month, unsigned short day,
-                 unsigned short hour = 0, unsigned short minute = 0,
-                 const BigDouble &sec = BigDouble("0.0"))
-                : year(year), month(month), day(day),
-                  hour(hour), minute(minute), second(sec) {}
+        Gregorian(unsigned short year, unsigned short month, unsigned short day,
+                  unsigned short hour = 0, unsigned short minute = 0,
+                  const std::string &sec = "0.0");
 
-        DateTime();
+        Gregorian(unsigned short year, unsigned short month, unsigned short day,
+                  unsigned short hour, unsigned short minute,
+                  const BigDouble &sec);
+
+        Gregorian();
 
         JulianDay toJulianDay() const;
 
@@ -41,22 +43,22 @@ namespace ns_spp {
         GPSTime toGPSTime() const;
 
     public:
-        friend std::ostream &operator<<(std::ostream &os, const DateTime &dateTime) {
-            os << "DateTime['y': " << dateTime.year << ", 'mon': " << dateTime.month << ", 'd': " << dateTime.day
+        friend std::ostream &operator<<(std::ostream &os, const Gregorian &dateTime) {
+            os << "Gregorian['y': " << dateTime.year << ", 'mon': " << dateTime.month << ", 'd': " << dateTime.day
                << ", 'h': " << dateTime.hour << ", 'min': " << dateTime.minute << ", 's': " << dateTime.second << ']';
             return os;
         }
 
-        bool operator==(const ns_spp::DateTime &rhs) const {
+        bool operator==(const ns_spp::Gregorian &rhs) const {
             return year == rhs.year &&
                    month == rhs.month &&
                    day == rhs.day &&
                    hour == rhs.hour &&
                    minute == rhs.minute &&
-                    std::abs(static_cast<long double>(second - rhs.second)) < Config::Threshold::DOUBLE_EQ;
+                   std::abs(static_cast<long double>(second - rhs.second)) < Config::Threshold::DOUBLE_EQ;
         }
 
-        bool operator!=(const ns_spp::DateTime &rhs) const {
+        bool operator!=(const ns_spp::Gregorian &rhs) const {
             return !(rhs == *this);
         }
 
@@ -66,11 +68,15 @@ namespace ns_spp {
     public:
         BigDouble days;
 
-    public:
+    protected:
 
-        explicit Julian(const BigDouble &days) : days(days) {}
+        explicit Julian(const std::string &days);
+
+        explicit Julian(const BigDouble &days);
 
         Julian() = default;
+
+    public:
 
         bool operator==(const Julian &rhs) const {
             return std::abs(static_cast<long double>(days - rhs.days)) < Config::Threshold::DOUBLE_EQ;
@@ -80,21 +86,20 @@ namespace ns_spp {
             return !(rhs == *this);
         }
 
-    protected:
-
-        virtual DateTime toDateTime() const = 0;
-
+        virtual Gregorian toDateTime() const = 0;
     };
 
     struct JulianDay : public Julian {
 
     public:
 
-        explicit JulianDay(const BigDouble &days) : Julian(days) {}
+        explicit JulianDay(const std::string &days = "0.0");
+
+        explicit JulianDay(const BigDouble &days);
 
         JulianDay();
 
-        DateTime toDateTime() const override;
+        Gregorian toDateTime() const override;
 
         ModJulianDay toModJulianDay() const;
 
@@ -110,11 +115,13 @@ namespace ns_spp {
 
     public:
 
-        explicit ModJulianDay(const BigDouble &days) : Julian(days) {}
+        explicit ModJulianDay(const std::string &days = "0.0");
+
+        explicit ModJulianDay(const BigDouble &days);
 
         ModJulianDay();
 
-        DateTime toDateTime() const override;
+        Gregorian toDateTime() const override;
 
         JulianDay toJulianDay() const;
 
@@ -133,12 +140,13 @@ namespace ns_spp {
 
         static GPSTime origin;
 
-        GPSTime(unsigned short week = 0, const BigDouble &secOfWeek = BigDouble("0.0"))
-                : week(week), secOfWeek(secOfWeek) {}
+        explicit GPSTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
+
+        explicit GPSTime(unsigned short week, const BigDouble &secOfWeek);
 
         ModJulianDay toModJulianDay() const;
 
-        DateTime toDateTime() const;
+        Gregorian toDateTime() const;
 
         JulianDay toJulianDay() const;
 
@@ -147,10 +155,9 @@ namespace ns_spp {
             return os;
         }
 
-
         bool operator==(const ns_spp::GPSTime &rhs) const {
             return week == rhs.week &&
-                    std::abs(static_cast<long double>(secOfWeek - rhs.secOfWeek)) < Config::Threshold::DOUBLE_EQ;
+                   std::abs(static_cast<long double>(secOfWeek - rhs.secOfWeek)) < Config::Threshold::DOUBLE_EQ;
         }
 
         bool operator!=(const ns_spp::GPSTime &rhs) const {
