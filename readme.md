@@ -74,10 +74,14 @@ If this brings you substantial help, it's really great!
     课程：综合实习
     描述：遥感图像融合代码实践
     
-+ [section-inspection](./section-inspection)
++ [section-inspection](./section-inspection)   
     课程：专业实习2
     描述：断面收敛性计算
-
-+ [GPS-StaPos-solver](./GPS-StaPos-solver/)
+    
++ [GPS-StaPos-solver](./GPS-StaPos-solver/)   
     课程：GNSS原理与应用
     描述：根据GPS观测文件计算卫星位置
+    
++ [nav-spp](./nav-spp/)   
+    课程：GNSS程序设计-单点定位
+    描述：实现GNSS单点定位程序
