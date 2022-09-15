@@ -9,7 +9,7 @@
 #include "coordinate.h"
 
 std::string ns_spp::Config::Author::name = "";
-std::string ns_spp::Config::Author::e_mail = "";
+std::string ns_spp::Config::Author::eMail = "";
 
 long double ns_spp::Config::Threshold::DOUBLE_EQ = 0.0;
 long double ns_spp::Config::Threshold::POSITION = 0.0;
@@ -28,7 +28,7 @@ void ns_spp::Config::loadConfigure(const std::string &configPath) {
     // authorValue info
     rapidjson::Value &authorValue = doc["author"];
     Config::Author::name = authorValue["name"].GetString();
-    Config::Author::e_mail = authorValue["e_mail"].GetString();
+    Config::Author::eMail = authorValue["eMail"].GetString();
 
     // thresholdValue
     rapidjson::Value &thresholdValue = doc["threshold"];
@@ -41,17 +41,17 @@ void ns_spp::Config::loadConfigure(const std::string &configPath) {
     // GPST
     rapidjson::Value &GPSTOriginValue = timeSystemValue["GPSTOrigin"];
     auto GPSOriginDateTime =
-            DateTime(GPSTOriginValue["year"].GetInt(), GPSTOriginValue["month"].GetInt(),
-                     GPSTOriginValue["day"].GetInt(), GPSTOriginValue["hour"].GetInt(),
-                     GPSTOriginValue["minute"].GetInt(), GPSTOriginValue["second"].GetInt());
+            Gregorian(GPSTOriginValue["year"].GetInt(), GPSTOriginValue["month"].GetInt(),
+                      GPSTOriginValue["day"].GetInt(), GPSTOriginValue["hour"].GetInt(),
+                      GPSTOriginValue["minute"].GetInt(), GPSTOriginValue["second"].GetInt());
     Config::TimeSystem::GPSTOrigin = GPSOriginDateTime.toModJulianDay();
 
     // BDT
     rapidjson::Value &BDTOriginValue = timeSystemValue["BDTOrigin"];
     auto BDOriginDateTime =
-            DateTime(BDTOriginValue["year"].GetInt(), BDTOriginValue["month"].GetInt(),
-                     BDTOriginValue["day"].GetInt(), BDTOriginValue["hour"].GetInt(),
-                     BDTOriginValue["minute"].GetInt(), BDTOriginValue["second"].GetInt());
+            Gregorian(BDTOriginValue["year"].GetInt(), BDTOriginValue["month"].GetInt(),
+                      BDTOriginValue["day"].GetInt(), BDTOriginValue["hour"].GetInt(),
+                      BDTOriginValue["minute"].GetInt(), BDTOriginValue["second"].GetInt());
     Config::TimeSystem::BDTOrigin = BDOriginDateTime.toModJulianDay();
 
     // RefEllipsoid
@@ -59,13 +59,13 @@ void ns_spp::Config::loadConfigure(const std::string &configPath) {
     // WGS1984
     rapidjson::Value &WGS1984Value = RefEllipsoidValue["WGS1984"];
     Config::RefEllipsoid::WGS1984 =
-            ns_spp::RefEllipsoid(WGS1984Value["longRadius"].GetDouble(),
-                                 1.0 / WGS1984Value["oblateness_inv"].GetDouble());
+            ns_spp::RefEllipsoid(WGS1984Value["a"].GetDouble(),
+                                 1.0 / WGS1984Value["fInv"].GetDouble());
     // CGCS2000
     rapidjson::Value &CGCS2000Value = RefEllipsoidValue["CGCS2000"];
     Config::RefEllipsoid::CGCS2000 =
-            ns_spp::RefEllipsoid(CGCS2000Value["longRadius"].GetDouble(),
-                                 1.0 / CGCS2000Value["oblateness_inv"].GetDouble());
+            ns_spp::RefEllipsoid(CGCS2000Value["a"].GetDouble(),
+                                 1.0 / CGCS2000Value["fInv"].GetDouble());
 
 }
 
