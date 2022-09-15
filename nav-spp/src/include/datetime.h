@@ -15,6 +15,7 @@ namespace ns_spp {
     struct JulianDay;
     struct ModJulianDay;
     struct GPSTime;
+    struct BDTime;
 
     using BigDouble = boost::multiprecision::cpp_dec_float_50;
 
@@ -41,6 +42,10 @@ namespace ns_spp {
         ModJulianDay toModJulianDay() const;
 
         GPSTime toGPSTime() const;
+
+        BDTime toBDTime() const;
+
+        unsigned short dayOfYear() const;
 
     public:
         friend std::ostream &operator<<(std::ostream &os, const Gregorian &dateTime) {
@@ -86,7 +91,7 @@ namespace ns_spp {
             return !(rhs == *this);
         }
 
-        virtual Gregorian toDateTime() const = 0;
+        virtual Gregorian toGregorian() const = 0;
     };
 
     struct JulianDay : public Julian {
@@ -99,11 +104,13 @@ namespace ns_spp {
 
         JulianDay();
 
-        Gregorian toDateTime() const override;
+        Gregorian toGregorian() const override;
 
         ModJulianDay toModJulianDay() const;
 
         GPSTime toGPSTime() const;
+
+        BDTime toBDTime() const;
 
         friend std::ostream &operator<<(std::ostream &os, const JulianDay &day) {
             os << "JulianDay['d': " << day.days << "]";
@@ -121,11 +128,13 @@ namespace ns_spp {
 
         ModJulianDay();
 
-        Gregorian toDateTime() const override;
+        Gregorian toGregorian() const override;
 
         JulianDay toJulianDay() const;
 
         GPSTime toGPSTime() const;
+
+        BDTime toBDTime() const;
 
         friend std::ostream &operator<<(std::ostream &os, const ModJulianDay &day) {
             os << "ModJulianDay['d': " << day.days << "]";
@@ -138,15 +147,13 @@ namespace ns_spp {
         unsigned short week;
         BigDouble secOfWeek;
 
-        static GPSTime origin;
-
         explicit GPSTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
 
         explicit GPSTime(unsigned short week, const BigDouble &secOfWeek);
 
         ModJulianDay toModJulianDay() const;
 
-        Gregorian toDateTime() const;
+        Gregorian toGregorian() const;
 
         JulianDay toJulianDay() const;
 
@@ -161,6 +168,37 @@ namespace ns_spp {
         }
 
         bool operator!=(const ns_spp::GPSTime &rhs) const {
+            return !(rhs == *this);
+        }
+
+    };
+
+    struct BDTime {
+    public:
+        unsigned short week;
+        BigDouble secOfWeek;
+
+        explicit BDTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
+
+        explicit BDTime(unsigned short week, const BigDouble &secOfWeek);
+
+        ModJulianDay toModJulianDay() const;
+
+        Gregorian toGregorian() const;
+
+        JulianDay toJulianDay() const;
+
+        friend std::ostream &operator<<(std::ostream &os, const BDTime &bdTime) {
+            os << "BDTime['w': " << bdTime.week << ", 'sow': " << bdTime.secOfWeek << ']';
+            return os;
+        }
+
+        bool operator==(const ns_spp::BDTime &rhs) const {
+            return week == rhs.week &&
+                   std::abs(static_cast<long double>(secOfWeek - rhs.secOfWeek)) < Config::Threshold::DOUBLE_EQ;
+        }
+
+        bool operator!=(const ns_spp::BDTime &rhs) const {
             return !(rhs == *this);
         }
 
