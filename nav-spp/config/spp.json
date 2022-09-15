@@ -1,7 +1,7 @@
 {
   "author": {
     "name": "unsigned-long2",
-    "e_mail": "3079625093@qq.com"
+    "eMail": "3079625093@qq.com"
   },
   "threshold": {
     "DOUBLE_EQ": 1E-15,
@@ -28,12 +28,12 @@
   },
   "RefEllipsoid": {
     "WGS1984": {
-      "longRadius": 6378137.0,
-      "oblateness_inv": 298.257223563
+      "a": 6378137.0,
+      "fInv": 298.257223563
     },
     "CGCS2000": {
-      "longRadius": 6378137.0,
-      "oblateness_inv": 298.257222101
+      "a": 6378137.0,
+      "fInv": 298.257222101
     }
   }
 }
