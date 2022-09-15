@@ -5,6 +5,5 @@
 
 int main(int argc, char *argv[]) {
     ns_spp::Config::loadConfigure("../config/spp.json");
-
     return 0;
 }
