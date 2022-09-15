@@ -67,10 +67,10 @@ namespace ns_spp {
         double b;
         double c;
         double f;
-        double efir;
-        double efir2;
-        double esed;
-        double esed2;
+        double eFir;
+        double eFir2;
+        double eSed;
+        double eSed2;
 
     public:
         RefEllipsoid(double majorAxis, double flattening);
@@ -85,9 +85,9 @@ namespace ns_spp {
 
         friend std::ostream &operator<<(std::ostream &os, const RefEllipsoid &ellipsoid) {
             os << "RefEllipsoid['a': " << ellipsoid.a << ", 'b': " << ellipsoid.b << ", 'c': "
-               << ellipsoid.c << ", 'f': " << ellipsoid.f << ", efir: " << ellipsoid.efir
-               << ", 'efir2': " << ellipsoid.efir2 << ", 'esed': " << ellipsoid.esed
-               << ", 'esed2': " << ellipsoid.esed2;
+               << ellipsoid.c << ", 'f': " << ellipsoid.f << ", eFir: " << ellipsoid.eFir
+               << ", 'eFir2': " << ellipsoid.eFir2 << ", 'eSed': " << ellipsoid.eSed
+               << ", 'eSed2': " << ellipsoid.eSed2;
             return os;
         }
 
@@ -100,10 +100,10 @@ namespace ns_spp {
                    std::abs(b - rhs.b) < Config::Threshold::DOUBLE_EQ &&
                    std::abs(c - rhs.c) < Config::Threshold::DOUBLE_EQ &&
                    std::abs(f - rhs.f) < Config::Threshold::DOUBLE_EQ &&
-                   std::abs(efir - rhs.efir) < Config::Threshold::DOUBLE_EQ &&
-                   std::abs(efir2 - rhs.efir2) < Config::Threshold::DOUBLE_EQ &&
-                   std::abs(esed - rhs.esed) < Config::Threshold::DOUBLE_EQ &&
-                   std::abs(esed2 - rhs.esed2) < Config::Threshold::DOUBLE_EQ;
+                   std::abs(eFir - rhs.eFir) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(eFir2 - rhs.eFir2) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(eSed - rhs.eSed) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(eSed2 - rhs.eSed2) < Config::Threshold::DOUBLE_EQ;
         }
 
         bool operator!=(const RefEllipsoid &rhs) const {
