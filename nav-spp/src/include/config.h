@@ -17,15 +17,15 @@ namespace ns_spp {
     public:
         struct Author {
             static std::string name;
-            static std::string e_mail;
+            static std::string eMail;
         };
 
         struct Threshold {
             static long double DOUBLE_EQ;
             static long double POSITION;
             static long double ITERATE;
-
         };
+
         struct TimeSystem {
             static ModJulianDay GPSTOrigin;
             static ModJulianDay BDTOrigin;
@@ -38,6 +38,11 @@ namespace ns_spp {
 
     public:
 
+        /**
+         * @brief load the configure file from the path
+         *
+         * @param configPath the file path
+         */
         static void loadConfigure(const std::string &configPath);
 
     private:
