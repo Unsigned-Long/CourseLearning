@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <iostream>
 #include <tuple>
+#include "config.h"
 
 namespace ns_spp {
 
@@ -20,9 +21,15 @@ namespace ns_spp {
 
         PointXYZ(double x, double y, double z);
 
-        bool operator==(const PointXYZ &rhs) const;
+        bool operator==(const PointXYZ &rhs) const {
+            return std::abs(X - rhs.X) < Config::Threshold::POSITION &&
+                   std::abs(Y - rhs.Y) < Config::Threshold::POSITION &&
+                   std::abs(Z - rhs.Z) < Config::Threshold::POSITION;
+        }
 
-        bool operator!=(const PointXYZ &rhs) const;
+        bool operator!=(const PointXYZ &rhs) const {
+            return !(rhs == *this);
+        }
 
         friend std::ostream &operator<<(std::ostream &os, const PointXYZ &xyz) {
             os << "PointXYZ['X': " << xyz.X << ", 'Y': " << xyz.Y << ", 'Z': " << xyz.Z << ']';
@@ -38,9 +45,15 @@ namespace ns_spp {
 
         PointBLH(double b, double l, double h);
 
-        bool operator==(const PointBLH &rhs) const;
+        bool operator==(const PointBLH &rhs) const {
+            return std::abs(B - rhs.B) < Config::Threshold::POSITION &&
+                   std::abs(L - rhs.L) < Config::Threshold::POSITION &&
+                   std::abs(H - rhs.H) < Config::Threshold::POSITION;
+        }
 
-        bool operator!=(const PointBLH &rhs) const;
+        bool operator!=(const PointBLH &rhs) const {
+            return !(rhs == *this);
+        }
 
         friend std::ostream &operator<<(std::ostream &os, const PointBLH &blh) {
             os << "PointBLH['B': " << blh.B << ", 'L': " << blh.L << ", 'H': " << blh.H << ']';
@@ -60,7 +73,7 @@ namespace ns_spp {
         double esed2;
 
     public:
-        RefEllipsoid(double longRadius, double oblateness);
+        RefEllipsoid(double majorAxis, double flattening);
 
         double W(double latitude) const;
 
@@ -82,9 +95,20 @@ namespace ns_spp {
 
         PointBLH XYZ2BLH(const PointXYZ &p) const;
 
-        bool operator==(const RefEllipsoid &rhs) const;
+        bool operator==(const RefEllipsoid &rhs) const {
+            return std::abs(a - rhs.a) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(b - rhs.b) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(c - rhs.c) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(f - rhs.f) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(efir - rhs.efir) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(efir2 - rhs.efir2) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(esed - rhs.esed) < Config::Threshold::DOUBLE_EQ &&
+                   std::abs(esed2 - rhs.esed2) < Config::Threshold::DOUBLE_EQ;
+        }
 
-        bool operator!=(const RefEllipsoid &rhs) const;
+        bool operator!=(const RefEllipsoid &rhs) const {
+            return !(rhs == *this);
+        }
     };
 }
 
