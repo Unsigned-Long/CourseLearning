@@ -32,8 +32,8 @@ TEST(datetime, Gregorian) {
     EXPECT_EQ(static_cast<int>(dt.toJulianDay().days), 2451726);
     EXPECT_EQ(static_cast<int>(dt.toModJulianDay().days), 51725);
 
-    EXPECT_EQ(dt.toJulianDay().toDateTime(), dt);
-    EXPECT_EQ(dt.toModJulianDay().toDateTime(), dt);
+    EXPECT_EQ(dt.toJulianDay().toGregorian(), dt);
+    EXPECT_EQ(dt.toModJulianDay().toGregorian(), dt);
 }
 
 TEST(datetime, JulianDay) {
@@ -45,7 +45,7 @@ TEST(datetime, JulianDay) {
 
     LOG_VAR(julianDay);
 
-    EXPECT_EQ(julianDay.toDateTime().toJulianDay(), julianDay);
+    EXPECT_EQ(julianDay.toGregorian().toJulianDay(), julianDay);
     EXPECT_EQ(julianDay.toModJulianDay().toJulianDay(), julianDay);
 }
 
@@ -58,7 +58,7 @@ TEST(datetime, ModJulianDay) {
 
     LOG_VAR(modJulianDay);
 
-    EXPECT_EQ(modJulianDay.toDateTime().toModJulianDay(), modJulianDay);
+    EXPECT_EQ(modJulianDay.toGregorian().toModJulianDay(), modJulianDay);
     EXPECT_EQ(modJulianDay.toJulianDay().toModJulianDay(), modJulianDay);
 }
 
@@ -68,10 +68,30 @@ TEST(datetime, GPSTime) {
     EXPECT_EQ(Config::TimeSystem::GPSTOrigin, ModJulianDay(BigDouble("44244")));
 
     auto gpsTime = GPSTime(2000, BigDouble("2000"));
+    EXPECT_EQ(gpsTime.week, 2000);
+    EXPECT_EQ(gpsTime.secOfWeek, BigDouble("2000"));
 
-    EXPECT_EQ(gpsTime.toDateTime().toGPSTime(), gpsTime);
+    LOG_VAR(gpsTime);
+
+    EXPECT_EQ(gpsTime.toGregorian().toGPSTime(), gpsTime);
     EXPECT_EQ(gpsTime.toModJulianDay().toGPSTime(), gpsTime);
     EXPECT_EQ(gpsTime.toJulianDay().toGPSTime(), gpsTime);
+}
+
+TEST(datetime, BDTime) {
+    using namespace ns_spp;
+
+    EXPECT_EQ(Config::TimeSystem::BDTOrigin, ModJulianDay(BigDouble("53736")));
+
+    auto bdTime = BDTime(2000, BigDouble("2000"));
+    EXPECT_EQ(bdTime.week, 2000);
+    EXPECT_EQ(bdTime.secOfWeek, BigDouble("2000"));
+
+    LOG_VAR(bdTime);
+
+    EXPECT_EQ(bdTime.toGregorian().toBDTime(), bdTime);
+    EXPECT_EQ(bdTime.toModJulianDay().toBDTime(), bdTime);
+    EXPECT_EQ(bdTime.toJulianDay().toBDTime(), bdTime);
 }
 
 #endif //SPP_TEST_DATETIME_HPP
