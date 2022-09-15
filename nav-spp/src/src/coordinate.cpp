@@ -3,9 +3,32 @@
 //
 
 #include "coordinate.h"
-#include "config.h"
 
-ns_spp::RefEllipsoid::RefEllipsoid(double longRadius, double oblateness) : a(longRadius), f(oblateness) {
+// PointXYZ
+
+ns_spp::PointXYZ::PointXYZ(double x, double y, double z) : X(x), Y(y), Z(z) {}
+
+// PointBLH
+ns_spp::PointBLH::PointBLH(double b, double l, double h) : B(b), L(l), H(h) {}
+
+// RefEllipsoid
+double ns_spp::RefEllipsoid::W(double latitude) const {
+    return std::sqrt(1.0 - efir2 * std::pow(std::sin(latitude), 2));
+}
+
+double ns_spp::RefEllipsoid::V(double latitude) const {
+    return std::sqrt(1.0 + esed2 * std::pow(std::cos(latitude), 2));
+}
+
+double ns_spp::RefEllipsoid::N(double latitude) const {
+    return a / W(latitude);
+}
+
+double ns_spp::RefEllipsoid::M(double latitude) const {
+    return a * (1 - efir2) / std::pow(W(latitude), 3);
+}
+
+ns_spp::RefEllipsoid::RefEllipsoid(double majorAxis, double flattening) : a(majorAxis), f(flattening) {
     b = (1.0 - f) * a;
     c = a * a / b;
     efir = std::sqrt(a * a - b * b) / a;
@@ -47,59 +70,3 @@ ns_spp::PointBLH ns_spp::RefEllipsoid::XYZ2BLH(const ns_spp::PointXYZ &p) const 
     H = std::sqrt(X * X + Y * Y + (Z + deltaZ) * (Z + deltaZ)) - this->N(B);
     return {B, L, H};
 }
-
-ns_spp::PointXYZ::PointXYZ(double x, double y, double z) : X(x), Y(y), Z(z) {}
-
-ns_spp::PointBLH::PointBLH(double b, double l, double h) : B(b), L(l), H(h) {}
-
-double ns_spp::RefEllipsoid::W(double latitude) const {
-    return std::sqrt(1.0 - efir2 * std::pow(std::sin(latitude), 2));
-}
-
-double ns_spp::RefEllipsoid::V(double latitude) const {
-    return std::sqrt(1.0 + esed2 * std::pow(std::cos(latitude), 2));
-}
-
-double ns_spp::RefEllipsoid::N(double latitude) const {
-    return a / W(latitude);
-}
-
-double ns_spp::RefEllipsoid::M(double latitude) const {
-    return a * (1 - efir2) / std::pow(W(latitude), 3);
-}
-
-bool ns_spp::RefEllipsoid::operator==(const ns_spp::RefEllipsoid &rhs) const {
-    return std::abs(a - rhs.a) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(b - rhs.b) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(c - rhs.c) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(f - rhs.f) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(efir - rhs.efir) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(efir2 - rhs.efir2) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(esed - rhs.esed) < Config::Threshold::DOUBLE_EQ &&
-           std::abs(esed2 - rhs.esed2) < Config::Threshold::DOUBLE_EQ;
-}
-
-bool ns_spp::RefEllipsoid::operator!=(const ns_spp::RefEllipsoid &rhs) const {
-    return !(rhs == *this);
-}
-
-bool ns_spp::PointBLH::operator==(const ns_spp::PointBLH &rhs) const {
-    return std::abs(B - rhs.B) < Config::Threshold::POSITION &&
-           std::abs(L - rhs.L) < Config::Threshold::POSITION &&
-           std::abs(H - rhs.H) < Config::Threshold::POSITION;
-}
-
-bool ns_spp::PointBLH::operator!=(const ns_spp::PointBLH &rhs) const {
-    return !(rhs == *this);
-}
-
-bool ns_spp::PointXYZ::operator==(const ns_spp::PointXYZ &rhs) const {
-    return std::abs(X - rhs.X) < Config::Threshold::POSITION &&
-           std::abs(Y - rhs.Y) < Config::Threshold::POSITION &&
-           std::abs(Z - rhs.Z) < Config::Threshold::POSITION;
-}
-
-bool ns_spp::PointXYZ::operator!=(const ns_spp::PointXYZ &rhs) const {
-    return !(rhs == *this);
-}
-
