@@ -34,6 +34,8 @@ TEST(datetime, Gregorian) {
 
     EXPECT_EQ(dt.toJulianDay().toGregorian(), dt);
     EXPECT_EQ(dt.toModJulianDay().toGregorian(), dt);
+
+    EXPECT_EQ(dt.dayOfYear(), 182);
 }
 
 TEST(datetime, JulianDay) {

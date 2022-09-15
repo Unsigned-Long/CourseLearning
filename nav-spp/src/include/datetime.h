@@ -33,19 +33,19 @@ namespace ns_spp {
 
         Gregorian(unsigned short year, unsigned short month, unsigned short day,
                   unsigned short hour, unsigned short minute,
-                  const BigDouble &sec);
+                  BigDouble sec);
 
         Gregorian();
 
-        JulianDay toJulianDay() const;
+        [[nodiscard]] JulianDay toJulianDay() const;
 
-        ModJulianDay toModJulianDay() const;
+        [[nodiscard]] ModJulianDay toModJulianDay() const;
 
-        GPSTime toGPSTime() const;
+        [[nodiscard]] GPSTime toGPSTime() const;
 
-        BDTime toBDTime() const;
+        [[nodiscard]] BDTime toBDTime() const;
 
-        unsigned short dayOfYear() const;
+        [[nodiscard]] unsigned short dayOfYear() const;
 
     public:
         friend std::ostream &operator<<(std::ostream &os, const Gregorian &dateTime) {
@@ -77,7 +77,7 @@ namespace ns_spp {
 
         explicit Julian(const std::string &days);
 
-        explicit Julian(const BigDouble &days);
+        explicit Julian(BigDouble days);
 
         Julian() = default;
 
@@ -91,7 +91,7 @@ namespace ns_spp {
             return !(rhs == *this);
         }
 
-        virtual Gregorian toGregorian() const = 0;
+        [[nodiscard]] virtual Gregorian toGregorian() const = 0;
     };
 
     struct JulianDay : public Julian {
@@ -104,13 +104,13 @@ namespace ns_spp {
 
         JulianDay();
 
-        Gregorian toGregorian() const override;
+        [[nodiscard]] Gregorian toGregorian() const override;
 
-        ModJulianDay toModJulianDay() const;
+        [[nodiscard]] ModJulianDay toModJulianDay() const;
 
-        GPSTime toGPSTime() const;
+        [[nodiscard]] GPSTime toGPSTime() const;
 
-        BDTime toBDTime() const;
+        [[nodiscard]] BDTime toBDTime() const;
 
         friend std::ostream &operator<<(std::ostream &os, const JulianDay &day) {
             os << "JulianDay['d': " << day.days << "]";
@@ -128,13 +128,13 @@ namespace ns_spp {
 
         ModJulianDay();
 
-        Gregorian toGregorian() const override;
+        [[nodiscard]] Gregorian toGregorian() const override;
 
-        JulianDay toJulianDay() const;
+        [[nodiscard]] JulianDay toJulianDay() const;
 
-        GPSTime toGPSTime() const;
+        [[nodiscard]] GPSTime toGPSTime() const;
 
-        BDTime toBDTime() const;
+        [[nodiscard]] BDTime toBDTime() const;
 
         friend std::ostream &operator<<(std::ostream &os, const ModJulianDay &day) {
             os << "ModJulianDay['d': " << day.days << "]";
@@ -142,20 +142,36 @@ namespace ns_spp {
         }
     };
 
-    struct GPSTime {
+    struct NavTime {
     public:
         unsigned short week;
         BigDouble secOfWeek;
+
+    protected:
+        explicit NavTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
+
+        explicit NavTime(unsigned short week, BigDouble secOfWeek);
+
+    public:
+        [[nodiscard]] virtual ModJulianDay toModJulianDay() const = 0;
+
+        [[nodiscard]] virtual Gregorian toGregorian() const = 0;
+
+        [[nodiscard]] virtual JulianDay toJulianDay() const = 0;
+    };
+
+    struct GPSTime : public NavTime {
+    public:
 
         explicit GPSTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
 
         explicit GPSTime(unsigned short week, const BigDouble &secOfWeek);
 
-        ModJulianDay toModJulianDay() const;
+        [[nodiscard]] ModJulianDay toModJulianDay() const override;
 
-        Gregorian toGregorian() const;
+        [[nodiscard]] Gregorian toGregorian() const override;
 
-        JulianDay toJulianDay() const;
+        [[nodiscard]] JulianDay toJulianDay() const override;
 
         friend std::ostream &operator<<(std::ostream &os, const GPSTime &gpsTime) {
             os << "GPSTime['w': " << gpsTime.week << ", 'sow': " << gpsTime.secOfWeek << ']';
@@ -173,20 +189,18 @@ namespace ns_spp {
 
     };
 
-    struct BDTime {
+    struct BDTime : public NavTime {
     public:
-        unsigned short week;
-        BigDouble secOfWeek;
 
         explicit BDTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
 
         explicit BDTime(unsigned short week, const BigDouble &secOfWeek);
 
-        ModJulianDay toModJulianDay() const;
+        [[nodiscard]] ModJulianDay toModJulianDay() const override;
 
-        Gregorian toGregorian() const;
+        [[nodiscard]] Gregorian toGregorian() const override;
 
-        JulianDay toJulianDay() const;
+        [[nodiscard]] JulianDay toJulianDay() const override;
 
         friend std::ostream &operator<<(std::ostream &os, const BDTime &bdTime) {
             os << "BDTime['w': " << bdTime.week << ", 'sow': " << bdTime.secOfWeek << ']';

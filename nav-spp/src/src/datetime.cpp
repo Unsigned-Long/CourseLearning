@@ -2,6 +2,8 @@
 // Created by csl on 9/12/22.
 //
 #include "datetime.h"
+
+#include <utility>
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
@@ -54,9 +56,9 @@ ns_spp::Gregorian::Gregorian(unsigned short year, unsigned short month, unsigned
           hour(hour), minute(minute), second(sec) {}
 
 ns_spp::Gregorian::Gregorian(unsigned short year, unsigned short month, unsigned short day, unsigned short hour,
-                             unsigned short minute, const ns_spp::BigDouble &sec)
+                             unsigned short minute, ns_spp::BigDouble sec)
         : year(year), month(month), day(day),
-          hour(hour), minute(minute), second(sec) {}
+          hour(hour), minute(minute), second(std::move(sec)) {}
 
 ns_spp::BDTime ns_spp::Gregorian::toBDTime() const {
     return this->toModJulianDay().toBDTime();
@@ -72,7 +74,7 @@ unsigned short ns_spp::Gregorian::dayOfYear() const {
 
 ns_spp::Julian::Julian(const std::string &days) : days(days) {}
 
-ns_spp::Julian::Julian(const ns_spp::BigDouble &days) : days(days) {}
+ns_spp::Julian::Julian(ns_spp::BigDouble days) : days(std::move(days)) {}
 
 // JulianDay
 
@@ -88,14 +90,14 @@ ns_spp::Gregorian ns_spp::JulianDay::toGregorian() const {
     auto day = ymd.day;
 
     auto fracHour = (days - iDays) * ns_spp::BigDouble("24.0");
-    auto hour = static_cast<unsigned int>(fracHour);
+    auto hour = static_cast<unsigned short>(fracHour);
 
     auto fracMinute = (fracHour - hour) * ns_spp::BigDouble("60.0");
-    auto minute = static_cast<unsigned int>(fracMinute);
+    auto minute = static_cast<unsigned short>(fracMinute);
 
     auto second = (fracMinute - minute) * ns_spp::BigDouble("60.0");
 
-    return Gregorian(year, month, day, hour, minute, second);
+    return {year, month, day, hour, minute, second};
 }
 
 ns_spp::JulianDay::JulianDay() {
@@ -132,14 +134,14 @@ ns_spp::Gregorian ns_spp::ModJulianDay::toGregorian() const {
     auto day = ymd.day;
 
     auto fracHour = (days - iDays) * ns_spp::BigDouble("24.0");
-    auto hour = static_cast<unsigned int>(fracHour);
+    auto hour = static_cast<unsigned short>(fracHour);
 
     auto fracMinute = (fracHour - hour) * ns_spp::BigDouble("60.0");
-    auto minute = static_cast<unsigned int>(fracMinute);
+    auto minute = static_cast<unsigned short>(fracMinute);
 
     auto second = (fracMinute - minute) * ns_spp::BigDouble("60.0");
 
-    return Gregorian(year, month, day, hour, minute, second);
+    return {year, month, day, hour, minute, second};
 }
 
 ns_spp::ModJulianDay::ModJulianDay() {
@@ -186,17 +188,17 @@ ns_spp::JulianDay ns_spp::GPSTime::toJulianDay() const {
 }
 
 ns_spp::GPSTime::GPSTime(unsigned short week, const std::string &secOfWeek)
-        : week(week), secOfWeek(secOfWeek) {}
+        : NavTime(week, secOfWeek) {}
 
 ns_spp::GPSTime::GPSTime(unsigned short week, const ns_spp::BigDouble &secOfWeek)
-        : week(week), secOfWeek(secOfWeek) {}
+        : NavTime(week, secOfWeek) {}
 // BDTime
 
 ns_spp::BDTime::BDTime(unsigned short week, const std::string &secOfWeek)
-        : week(week), secOfWeek(secOfWeek) {}
+        : NavTime(week, secOfWeek) {}
 
 ns_spp::BDTime::BDTime(unsigned short week, const ns_spp::BigDouble &secOfWeek)
-        : week(week), secOfWeek(secOfWeek) {}
+        : NavTime(week, secOfWeek) {}
 
 ns_spp::ModJulianDay ns_spp::BDTime::toModJulianDay() const {
     auto days = this->week * BigDouble("7") + this->secOfWeek / BigDouble("86400");
@@ -210,3 +212,9 @@ ns_spp::Gregorian ns_spp::BDTime::toGregorian() const {
 ns_spp::JulianDay ns_spp::BDTime::toJulianDay() const {
     return this->toModJulianDay().toJulianDay();
 }
+
+ns_spp::NavTime::NavTime(unsigned short week, const std::string &secOfWeek)
+        : week(week), secOfWeek(secOfWeek) {}
+
+ns_spp::NavTime::NavTime(unsigned short week, ns_spp::BigDouble secOfWeek)
+        : week(week), secOfWeek(std::move(secOfWeek)) {}
