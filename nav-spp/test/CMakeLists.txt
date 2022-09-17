@@ -13,7 +13,7 @@ target_include_directories(
 
 target_link_libraries(
         ${CMAKE_PROJECT_NAME}_test PRIVATE
-        ${GTEST_BOTH_LIBRARIES}
         ${CMAKE_PROJECT_NAME}
+        ${GTEST_BOTH_LIBRARIES}
         pthread
 )

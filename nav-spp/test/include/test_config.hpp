@@ -14,6 +14,7 @@ TEST(config, Config) {
 
     EXPECT_EQ(Config::Author::name, "unsigned-long2");
     EXPECT_EQ(Config::Author::eMail, "3079625093@qq.com");
+    EXPECT_EQ(Config::Author::address, "WuHan China");
 
     EXPECT_DOUBLE_EQ(Config::Threshold::DOUBLE_EQ, 1E-15);
     EXPECT_DOUBLE_EQ(Config::Threshold::POSITION, 1E-5);

@@ -2,7 +2,7 @@
 // Created by csl on 9/12/22.
 //
 
-#include "../include/config.h"
+#include "config.h"
 #include "rapidjson/document.h"
 #include "fstream"
 #include "datetime.h"
@@ -10,6 +10,7 @@
 
 std::string ns_spp::Config::Author::name = "";
 std::string ns_spp::Config::Author::eMail = "";
+std::string ns_spp::Config::Author::address = "";
 
 long double ns_spp::Config::Threshold::DOUBLE_EQ = 0.0;
 long double ns_spp::Config::Threshold::POSITION = 0.0;
@@ -29,6 +30,7 @@ void ns_spp::Config::loadConfigure(const std::string &configPath) {
     rapidjson::Value &authorValue = doc["author"];
     Config::Author::name = authorValue["name"].GetString();
     Config::Author::eMail = authorValue["eMail"].GetString();
+    Config::Author::address = authorValue["address"].GetString();
 
     // thresholdValue
     rapidjson::Value &thresholdValue = doc["threshold"];

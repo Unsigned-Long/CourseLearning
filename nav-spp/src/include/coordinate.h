@@ -10,13 +10,17 @@
 #include <iostream>
 #include <tuple>
 #include "config.h"
+#include "ceres/ceres.h"
 
 namespace ns_spp {
 
     struct PointXYZ {
     public:
+        // x axis [m]
         double X;
+        // y axis [m]
         double Y;
+        // z axis [m]
         double Z;
 
         PointXYZ(double x, double y, double z);
@@ -39,8 +43,11 @@ namespace ns_spp {
 
     struct PointBLH {
     public:
+        // latitude [rad]
         double B;
+        // longitude [rad]
         double L;
+        // height [m]
         double H;
 
         PointBLH(double b, double l, double h);
@@ -63,13 +70,21 @@ namespace ns_spp {
 
     struct RefEllipsoid {
     public:
+        // semi major axis of the ellipsoid
         double a;
+        // semi minor axis of the ellipsoid
         double b;
+        // polar radius of curvature
         double c;
+        // flattening
         double f;
+        // first eccentricity
         double eFir;
+        // first eccentricity squared
         double eFir2;
+        // second eccentricity
         double eSed;
+        // second eccentricity squared
         double eSed2;
 
     public:
@@ -79,8 +94,14 @@ namespace ns_spp {
 
         double V(double latitude) const;
 
+        /**
+         * Radius of curvature of prime vertical
+         */
         double N(double latitude) const;
 
+        /*
+        * Radius of curvature of meridian circle
+        */
         double M(double latitude) const;
 
         friend std::ostream &operator<<(std::ostream &os, const RefEllipsoid &ellipsoid) {
@@ -91,8 +112,14 @@ namespace ns_spp {
             return os;
         }
 
+        /*
+         * convert geodetic coordinates of a point to rectangular coordinates
+         */
         PointXYZ BLH2XYZ(const PointBLH &p) const;
 
+        /**
+         * convert rectangular coordinates of a point to geodetic coordinates
+         */
         PointBLH XYZ2BLH(const PointXYZ &p) const;
 
         bool operator==(const RefEllipsoid &rhs) const {
@@ -109,7 +136,9 @@ namespace ns_spp {
         bool operator!=(const RefEllipsoid &rhs) const {
             return !(rhs == *this);
         }
+
     };
+
 }
 
 

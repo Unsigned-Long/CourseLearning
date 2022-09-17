@@ -1,7 +1,8 @@
 {
   "author": {
     "name": "unsigned-long2",
-    "eMail": "3079625093@qq.com"
+    "eMail": "3079625093@qq.com",
+    "address": "WuHan China"
   },
   "threshold": {
     "DOUBLE_EQ": 1E-15,

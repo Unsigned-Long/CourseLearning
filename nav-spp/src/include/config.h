@@ -13,26 +13,49 @@ namespace ns_spp {
     struct ModJulianDay;
     struct RefEllipsoid;
 
+    /**
+     * a configure struct using in all program
+     * @attention the members are all static
+     */
     struct Config {
     public:
+        /**
+         * the author's information
+         */
         struct Author {
             static std::string name;
             static std::string eMail;
+            static std::string address;
         };
 
+        /**
+         * the threshold for algorithm or values
+         */
         struct Threshold {
+            // the threshold to judge whether two doubles are equal
             static long double DOUBLE_EQ;
+            // the coordinate transformation accuracy threshold
             static long double POSITION;
+            // the threshold for iterate algorithm
             static long double ITERATE;
         };
 
+        /**
+         * the origin for the specific global position systems
+         * @attention the origins are expressed in the form of modify julian day
+         */
         struct TimeSystem {
             static ModJulianDay GPSTOrigin;
             static ModJulianDay BDTOrigin;
 ;        };
 
+        /**
+         * the reference ellipsoids
+         */
         struct RefEllipsoid {
+            // for GPS
             static ns_spp::RefEllipsoid WGS1984;
+            // for BDS
             static ns_spp::RefEllipsoid CGCS2000;
         };
 
