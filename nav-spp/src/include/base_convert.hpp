@@ -32,7 +32,9 @@ namespace ns_spp {
         static DecType toDec(const std::string &numStr) {
             DecType factor = 1, result = 0;
             for (int i = static_cast<int>(numStr.size()) - 1; i >= 0; --i) {
-                auto baseCharValue = EnumCast::stringToInteger<BaseChar>(std::string("_") + numStr[i]);
+                auto baseCharValue = EnumCast::stringToInteger<BaseChar>(
+                        std::string("_") + static_cast<char>(std::toupper(numStr[i]))
+                );
                 result += baseCharValue * factor;
                 factor *= Base;
             }
