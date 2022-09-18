@@ -35,7 +35,7 @@ namespace ns_spp {
         static DecType toDec(const std::string &numStr) {
             DecType factor = 1;
             DecType result = 0;
-            for (int i = numStr.size() - 1; i >= 0; --i) {
+            for (std::size_t i = numStr.size() - 1; i >= 0; --i) {
                 DecType val;
                 bool validChar = false;
                 for (int j = 0; j < Base; ++j) {
