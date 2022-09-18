@@ -13,12 +13,12 @@ TEST(base_convert, BaseConvert) {
     using namespace ns_spp;
 
     std::string hex = "806F53FA";
-    auto dec = BaseConvert::toDec<BaseConvert::Base::HEX, unsigned long>(hex);
+    auto dec = BaseConvert::toDec<16, unsigned long>(hex);
     LOG_VAR(hex, dec);
-    EXPECT_EQ(hex, BaseConvert::decTo<BaseConvert::HEX>(dec));
+    EXPECT_EQ(hex, BaseConvert::decTo<16>(dec));
 
-    EXPECT_EQ(BaseConvert::decTo<BaseConvert::BIT>(6), "110");
-    auto val = BaseConvert::toDec<BaseConvert::BIT, unsigned long>("110");
+    EXPECT_EQ(BaseConvert::decTo<2>(6), "110");
+    auto val = BaseConvert::toDec<2, int>("110");
     EXPECT_EQ(val, 6);
 
 }
