@@ -7,15 +7,12 @@
 
 #include "stack"
 #include "string"
-#include "exception"
+#include "enum_cast.hpp"
 
 namespace ns_spp {
+
     struct BaseConvert {
     public:
-        enum Base : unsigned short {
-            BIT = 2, OCT = 8, DEC = 10, HEX = 16
-        };
-
         template<unsigned short Base, class DecType>
         static std::string decTo(DecType num) {
             std::stack<unsigned short> stack;
@@ -25,7 +22,7 @@ namespace ns_spp {
             }
             std::string result(stack.size(), ' ');
             for (char &i: result) {
-                i = i2cStr[stack.top()];
+                i = EnumCast::integerToString<BaseChar>(stack.top())[1];
                 stack.pop();
             }
             return result;
@@ -33,34 +30,20 @@ namespace ns_spp {
 
         template<unsigned short Base, class DecType>
         static DecType toDec(const std::string &numStr) {
-            DecType factor = 1;
-            DecType result = 0;
-            for (std::size_t i = numStr.size() - 1; i >= 0; --i) {
-                DecType val;
-                bool validChar = false;
-                for (int j = 0; j < Base; ++j) {
-                    if (toupper(numStr[i]) == i2cStr[j]) {
-                        val = j, validChar = true;
-                        break;
-                    }
-                }
-                if (!validChar) {
-                    throw std::runtime_error(
-                            "wrong number string for base 'Base = " + std::to_string(Base)
-                            + "' at 'pos = " + std::to_string(i) + "'"
-                    );
-                }
-                result += val * factor;
+            DecType factor = 1, result = 0;
+            for (int i = static_cast<int>(numStr.size()) - 1; i >= 0; --i) {
+                auto baseCharValue = EnumCast::stringToInteger<BaseChar>(std::string("_") + numStr[i]);
+                result += baseCharValue * factor;
                 factor *= Base;
             }
             return result;
         }
 
     protected:
-        static const std::string i2cStr;
+        enum class BaseChar {
+            _0 = 0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _A, _B, _C, _D, _E, _F
+        };
     };
-
-    const std::string BaseConvert::i2cStr = "0123456789ABCDEF";
 }
 
 #endif //SPP_BASE_CONVERT_HPP
