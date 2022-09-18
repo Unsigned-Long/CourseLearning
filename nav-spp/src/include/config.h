@@ -8,6 +8,7 @@
 #include <ostream>
 #include "string"
 #include "memory"
+#include "type_def.hpp"
 
 namespace ns_spp {
     struct ModJulianDay;

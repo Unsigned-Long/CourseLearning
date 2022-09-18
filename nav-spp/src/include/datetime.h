@@ -6,7 +6,6 @@
 #define SPP_DATETIME_H
 
 #include <ostream>
-#include <boost/multiprecision/cpp_dec_float.hpp>
 #include "config.h"
 
 namespace ns_spp {
@@ -17,7 +16,6 @@ namespace ns_spp {
     struct GPSTime;
     struct BDTime;
 
-    using BigDouble = boost::multiprecision::cpp_dec_float_50;
 
     struct Gregorian {
         unsigned short year;
