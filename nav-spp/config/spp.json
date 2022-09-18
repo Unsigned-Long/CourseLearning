@@ -6,7 +6,7 @@
   },
   "threshold": {
     "DOUBLE_EQ": 1E-15,
-    "POSITION": 1E-5,
+    "POSITION": 1E-8,
     "ITERATE": 1E-12
   },
   "timeSystem": {

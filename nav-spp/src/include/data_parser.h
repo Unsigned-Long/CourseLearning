@@ -7,8 +7,32 @@
 
 #include "config.h"
 #include "datetime.h"
+#include "boost/preprocessor.hpp"
 
 namespace ns_spp {
+// enum to tuple
+#define TUPLE_WITHOUT_ZERO(count, name) \
+BOOST_PP_TUPLE_POP_FRONT((BOOST_PP_ENUM_PARAMS(count, name),name##count))
+
+// tuple to seq
+#define SEQ_WITHOUT_ZERO(count, name) \
+BOOST_PP_TUPLE_TO_SEQ(TUPLE_WITHOUT_ZERO(count,name))
+
+// seq to enum
+#define ENUM_WITHOUT_ZERO(count, name) \
+BOOST_PP_SEQ_ENUM(SEQ_WITHOUT_ZERO(count, name))
+
+// append
+#define APPEND(r, data, elem) \
+BOOST_PP_CAT(elem, data)
+
+// add tail
+#define SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail) \
+BOOST_PP_SEQ_TRANSFORM(APPEND, tail, SEQ_WITHOUT_ZERO(count, name))
+
+// seq to enum
+#define ENUM_WITH_TAIL_WITHOUT_ZERO(count, name, tail) \
+BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
 
 #define CRC32_POLYNOMIAL 0xEDB88320U
 
@@ -16,9 +40,9 @@ namespace ns_spp {
         /*
          * calculates the CRC-32 of a block of data all at once
          */
-        static unsigned int calBuffCRC32(const Byte *buff, int len);
+        static unsigned int calBuffCRC32(const Byte *buff, std::size_t len);
 
-        static bool checkBuff(const Byte *buff, int len, unsigned int tarCRC32);
+        static bool checkBuff(const Byte *buff, std::size_t len, unsigned int tarCRC32);
     };
 
     enum class TimeStatus {
@@ -56,10 +80,58 @@ namespace ns_spp {
         SATTIME = 200
     };
 
+    enum class PortIdentifier {
+        NO_PORTS = 0,
+        ENUM_WITH_TAIL_WITHOUT_ZERO(3, COM, _ALL),
+        THISPORT_ALL = 6,
+        FILE_ALL,
+        ALL_PORTS,
+        USB1_ALL = 13,
+        USB2_ALL,
+        USB3_ALL,
+        AUX_ALL,
+        COM4_ALL = 19,
+        ETH1_ALL,
+        IMU_ALL,
+        ICOM1_ALL = 23,
+        ICOM2_ALL,
+        ICOM3_ALL,
+        ENUM_WITH_TAIL_WITHOUT_ZERO(3, NCOM, _ALL),
+        ICOM4_ALL,
+        WCOM1_ALL,
+        COM1 = 32,
+        ENUM_WITHOUT_ZERO(31, COM1_),
+        COM2,
+        ENUM_WITHOUT_ZERO(31, COM2_),
+        COM3,
+        ENUM_WITHOUT_ZERO(31, COM3_)
+    };
+
+    enum class MessageID : ushort {
+        RANGE = 43,
+        RANGECMP = 140,
+
+        // The data is stored in the format of three sub-frames in the GPS navigation message,
+        // and the navigation message format needs to be referred to when decoding
+        RAWEPHEM = 41,
+        RAWGPSSUBFRAME = 25,
+
+        // NovAtel decodes and recodes all sub-frames of the navigation message
+        GPSEPHEM = 7,
+        BDSEPHEMERIS = 1696,
+
+        // Four navigation and positioning results
+        BESTPOS = 42,
+        AVEPOS = 172,
+        PDPPOS = 469,
+        PSRPOS = 47
+    };
+
     struct ASCIIMessageHeader {
     public:
-        Char message;
-        Char port;
+        Char sync;
+        String message;
+        PortIdentifier port;
         Long sequence;
         Float idleTime;
         TimeStatus timeStatus;
@@ -68,14 +140,22 @@ namespace ns_spp {
         ULong receiverStatus;
         ULong reserved;
         ULong receiverVersion;
+
+    public:
+        static ASCIIMessageHeader parsing(const Byte *buff, std::size_t len);
+
+        ASCIIMessageHeader() {}
     };
 
     struct BinaryMessageHeader {
     public:
+        Char firSync;
+        Char sedSync;
+        Char trdSync;
         UChar headerLength;
-        UShort messageID;
+        MessageID messageID;
         Char messageType;
-        UChar portAddress;
+        PortIdentifier portAddress;
         UShort messageLength;
         UShort sequence;
         UChar idleTime;
@@ -85,6 +165,11 @@ namespace ns_spp {
         ULong receiverStatus;
         UShort reserved;
         UShort receiverVersion;
+
+    public:
+        BinaryMessageHeader() {}
+
+        static BinaryMessageHeader parsing(const Byte *buff, std::size_t len);
     };
 
 

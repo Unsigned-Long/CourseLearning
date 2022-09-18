@@ -17,7 +17,7 @@ TEST(config, Config) {
     EXPECT_EQ(Config::Author::address, "WuHan China");
 
     EXPECT_DOUBLE_EQ(Config::Threshold::DOUBLE_EQ, 1E-15);
-    EXPECT_DOUBLE_EQ(Config::Threshold::POSITION, 1E-5);
+    EXPECT_DOUBLE_EQ(Config::Threshold::POSITION, 1E-8);
     EXPECT_DOUBLE_EQ(Config::Threshold::ITERATE, 1E-12);
 
     EXPECT_EQ(Config::TimeSystem::GPSTOrigin,

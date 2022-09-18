@@ -55,18 +55,17 @@ ns_spp::PointBLH ns_spp::RefEllipsoid::XYZ2BLH(const ns_spp::PointXYZ &p) const 
     double rxy = std::sqrt(X * X + Y * Y);
     double L = std::atan2(Y, X);
     double deltaZ = eFir2 * Z;
-    double B, H;
+    double B = std::atan2(Z, rxy);
     while (true) {
-        double sinB = (Z + deltaZ) / std::sqrt(X * X + Y * Y + (Z + deltaZ) * (Z + deltaZ));
-        B = std::asin(sinB);
-        auto newDeltaZ = this->N(B) * eFir2 * sinB;
-        double update = std::abs(deltaZ - newDeltaZ);
-        deltaZ = newDeltaZ;
-        if (update < Config::Threshold::ITERATE) {
+        double newB = std::atan(
+                (Z + N(B) * eFir2 * std::sin(B)) / rxy
+        );
+        double deltaB = std::abs(B - newB);
+        B = newB;
+        if (deltaB < ns_spp::Config::Threshold::ITERATE) {
             break;
         }
     }
-    B = std::atan2(Z + deltaZ, rxy);
-    H = std::sqrt(X * X + Y * Y + (Z + deltaZ) * (Z + deltaZ)) - this->N(B);
+    double H = rxy / std::cos(B) - N(B);
     return {B, L, H};
 }

@@ -20,6 +20,7 @@ namespace ns_spp {
     using ULong = unsigned int;
     using Double = double;
     using Float = float;
+    using String = std::string;
 }
 
 #endif //SPP_TYPE_DEF_HPP

@@ -3,6 +3,7 @@
 #include "test_coordinate.hpp"
 #include "test_enum_cast.hpp"
 #include "test_base_cast.hpp"
+#include "test_data_parser.hpp"
 
 int main(int argc, char *argv[]) {
     ns_spp::Config::loadConfigure("../config/spp.json");
