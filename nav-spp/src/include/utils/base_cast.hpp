@@ -2,16 +2,16 @@
 // Created by csl on 9/18/22.
 //
 
-#ifndef SPP_BASE_CONVERT_HPP
-#define SPP_BASE_CONVERT_HPP
+#ifndef SPP_BASE_CAST_HPP
+#define SPP_BASE_CAST_HPP
 
 #include "stack"
 #include "string"
-#include "enum_cast.hpp"
+#include "utils/enum_cast.hpp"
 
 namespace ns_spp {
 
-    struct BaseConvert {
+    struct BaseCast {
     public:
         template<unsigned short Base, class DecType>
         static std::string decTo(DecType num) {
@@ -48,4 +48,4 @@ namespace ns_spp {
     };
 }
 
-#endif //SPP_BASE_CONVERT_HPP
+#endif //SPP_BASE_CAST_HPP

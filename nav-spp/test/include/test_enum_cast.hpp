@@ -6,7 +6,7 @@
 #define SPP_TEST_ENUM_CAST_HPP
 
 #include "gtest/gtest.h"
-#include "enum_cast.hpp"
+#include "utils/enum_cast.hpp"
 
 enum class Color {
     RED = 12, GREEN = 14, BLUE = 19
