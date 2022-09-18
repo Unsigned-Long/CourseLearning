@@ -2,6 +2,7 @@
 #include "datetime.h"
 #include "coordinate.h"
 #include "artwork/logger/logger.h"
+#include "base_convert.hpp"
 
 int main(int argc, char *argv[]) {
     ns_spp::Config::loadConfigure("../config/spp.json");

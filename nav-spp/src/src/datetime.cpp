@@ -187,17 +187,17 @@ ns_spp::JulianDay ns_spp::GPSTime::toJulianDay() const {
     return this->toModJulianDay().toJulianDay();
 }
 
-ns_spp::GPSTime::GPSTime(unsigned short week, const std::string &secOfWeek)
+ns_spp::GPSTime::GPSTime(unsigned int week, const std::string &secOfWeek)
         : NavTime(week, secOfWeek) {}
 
-ns_spp::GPSTime::GPSTime(unsigned short week, const ns_spp::BigDouble &secOfWeek)
+ns_spp::GPSTime::GPSTime(unsigned int week, const ns_spp::BigDouble &secOfWeek)
         : NavTime(week, secOfWeek) {}
 // BDTime
 
-ns_spp::BDTime::BDTime(unsigned short week, const std::string &secOfWeek)
+ns_spp::BDTime::BDTime(unsigned int week, const std::string &secOfWeek)
         : NavTime(week, secOfWeek) {}
 
-ns_spp::BDTime::BDTime(unsigned short week, const ns_spp::BigDouble &secOfWeek)
+ns_spp::BDTime::BDTime(unsigned int week, const ns_spp::BigDouble &secOfWeek)
         : NavTime(week, secOfWeek) {}
 
 ns_spp::ModJulianDay ns_spp::BDTime::toModJulianDay() const {
@@ -213,8 +213,8 @@ ns_spp::JulianDay ns_spp::BDTime::toJulianDay() const {
     return this->toModJulianDay().toJulianDay();
 }
 
-ns_spp::NavTime::NavTime(unsigned short week, const std::string &secOfWeek)
+ns_spp::NavTime::NavTime(unsigned int week, const std::string &secOfWeek)
         : week(week), secOfWeek(secOfWeek) {}
 
-ns_spp::NavTime::NavTime(unsigned short week, ns_spp::BigDouble secOfWeek)
+ns_spp::NavTime::NavTime(unsigned int week, ns_spp::BigDouble secOfWeek)
         : week(week), secOfWeek(std::move(secOfWeek)) {}

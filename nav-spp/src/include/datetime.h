@@ -144,13 +144,13 @@ namespace ns_spp {
 
     struct NavTime {
     public:
-        unsigned short week;
+        unsigned int week;
         BigDouble secOfWeek;
 
     protected:
-        explicit NavTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
+        explicit NavTime(unsigned int week = 0, const std::string &secOfWeek = "0.0");
 
-        explicit NavTime(unsigned short week, BigDouble secOfWeek);
+        explicit NavTime(unsigned int week, BigDouble secOfWeek);
 
     public:
         [[nodiscard]] virtual ModJulianDay toModJulianDay() const = 0;
@@ -163,9 +163,9 @@ namespace ns_spp {
     struct GPSTime : public NavTime {
     public:
 
-        explicit GPSTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
+        explicit GPSTime(unsigned int week = 0, const std::string &secOfWeek = "0.0");
 
-        explicit GPSTime(unsigned short week, const BigDouble &secOfWeek);
+        explicit GPSTime(unsigned int week, const BigDouble &secOfWeek);
 
         [[nodiscard]] ModJulianDay toModJulianDay() const override;
 
@@ -192,9 +192,9 @@ namespace ns_spp {
     struct BDTime : public NavTime {
     public:
 
-        explicit BDTime(unsigned short week = 0, const std::string &secOfWeek = "0.0");
+        explicit BDTime(unsigned int week = 0, const std::string &secOfWeek = "0.0");
 
-        explicit BDTime(unsigned short week, const BigDouble &secOfWeek);
+        explicit BDTime(unsigned int week, const BigDouble &secOfWeek);
 
         [[nodiscard]] ModJulianDay toModJulianDay() const override;
 
