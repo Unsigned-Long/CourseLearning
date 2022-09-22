@@ -23,12 +23,10 @@ bool ns_spp::CRC32::checkBuff(const ns_spp::Byte *buff, std::size_t len, unsigne
     return calBuffCRC32(buff, len) == tarCRC32;
 }
 
-ns_spp::BinaryMessageHeader ns_spp::BinaryMessageHeader::parsing(const ns_spp::Byte *buffer, std::size_t len) {
+ns_spp::MessageHeader ns_spp::MessageHeader::parsing(const ns_spp::Byte *buffer, std::size_t len) {
     using namespace ns_spp;
 
-    ns_spp::BinaryMessageHeader header{};
-
-    header.firSync = buffer[0], header.sedSync = buffer[1], header.trdSync = buffer[2];
+    ns_spp::MessageHeader header{};
 
     header.headerLength = buffer[3];
 
@@ -59,71 +57,59 @@ ns_spp::BinaryMessageHeader ns_spp::BinaryMessageHeader::parsing(const ns_spp::B
     return header;
 }
 
-
-ns_spp::NovAtelOEM::~NovAtelOEM() {
-    delete[] this->buffer;
-}
-
-const ns_spp::Byte *ns_spp::NovAtelOEM::getBuffer() const {
-    return buffer;
-}
-
-ns_spp::NovAtelOEM::NovAtelOEM(const std::string &binFilePath) : buffer(nullptr) {
-    using namespace ns_spp;
-    this->bufferSize = BufferHelper::readBuffer(&this->buffer, binFilePath);
-
-    for (int i = 0; i != bufferSize - 3;) {
-        LOG_VAR(i);
-        auto firByte = buffer[i + 0], sedByte = buffer[i + 1], trdByte = buffer[i + 2];
-        if (firByte == firSync && sedByte == sedSync && trdByte == trdSync) {
-            BinaryMessageHeader header = BinaryMessageHeader::parsing(buffer + i, buffer[i + 3]);
-            LOG_VAR(header);
-
-            auto dataSize = header.headerLength + header.messageLength;
-            auto crcCode = BufferHelper::fromByte<ULong>(buffer + i + dataSize);
-            if (!CRC32::checkBuff(buffer + i, dataSize, crcCode)) { continue; }
-            LOG_VAR("check pass!");
-
-            std::shared_ptr<MessageItem> messageItem = nullptr;
-
-            switch (header.messageID) {
-                case RANGE:
-                    messageItem = std::make_shared<RANGEMessage>(header);
-                    break;
-                case GPSEPHEM:
-                    messageItem = std::make_shared<GPSEPHEMMessage>(header);
-                    break;
-                case BDSEPHEMERIS:
-                    messageItem = std::make_shared<BDSEPHEMERISMessage>(header);
-                    break;
-                case BESTPOS:
-                    messageItem = std::make_shared<BESTPOSMessage>(header);
-                    break;
-                default:
-                    break;
-            }
-            if (messageItem != nullptr) {
-                messageItem->parseMessage(buffer + i + header.headerLength, header.messageLength);
-                this->msgVector.push_back(messageItem);
-            }
-            i += dataSize + 4;
-        } else {
-            ++i;
-        }
-        std::cin.get();
-    }
-}
-
 /*
  * MessageItem
  */
-ns_spp::MessageItem::MessageItem(const ns_spp::BinaryMessageHeader &header)
+ns_spp::MessageItem::MessageItem(const ns_spp::MessageHeader &header)
         : header(header) {}
+
+std::shared_ptr<ns_spp::MessageItem>
+ns_spp::MessageItem::tryParseMessage(const ns_spp::Byte *buffer,
+                                     std::size_t *bytesUsed) {
+    MessageHeader header = MessageHeader::parsing(buffer, buffer[3]);
+
+    auto dataSize = header.headerLength + header.messageLength;
+    LOG_VAR(header);
+    if (bytesUsed != nullptr) {
+        *bytesUsed = dataSize + 4;
+    }
+
+    auto crcCode = BufferHelper::fromByte<ULong>(buffer + dataSize);
+    if (!CRC32::checkBuff(buffer, dataSize, crcCode)) {
+        return nullptr;
+    }
+    std::shared_ptr<MessageItem> messageItem = nullptr;
+
+    switch (header.messageID) {
+        case RANGE:
+            messageItem = std::make_shared<RANGEMessage>(header);
+            break;
+        case GPSEPHEM:
+            messageItem = std::make_shared<GPSEPHEMMessage>(header);
+            break;
+        case BDSEPHEMERIS:
+            messageItem = std::make_shared<BDSEPHEMERISMessage>(header);
+            break;
+        case BESTPOS:
+            messageItem = std::make_shared<BESTPOSMessage>(header);
+            break;
+        default:
+            break;
+    }
+    if (messageItem != nullptr) {
+        messageItem->parseMessage(buffer + header.headerLength, header.messageLength);
+    }
+    return messageItem;
+}
+
+std::size_t ns_spp::MessageItem::messageItemSize() const {
+    return this->header.headerLength + header.messageLength + 4;
+}
 
 /*
  * RANGEMessage
  */
-ns_spp::RANGEMessage::RANGEMessage(const ns_spp::BinaryMessageHeader &header)
+ns_spp::RANGEMessage::RANGEMessage(const ns_spp::MessageHeader &header)
         : MessageItem(header) {}
 
 void ns_spp::RANGEMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
@@ -133,7 +119,7 @@ void ns_spp::RANGEMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t 
 /*
  * GPSEPHEMMessage
  */
-ns_spp::GPSEPHEMMessage::GPSEPHEMMessage(const ns_spp::BinaryMessageHeader &header)
+ns_spp::GPSEPHEMMessage::GPSEPHEMMessage(const ns_spp::MessageHeader &header)
         : MessageItem(header) {}
 
 void ns_spp::GPSEPHEMMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
@@ -143,7 +129,7 @@ void ns_spp::GPSEPHEMMessage::parseMessage(const ns_spp::Byte *buffer, std::size
 /*
  * BDSEPHEMERISMessage
  */
-ns_spp::BDSEPHEMERISMessage::BDSEPHEMERISMessage(const ns_spp::BinaryMessageHeader &header)
+ns_spp::BDSEPHEMERISMessage::BDSEPHEMERISMessage(const ns_spp::MessageHeader &header)
         : MessageItem(header) {}
 
 void ns_spp::BDSEPHEMERISMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
@@ -153,7 +139,7 @@ void ns_spp::BDSEPHEMERISMessage::parseMessage(const ns_spp::Byte *buffer, std::
 /*
  * BESTPOSMessage
  */
-ns_spp::BESTPOSMessage::BESTPOSMessage(const ns_spp::BinaryMessageHeader &header)
+ns_spp::BESTPOSMessage::BESTPOSMessage(const ns_spp::MessageHeader &header)
         : MessageItem(header) {}
 
 void ns_spp::BESTPOSMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {

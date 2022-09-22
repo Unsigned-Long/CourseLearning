@@ -143,11 +143,12 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         // PSRPOS = 47
     };
 
-    struct BinaryMessageHeader {
+    struct MessageHeader {
     public:
-        UChar firSync;
-        UChar sedSync;
-        UChar trdSync;
+        const static Byte firSync = 0xAA;
+        const static Byte sedSync = 0x44;
+        const static Byte trdSync = 0x12;
+
         UChar headerLength;
         MessageID messageID;
         Char messageType;
@@ -163,11 +164,11 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         UShort receiverVersion;
 
     public:
-        BinaryMessageHeader() {}
+        MessageHeader() {}
 
-        static BinaryMessageHeader parsing(const Byte *buffer, std::size_t len);
+        static MessageHeader parsing(const Byte *buffer, std::size_t len);
 
-        friend std::ostream &operator<<(std::ostream &os, const BinaryMessageHeader &header) {
+        friend std::ostream &operator<<(std::ostream &os, const MessageHeader &header) {
             os << "firSync: " << BaseCast::decTo<16>(header.firSync)
                << " sedSync: " << BaseCast::decTo<16>(header.sedSync)
                << " trdSync: " << BaseCast::decTo<16>(header.trdSync)
@@ -187,19 +188,28 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         }
     };
 
+    /*
+     * MessageItem
+     */
 
     struct MessageItem {
     public:
-        BinaryMessageHeader header;
+        MessageHeader header;
 
-        MessageItem(const BinaryMessageHeader &header);
+        MessageItem(const MessageHeader &header);
 
         virtual void parseMessage(const Byte *buffer, std::size_t len) = 0;
+
+        std::size_t messageItemSize() const;
+
+        static std::shared_ptr<MessageItem>
+        tryParseMessage(const Byte *buffer, std::size_t *bytesUsed = nullptr);
+
     };
 
     struct RANGEMessage : public MessageItem {
     public:
-        explicit RANGEMessage(const BinaryMessageHeader &header);
+        explicit RANGEMessage(const MessageHeader &header);
 
     protected:
         void parseMessage(const Byte *buffer, std::size_t len) override;
@@ -207,7 +217,7 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
 
     struct GPSEPHEMMessage : public MessageItem {
     public:
-        explicit GPSEPHEMMessage(const BinaryMessageHeader &header);
+        explicit GPSEPHEMMessage(const MessageHeader &header);
 
     protected:
         void parseMessage(const Byte *buffer, std::size_t len) override;
@@ -215,7 +225,7 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
 
     struct BDSEPHEMERISMessage : public MessageItem {
     public:
-        explicit BDSEPHEMERISMessage(const BinaryMessageHeader &header);
+        explicit BDSEPHEMERISMessage(const MessageHeader &header);
 
     protected:
         void parseMessage(const Byte *buffer, std::size_t len) override;
@@ -223,31 +233,12 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
 
     struct BESTPOSMessage : public MessageItem {
     public:
-        explicit BESTPOSMessage(const BinaryMessageHeader &header);
+        explicit BESTPOSMessage(const MessageHeader &header);
 
     protected:
         void parseMessage(const Byte *buffer, std::size_t len) override;
     };
 
-    class NovAtelOEM {
-    private:
-        Byte *buffer;
-        std::size_t bufferSize;
-
-        const static Byte firSync = 0xAA;
-        const static Byte sedSync = 0x44;
-        const static Byte trdSync = 0x12;
-
-        std::vector<std::shared_ptr<MessageItem>> msgVector;
-
-    public:
-        explicit NovAtelOEM(const std::string &binFilePath);
-
-        virtual ~NovAtelOEM();
-
-        [[nodiscard]] const Byte *getBuffer() const;
-
-    };
 
 }
 
