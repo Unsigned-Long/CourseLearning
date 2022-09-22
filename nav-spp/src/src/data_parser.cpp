@@ -89,3 +89,35 @@ ns_spp::NovAtelOEM::NovAtelOEM(const std::string &binFilePath) : buffer(nullptr)
         std::cin.get();
     }
 }
+
+ns_spp::MessageItem::MessageItem(const ns_spp::BinaryMessageHeader &header) {
+
+}
+
+ns_spp::RANGEMessage::RANGEMessage(const ns_spp::BinaryMessageHeader &header)
+        : MessageItem(header) {}
+
+void ns_spp::RANGEMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
+
+}
+
+ns_spp::GPSEPHEMMessage::GPSEPHEMMessage(const ns_spp::BinaryMessageHeader &header)
+        : MessageItem(header) {}
+
+void ns_spp::GPSEPHEMMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
+
+}
+
+ns_spp::BDSEPHEMERISMessage::BDSEPHEMERISMessage(const ns_spp::BinaryMessageHeader &header)
+        : MessageItem(header) {}
+
+void ns_spp::BDSEPHEMERISMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
+
+}
+
+ns_spp::BESTPOSMessage::BESTPOSMessage(const ns_spp::BinaryMessageHeader &header)
+        : MessageItem(header) {}
+
+void ns_spp::BESTPOSMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
+
+}
