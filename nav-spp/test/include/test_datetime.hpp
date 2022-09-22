@@ -14,7 +14,6 @@
 
 TEST(datetime, Gregorian) {
     using namespace ns_spp;
-    Config::loadConfigure("../config/spp.json");
 
     BigDouble second("0");
 

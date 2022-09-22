@@ -6,7 +6,6 @@
 #include "data_parser.h"
 
 int main(int argc, char *argv[]) {
-    ns_spp::Config::loadConfigure("../config/spp.json");
-    LOG_VAR(ns_spp::EnumCast::enumToInteger(ns_spp::PortIdentifier::COM3_31));
+    ns_spp::Config::loadConfigure("../config/spp.yaml");
     return 0;
 }
