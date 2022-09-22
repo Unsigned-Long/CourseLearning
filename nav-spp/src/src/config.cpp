@@ -3,7 +3,7 @@
 //
 
 #include "config.h"
-#include "rapidjson/document.h"
+#include "yaml-cpp/yaml.h"
 #include "fstream"
 #include "datetime.h"
 #include "coordinate.h"
@@ -23,51 +23,50 @@ ns_spp::RefEllipsoid ns_spp::Config::RefEllipsoid::WGS1984 = ns_spp::RefEllipsoi
 ns_spp::RefEllipsoid ns_spp::Config::RefEllipsoid::CGCS2000 = ns_spp::RefEllipsoid(0.0, 0.0);
 
 void ns_spp::Config::loadConfigure(const std::string &configPath) {
-    rapidjson::Document doc;
-    doc.Parse(Config::readString(configPath).c_str());
+    auto doc = YAML::LoadFile(configPath);
 
     // authorValue info
-    rapidjson::Value &authorValue = doc["author"];
-    Config::Author::name = authorValue["name"].GetString();
-    Config::Author::eMail = authorValue["eMail"].GetString();
-    Config::Author::address = authorValue["address"].GetString();
+    auto authorValue = doc["author"];
+    Config::Author::name = authorValue["name"].as<std::string>();
+    Config::Author::eMail = authorValue["eMail"].as<std::string>();
+    Config::Author::address = authorValue["address"].as<std::string>();
 
     // thresholdValue
-    rapidjson::Value &thresholdValue = doc["threshold"];
-    Config::Threshold::DOUBLE_EQ = thresholdValue["DOUBLE_EQ"].GetDouble();
-    Config::Threshold::POSITION = thresholdValue["POSITION"].GetDouble();
-    Config::Threshold::ITERATE = thresholdValue["ITERATE"].GetDouble();
+    auto thresholdValue = doc["threshold"];
+    Config::Threshold::DOUBLE_EQ = thresholdValue["DOUBLE_EQ"].as<double>();
+    Config::Threshold::POSITION = thresholdValue["POSITION"].as<double>();
+    Config::Threshold::ITERATE = thresholdValue["ITERATE"].as<double>();
 
     // time system
-    rapidjson::Value &timeSystemValue = doc["timeSystem"];
+    auto timeSystemValue = doc["timeSystem"];
     // GPST
-    rapidjson::Value &GPSTOriginValue = timeSystemValue["GPSTOrigin"];
+    auto GPSTOriginValue = timeSystemValue["GPSTOrigin"];
     auto GPSOriginDateTime =
-            Gregorian(GPSTOriginValue["year"].GetInt(), GPSTOriginValue["month"].GetInt(),
-                      GPSTOriginValue["day"].GetInt(), GPSTOriginValue["hour"].GetInt(),
-                      GPSTOriginValue["minute"].GetInt(), GPSTOriginValue["second"].GetInt());
+            Gregorian(GPSTOriginValue["year"].as<int>(), GPSTOriginValue["month"].as<int>(),
+                      GPSTOriginValue["day"].as<int>(), GPSTOriginValue["hour"].as<int>(),
+                      GPSTOriginValue["minute"].as<int>(), GPSTOriginValue["second"].as<int>());
     Config::TimeSystem::GPSTOrigin = GPSOriginDateTime.toModJulianDay();
 
     // BDT
-    rapidjson::Value &BDTOriginValue = timeSystemValue["BDTOrigin"];
+    auto BDTOriginValue = timeSystemValue["BDTOrigin"];
     auto BDOriginDateTime =
-            Gregorian(BDTOriginValue["year"].GetInt(), BDTOriginValue["month"].GetInt(),
-                      BDTOriginValue["day"].GetInt(), BDTOriginValue["hour"].GetInt(),
-                      BDTOriginValue["minute"].GetInt(), BDTOriginValue["second"].GetInt());
+            Gregorian(BDTOriginValue["year"].as<int>(), BDTOriginValue["month"].as<int>(),
+                      BDTOriginValue["day"].as<int>(), BDTOriginValue["hour"].as<int>(),
+                      BDTOriginValue["minute"].as<int>(), BDTOriginValue["second"].as<int>());
     Config::TimeSystem::BDTOrigin = BDOriginDateTime.toModJulianDay();
 
     // RefEllipsoid
-    rapidjson::Value &RefEllipsoidValue = doc["RefEllipsoid"];
+    auto RefEllipsoidValue = doc["RefEllipsoid"];
     // WGS1984
-    rapidjson::Value &WGS1984Value = RefEllipsoidValue["WGS1984"];
+    auto WGS1984Value = RefEllipsoidValue["WGS1984"];
     Config::RefEllipsoid::WGS1984 =
-            ns_spp::RefEllipsoid(WGS1984Value["a"].GetDouble(),
-                                 1.0 / WGS1984Value["fInv"].GetDouble());
+            ns_spp::RefEllipsoid(WGS1984Value["a"].as<double>(),
+                                 1.0 / WGS1984Value["fInv"].as<double>());
     // CGCS2000
-    rapidjson::Value &CGCS2000Value = RefEllipsoidValue["CGCS2000"];
+    auto CGCS2000Value = RefEllipsoidValue["CGCS2000"];
     Config::RefEllipsoid::CGCS2000 =
-            ns_spp::RefEllipsoid(CGCS2000Value["a"].GetDouble(),
-                                 1.0 / CGCS2000Value["fInv"].GetDouble());
+            ns_spp::RefEllipsoid(CGCS2000Value["a"].as<double>(),
+                                 1.0 / CGCS2000Value["fInv"].as<double>());
 
 }
 

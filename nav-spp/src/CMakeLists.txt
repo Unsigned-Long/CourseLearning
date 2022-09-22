@@ -1,9 +1,9 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 find_package(Eigen3)
-find_package(RapidJSON)
 find_package(Boost)
 find_package(magic_enum CONFIG REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_FILES)
 
@@ -13,14 +13,15 @@ target_include_directories(
         ${CMAKE_PROJECT_NAME} PUBLIC
         ${EIGEN_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${RAPIDJSON_INCLUDE_DIRS}
         ${Boost_INCLUDE_DIRS}
+        ${YAML_CPP_INCLUDE_DIRS}
 )
 
 target_link_libraries(
         ${CMAKE_PROJECT_NAME} PUBLIC
         ${Boost_LIBRARIES}
         magic_enum::magic_enum
+        ${YAML_CPP_LIBRARIES}
 )
 
 add_executable(${CMAKE_PROJECT_NAME}_prog ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)

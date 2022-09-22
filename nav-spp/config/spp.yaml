@@ -14,35 +14,35 @@ threshold:
   # the coordinate transformation accuracy threshold
   POSITION: 1E-8
   # the threshold for iterate algorithm
-  ITERATOR: 1E-12
+  ITERATE: 1E-12
 
 # the origin for the specific global position systems
 # attention! the origins are expressed in the form of modify julian day
 timeSystem:
-  - GPSTOrigin:
-      year: 1980
-      month: 1
-      day: 6
-      hour: 0
-      minute: 0
-      second: 0
-  - BDTOrigin:
-      year: 2006
-      month: 1
-      day: 1
-      hour: 0
-      minute: 0
-      second: 0
+  GPSTOrigin:
+    year: 1980
+    month: 1
+    day: 6
+    hour: 0
+    minute: 0
+    second: 0
+  BDTOrigin:
+    year: 2006
+    month: 1
+    day: 1
+    hour: 0
+    minute: 0
+    second: 0
 
 # the reference ellipsoids
 RefEllipsoid:
-  - WGS1984:
-      # semi major axis of the ellipsoid
-      a: 6378137.0
-      # inverse flattening
-      fInv: 298.257223563
-  - CGCS2000:
-      # semi major axis of the ellipsoid
-      a: 6378137.0
-      # inverse flattening
-      fInv: 298.257222101
+  WGS1984:
+    # semi major axis of the ellipsoid
+    a: 6378137.0
+    # inverse flattening
+    fInv: 298.257223563
+  CGCS2000:
+    # semi major axis of the ellipsoid
+    a: 6378137.0
+    # inverse flattening
+    fInv: 298.257222101
