@@ -136,11 +136,11 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         // Best position
         BESTPOS = 42,
         // Position averaging
-        AVEPOS = 172,
+        // AVEPOS = 172,
         // PDP filter position
-        PDPPOS = 469,
+        // PDPPOS = 469,
         // Pseudorange position
-        PSRPOS = 47
+        // PSRPOS = 47
     };
 
     struct BinaryMessageHeader {
@@ -192,7 +192,7 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
     public:
         BinaryMessageHeader header;
 
-        explicit MessageItem(const BinaryMessageHeader &header);
+        MessageItem(const BinaryMessageHeader &header);
 
         virtual void parseMessage(const Byte *buffer, std::size_t len) = 0;
     };
@@ -237,6 +237,8 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         const static Byte firSync = 0xAA;
         const static Byte sedSync = 0x44;
         const static Byte trdSync = 0x12;
+
+        std::vector<std::shared_ptr<MessageItem>> msgVector;
 
     public:
         explicit NovAtelOEM(const std::string &binFilePath);

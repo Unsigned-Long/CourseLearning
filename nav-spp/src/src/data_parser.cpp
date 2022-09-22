@@ -78,10 +78,34 @@ ns_spp::NovAtelOEM::NovAtelOEM(const std::string &binFilePath) : buffer(nullptr)
         if (firByte == firSync && sedByte == sedSync && trdByte == trdSync) {
             BinaryMessageHeader header = BinaryMessageHeader::parsing(buffer + i, buffer[i + 3]);
             LOG_VAR(header);
+
             auto dataSize = header.headerLength + header.messageLength;
             auto crcCode = BufferHelper::fromByte<ULong>(buffer + i + dataSize);
             if (!CRC32::checkBuff(buffer + i, dataSize, crcCode)) { continue; }
             LOG_VAR("check pass!");
+
+            std::shared_ptr<MessageItem> messageItem = nullptr;
+
+            switch (header.messageID) {
+                case RANGE:
+                    messageItem = std::make_shared<RANGEMessage>(header);
+                    break;
+                case GPSEPHEM:
+                    messageItem = std::make_shared<GPSEPHEMMessage>(header);
+                    break;
+                case BDSEPHEMERIS:
+                    messageItem = std::make_shared<BDSEPHEMERISMessage>(header);
+                    break;
+                case BESTPOS:
+                    messageItem = std::make_shared<BESTPOSMessage>(header);
+                    break;
+                default:
+                    break;
+            }
+            if (messageItem != nullptr) {
+                messageItem->parseMessage(buffer + i + header.headerLength, header.messageLength);
+                this->msgVector.push_back(messageItem);
+            }
             i += dataSize + 4;
         } else {
             ++i;
@@ -90,10 +114,15 @@ ns_spp::NovAtelOEM::NovAtelOEM(const std::string &binFilePath) : buffer(nullptr)
     }
 }
 
-ns_spp::MessageItem::MessageItem(const ns_spp::BinaryMessageHeader &header) {
+/*
+ * MessageItem
+ */
+ns_spp::MessageItem::MessageItem(const ns_spp::BinaryMessageHeader &header)
+        : header(header) {}
 
-}
-
+/*
+ * RANGEMessage
+ */
 ns_spp::RANGEMessage::RANGEMessage(const ns_spp::BinaryMessageHeader &header)
         : MessageItem(header) {}
 
@@ -101,6 +130,9 @@ void ns_spp::RANGEMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t 
 
 }
 
+/*
+ * GPSEPHEMMessage
+ */
 ns_spp::GPSEPHEMMessage::GPSEPHEMMessage(const ns_spp::BinaryMessageHeader &header)
         : MessageItem(header) {}
 
@@ -108,6 +140,9 @@ void ns_spp::GPSEPHEMMessage::parseMessage(const ns_spp::Byte *buffer, std::size
 
 }
 
+/*
+ * BDSEPHEMERISMessage
+ */
 ns_spp::BDSEPHEMERISMessage::BDSEPHEMERISMessage(const ns_spp::BinaryMessageHeader &header)
         : MessageItem(header) {}
 
@@ -115,9 +150,13 @@ void ns_spp::BDSEPHEMERISMessage::parseMessage(const ns_spp::Byte *buffer, std::
 
 }
 
+/*
+ * BESTPOSMessage
+ */
 ns_spp::BESTPOSMessage::BESTPOSMessage(const ns_spp::BinaryMessageHeader &header)
         : MessageItem(header) {}
 
 void ns_spp::BESTPOSMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
 
 }
+
