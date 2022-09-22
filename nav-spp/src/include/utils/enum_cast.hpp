@@ -6,6 +6,9 @@
 #define SPP_ENUM_CAST_HPP
 
 #include "string"
+
+#define MAGIC_ENUM_RANGE_MIN 0
+#define MAGIC_ENUM_RANGE_MAX 256
 #include "magic-enum/magic_enum.hpp"
 #include "exception"
 

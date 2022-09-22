@@ -5,9 +5,11 @@
 #ifndef SPP_DATA_PARSER_H
 #define SPP_DATA_PARSER_H
 
+#include <ostream>
 #include "config.h"
 #include "datetime.h"
 #include "boost/preprocessor.hpp"
+#include "utils/base_cast.hpp"
 
 namespace ns_spp {
 // enum to tuple
@@ -45,7 +47,7 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         static bool checkBuff(const Byte *buff, std::size_t len, unsigned int tarCRC32);
     };
 
-    enum class TimeStatus {
+    enum class TimeStatus : UChar {
         // Time validity is unknown
         APPROXIMATE = 60,
 
@@ -80,7 +82,12 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         SATTIME = 200
     };
 
-    enum class PortIdentifier {
+    static std::ostream &operator<<(std::ostream &os, const TimeStatus &timeStatus) {
+        os << EnumCast::enumToString(timeStatus);
+        return os;
+    }
+
+    enum class PortIdentifier : UChar {
         NO_PORTS = 0,
         ENUM_WITH_TAIL_WITHOUT_ZERO(3, COM, _ALL),
         THISPORT_ALL = 6,
@@ -104,54 +111,43 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         COM2,
         ENUM_WITHOUT_ZERO(31, COM2_),
         COM3,
-        ENUM_WITHOUT_ZERO(31, COM3_)
+        ENUM_WITHOUT_ZERO(31, COM3_),
+        SPECIAL = 160,
+        ENUM_WITHOUT_ZERO(31, SPECIAL_),
+        THISPORT = 192,
+        ENUM_WITHOUT_ZERO(31, THISPORT_),
+        FILE = 224,
+        ENUM_WITHOUT_ZERO(31, FILE_)
     };
 
-    enum class MessageID : ushort {
+    static std::ostream &operator<<(std::ostream &os, const PortIdentifier &portIdentifier) {
+        os << EnumCast::enumToString(portIdentifier);
+        return os;
+    }
+
+    enum MessageID : UShort {
+        // Satellite range information
         RANGE = 43,
-        RANGECMP = 140,
-
-        // The data is stored in the format of three sub-frames in the GPS navigation message,
-        // and the navigation message format needs to be referred to when decoding
-        RAWEPHEM = 41,
-        RAWGPSSUBFRAME = 25,
-
-        // NovAtel decodes and recodes all sub-frames of the navigation message
+        // Decoded GPS L1 C/A ephemerides
         GPSEPHEM = 7,
+        // Decoded BDS ephemeris
         BDSEPHEMERIS = 1696,
 
-        // Four navigation and positioning results
+        // Best position
         BESTPOS = 42,
+        // Position averaging
         AVEPOS = 172,
+        // PDP filter position
         PDPPOS = 469,
+        // Pseudorange position
         PSRPOS = 47
-    };
-
-    struct ASCIIMessageHeader {
-    public:
-        Char sync;
-        String message;
-        PortIdentifier port;
-        Long sequence;
-        Float idleTime;
-        TimeStatus timeStatus;
-        ULong week;
-        Float seconds;
-        ULong receiverStatus;
-        ULong reserved;
-        ULong receiverVersion;
-
-    public:
-        static ASCIIMessageHeader parsing(const Byte *buff, std::size_t len);
-
-        ASCIIMessageHeader() {}
     };
 
     struct BinaryMessageHeader {
     public:
-        Char firSync;
-        Char sedSync;
-        Char trdSync;
+        UChar firSync;
+        UChar sedSync;
+        UChar trdSync;
         UChar headerLength;
         MessageID messageID;
         Char messageType;
@@ -169,9 +165,87 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
     public:
         BinaryMessageHeader() {}
 
-        static BinaryMessageHeader parsing(const Byte *buff, std::size_t len);
+        static BinaryMessageHeader parsing(const Byte *buffer, std::size_t len);
+
+        friend std::ostream &operator<<(std::ostream &os, const BinaryMessageHeader &header) {
+            os << "firSync: " << BaseCast::decTo<16>(header.firSync)
+               << " sedSync: " << BaseCast::decTo<16>(header.sedSync)
+               << " trdSync: " << BaseCast::decTo<16>(header.trdSync)
+               << " headerLength: " << static_cast<unsigned int>(header.headerLength)
+               << " messageID: " << header.messageID
+               << " messageType: " << static_cast<unsigned int>(header.messageType)
+               << " portAddress: " << header.portAddress
+               << " messageLength: " << header.messageLength
+               << " sequence: " << header.sequence
+               << " idleTime: " << static_cast<unsigned int>(header.idleTime)
+               << " timeStatus: " << header.timeStatus
+               << " week: " << header.week << " ms: " << header.ms
+               << " receiverStatus: " << header.receiverStatus
+               << " reserved: " << header.reserved
+               << " receiverVersion: " << header.receiverVersion;
+            return os;
+        }
     };
 
+
+    struct MessageItem {
+    public:
+        BinaryMessageHeader header;
+
+        explicit MessageItem(const BinaryMessageHeader &header);
+
+        virtual void parseMessage(const Byte *buffer, std::size_t len) = 0;
+    };
+
+    struct RANGEMessage : public MessageItem {
+    public:
+        explicit RANGEMessage(const BinaryMessageHeader &header);
+
+    protected:
+        void parseMessage(const Byte *buffer, std::size_t len) override;
+    };
+
+    struct GPSEPHEMMessage : public MessageItem {
+    public:
+        explicit GPSEPHEMMessage(const BinaryMessageHeader &header);
+
+    protected:
+        void parseMessage(const Byte *buffer, std::size_t len) override;
+    };
+
+    struct BDSEPHEMERISMessage : public MessageItem {
+    public:
+        explicit BDSEPHEMERISMessage(const BinaryMessageHeader &header);
+
+    protected:
+        void parseMessage(const Byte *buffer, std::size_t len) override;
+    };
+
+    struct BESTPOSMessage : public MessageItem {
+    public:
+        explicit BESTPOSMessage(const BinaryMessageHeader &header);
+
+    protected:
+        void parseMessage(const Byte *buffer, std::size_t len) override;
+    };
+
+    class NovAtelOEM {
+    private:
+        Byte *buffer;
+        std::size_t bufferSize;
+
+        const static Byte firSync = 0xAA;
+        const static Byte sedSync = 0x44;
+        const static Byte trdSync = 0x12;
+
+    public:
+        explicit NovAtelOEM(const std::string &binFilePath);
+
+        virtual ~NovAtelOEM();
+
+        [[nodiscard]] const Byte *getBuffer() const;
+
+    };
 
 }
 

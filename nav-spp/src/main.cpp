@@ -7,5 +7,9 @@
 
 int main(int argc, char *argv[]) {
     ns_spp::Config::loadConfigure("../config/spp.yaml");
+    ns_spp::NovAtelOEM("../data/202209051200.oem719");
     return 0;
 }
+
+
+
