@@ -134,13 +134,13 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
         BDSEPHEMERIS = 1696,
 
         // Best position
-        BESTPOS = 42,
+        // BESTPOS = 42,
         // Position averaging
         // AVEPOS = 172,
         // PDP filter position
         // PDPPOS = 469,
         // Pseudorange position
-        // PSRPOS = 47
+        PSRPOS = 47
     };
 
     struct MessageHeader {
@@ -209,6 +209,44 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
 
     struct RANGEMessage : public MessageItem {
     public:
+
+        struct Observation {
+            // Satellite PRN number of range measurement
+            UShort PRN;
+            // GLONASS Frequency + 7
+            UShort gloFreq;
+            // Pseudorange measurement (m)
+            Double psr;
+            // Pseudorange measurement standard deviation (m)
+            Float psrSigma;
+            // Carrier phase, in cycles (accumulated Doppler range)
+            Double adr;
+            // Estimated carrier phase standard deviation (cycles)
+            Float adrSigma;
+            // Instantaneous carrier Doppler frequency (Hz)
+            Float dopp;
+            // Carrier to noise density ratio C/No = 10[log10(S/N0)] (dB-Hz)
+            Float C_No;
+            // Number of seconds of continuous tracking (no cycle slipping)
+            Float lockTime;
+            // Tracking status
+            ULong ch_tr_status;
+
+            friend std::ostream &operator<<(std::ostream &os, const Observation &observation) {
+                os << "PRN: " << observation.PRN << " gloFreq: " << observation.gloFreq
+                   << " psr: " << observation.psr << " psrSigma: " << observation.psrSigma
+                   << " adr: " << observation.adr << " adrSigma: " << observation.adrSigma
+                   << " dopp: " << observation.dopp << " C_No: " << observation.C_No
+                   << " lockTime: " << observation.lockTime << " ch_tr_status: " << observation.ch_tr_status;
+                return os;
+            }
+        };
+
+        // Number of observations with information
+        ULong obsNum;
+        std::vector<Observation> obsVec;
+
+    public:
         explicit RANGEMessage(const MessageHeader &header);
 
     protected:
@@ -216,6 +254,93 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
     };
 
     struct GPSEPHEMMessage : public MessageItem {
+    public:
+        struct Ephemeris {
+            // Satellite PRN number
+            ULong PRN;
+            // Time stamp of subframe 1 (s)
+            Double tow;
+            // Health status - a 6-bit health code
+            ULong health;
+            // Issue of ephemeris data 1
+            ULong IODE1;
+            // Issue of ephemeris data 2
+            ULong IODE2;
+            // toe week number (computed from Z count week)
+            ULong week;
+            // Z count week number, This is the week number from subframe 1 of the ephemeris
+            ULong zWeek;
+            // Reference time for ephemeris (s)
+            Double toe;
+            // Semi-major axis (m)
+            Double A;
+            // Mean motion difference (radians/s)
+            Double DeltaN;
+            // Mean anomaly of reference time (radians)
+            Double M_0;
+            // Eccentricity, dimensionless
+            Double ecc;
+            // Argument of perigee (radians)
+            Double omega;
+            // Amplitude of cosine harmonic correction term to the argument of latitude (radians)
+            Double cuc;
+            // Amplitude of sine harmonic correction term to the argument of latitude (radians)
+            Double cus;
+            // Amplitude of cosine harmonic correction term to the orbit radius (m)
+            Double crc;
+            // Amplitude of sine harmonic correction term to the orbit radius (m)
+            Double crs;
+            // Amplitude of cosine harmonic correction term to the angle of inclination (radians)
+            Double cic;
+            // Amplitude of sine harmonic correction term to the angle of inclination (radians)
+            Double cis;
+            // Inclination angle at reference time (radians)
+            Double i_0;
+            // Rate of inclination angle (radians/s)
+            Double i_u0;
+            // Right ascension (radians)
+            Double omega_0;
+            // Rate of right ascension (radians/s)
+            Double omegaDot;
+            // Issue of data clock
+            ULong iodc;
+            // SV clock correction term (s)
+            Double toc;
+            // Estimated group delay difference (s)
+            Double tgd;
+            // Clock aging parameter (s)
+            Double a_f0;
+            // Clock aging parameter (s/s)
+            Double a_f1;
+            // Clock aging parameter (s/s/s)
+            Double a_f2;
+            // Anti-spoofing on: FALSE(0); TRUE(1);
+            Bool AS;
+            // Corrected mean motion (radians/s)
+            Double N;
+            // User Range Accuracy variance (m)^2
+            Double URA;
+
+            friend std::ostream &operator<<(std::ostream &os, const Ephemeris &ephemeris) {
+                os << "PRN: " << ephemeris.PRN << " tow: " << ephemeris.tow
+                   << " health: " << ephemeris.health << " IODE1: " << ephemeris.IODE1
+                   << " IODE2: " << ephemeris.IODE2 << " week: " << ephemeris.week
+                   << " zWeek: " << ephemeris.zWeek << " toe: " << ephemeris.toe
+                   << " A: " << ephemeris.A << " DeltaN: " << ephemeris.DeltaN
+                   << " M_0: " << ephemeris.M_0 << " ecc: " << ephemeris.ecc << " omega: " << ephemeris.omega
+                   << " cuc: " << ephemeris.cuc << " cus: " << ephemeris.cus
+                   << " crc: " << ephemeris.crc << " crs: " << ephemeris.crs
+                   << " cic: " << ephemeris.cic << " cis: " << ephemeris.cis
+                   << " i_0: " << ephemeris.i_0 << " i_u0: " << ephemeris.i_u0
+                   << " omega_0: " << ephemeris.omega_0 << " omegaDot: " << ephemeris.omegaDot
+                   << " iodc: " << ephemeris.iodc << " toc: " << ephemeris.toc
+                   << " tgd: " << ephemeris.tgd << " a_f0: " << ephemeris.a_f0
+                   << " a_f1: " << ephemeris.a_f1 << " a_f2: " << ephemeris.a_f2
+                   << " AS: " << ephemeris.AS << " N: " << ephemeris.N << " URA: " << ephemeris.URA;
+                return os;
+            }
+        } ephem;
+
     public:
         explicit GPSEPHEMMessage(const MessageHeader &header);
 
@@ -225,15 +350,165 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
 
     struct BDSEPHEMERISMessage : public MessageItem {
     public:
+        struct Ephemeris {
+            // ID/ranging code
+            ULong satID;
+            // BeiDou week number
+            ULong week;
+            // User range accuracy (m). This is the evaluated URAI/URA lookup-table value.
+            Double URA;
+            // Autonomous satellite health flag. 0 means broadcasting satellite is good and 1 means not.
+            ULong health;
+            // Equipment group delay differential for the B1 signal (s)
+            Double tgd1;
+            // Equipment group delay differential for the B2 signal (s)
+            Double tgd2;
+            // Age of data, clock
+            ULong AODC;
+            // Reference time of clock parameters (s)
+            ULong toc;
+            // Constant term of clock correction polynomial (s)
+            Double a_0;
+            // Linear term of clock correction polynomial (s/s)
+            Double a_1;
+            // Quadratic term of clock correction polynomial (s/s^2)
+            Double a_2;
+            // Age of data, ephemeris
+            ULong AODE;
+            // Reference time of ephemeris parameters (s)
+            ULong toe;
+            // Square root of semi-major axis (sqrt(m))
+            Double rootA;
+            // Eccentricity (dimensionless)
+            Double ecc;
+            // Argument of perigee (radians)
+            Double omega;
+            // Mean motion difference from computed value (radians/s)
+            Double DeltaN;
+            // Mean anomaly at reference time (radians)
+            Double M_0;
+            // Longitude of ascending node of orbital of plane computed according to reference time (radians)
+            Double Omega_0;
+            // Rate of right ascension (radians/s)
+            Double OmegaDot;
+            // Inclination angle at reference time (radians)
+            Double i_0;
+            // Rate of inclination angle (radians/second)
+            Double IDOT;
+            // Amplitude of cosine harmonic correction term to the argument of latitude (radians)
+            Double cuc;
+            // Amplitude of sine harmonic correction term to the argument of latitude (radians)
+            Double cus;
+            // Amplitude of cosine harmonic correction term to the orbit radius (m)
+            Double crc;
+            // Amplitude of sine harmonic correction term to the orbit radius (m)
+            Double crs;
+            // Amplitude of cosine harmonic correction term to the angle of inclination (radians)
+            Double cic;
+            // Amplitude of sine harmonic correction term to the angle of inclination (radians)
+            Double cis;
+
+            friend std::ostream &operator<<(std::ostream &os, const Ephemeris &ephemeris) {
+                os << "satID: " << ephemeris.satID << " week: " << ephemeris.week
+                   << " URA: " << ephemeris.URA << " health: " << ephemeris.health
+                   << " tgd1: " << ephemeris.tgd1 << " tgd2: " << ephemeris.tgd2
+                   << " AODC: " << ephemeris.AODC << " toc: " << ephemeris.toc
+                   << " a_0: " << ephemeris.a_0 << " a_1: " << ephemeris.a_1
+                   << " a_2: " << ephemeris.a_2 << " AODE: " << ephemeris.AODE
+                   << " toe: " << ephemeris.toe << " rootA: " << ephemeris.rootA
+                   << " ecc: " << ephemeris.ecc << " omega: " << ephemeris.omega
+                   << " DeltaN: " << ephemeris.DeltaN << " M_0: " << ephemeris.M_0
+                   << " Omega_0: " << ephemeris.Omega_0 << " OmegaDot: " << ephemeris.OmegaDot
+                   << " i_0: " << ephemeris.i_0 << " IDOT: " << ephemeris.IDOT
+                   << " cuc: " << ephemeris.cuc << " cus: " << ephemeris.cus
+                   << " crc: " << ephemeris.crc << " crs: " << ephemeris.crs
+                   << " cic: " << ephemeris.cic << " cis: " << ephemeris.cis;
+                return os;
+            }
+        } ephem;
+
+    public:
         explicit BDSEPHEMERISMessage(const MessageHeader &header);
 
     protected:
         void parseMessage(const Byte *buffer, std::size_t len) override;
     };
 
-    struct BESTPOSMessage : public MessageItem {
+    struct PSRPOSMessage : public MessageItem {
     public:
-        explicit BESTPOSMessage(const MessageHeader &header);
+        struct PSRPOS {
+            // Solution status
+            ULong solStatus;
+            // Position type
+            ULong posType;
+            // Latitude (degrees)
+            Double lat;
+            // Longitude (degrees)
+            Double lon;
+            // Height above mean sea level (m)
+            Double height;
+            // Undulation - the relationship between the geoid and the WGS84 ellipsoid (m) 1
+            Float undulation;
+            // Datum ID number: WGS84(61); USER(63)
+            ULong datumID;
+            // Latitude standard deviation (m)
+            Float latSigma;
+            // Longitude standard deviation (m)
+            Float lonSigma;
+            // Height standard deviation (m)
+            Float heightSigma;
+            // Base station ID
+            Char stnID[4];
+            // Differential age in seconds
+            Float diffAge;
+            // Solution age in seconds
+            Float solAge;
+            // Number of satellites tracked
+            UChar SVs;
+            // Number of satellites used in solution
+            UChar solnSvs;
+
+            struct Reserved {
+                UChar field0;
+                UChar field1;
+                Byte field2;
+
+                friend std::ostream &operator<<(std::ostream &os, const Reserved &reserved) {
+                    os << "field0: " << static_cast<unsigned int>(reserved.field0)
+                       << " field1: " << static_cast<unsigned int>(reserved.field1)
+                       << " field2: " << BaseCast::decTo<16>(reserved.field2);
+                    return os;
+                }
+            } reserved;
+
+            // Extended solution status
+            Byte EXT_SOL_STATUS;
+            // Galileo and BeiDou signals used mask
+            Byte GALILEO_BEIDOU_SIG_MASK;
+            // GPS and GLONASS signals used mask
+            Byte GPS_GLONASS_SIG_MASK;
+
+            friend std::ostream &operator<<(std::ostream &os, const PSRPOS &psrpos) {
+                os << "solStatus: " << psrpos.solStatus << " posType: " << psrpos.posType
+                   << " lat: " << psrpos.lat << " lon: " << psrpos.lon << " height: " << psrpos.height
+                   << " undulation: " << psrpos.undulation << " datumID: " << psrpos.datumID
+                   << " latSigma: " << psrpos.latSigma << " lonSigma: " << psrpos.lonSigma
+                   << " heightSigma: " << psrpos.heightSigma
+                   << " stnID: " << static_cast<int>(psrpos.stnID[0]) << ':' << static_cast<int>(psrpos.stnID[1])
+                   << ':' << static_cast<int>(psrpos.stnID[2]) << ':' << static_cast<int>(psrpos.stnID[3])
+                   << " diffAge: " << psrpos.diffAge << " solAge: " << psrpos.solAge
+                   << " SVs: " << static_cast<unsigned int>(psrpos.SVs)
+                   << " solnSvs: " << static_cast<unsigned int>(psrpos.solnSvs)
+                   << " reserved: " << psrpos.reserved
+                   << " EXT_SOL_STATUS: " << BaseCast::decTo<16>(psrpos.EXT_SOL_STATUS)
+                   << " GALILEO_BEIDOU_SIG_MASK: " << BaseCast::decTo<16>(psrpos.GALILEO_BEIDOU_SIG_MASK)
+                   << " GPS_GLONASS_SIG_MASK: " << BaseCast::decTo<16>(psrpos.GPS_GLONASS_SIG_MASK);
+                return os;
+            }
+        } psrpos;
+
+    public:
+        explicit PSRPOSMessage(const MessageHeader &header);
 
     protected:
         void parseMessage(const Byte *buffer, std::size_t len) override;

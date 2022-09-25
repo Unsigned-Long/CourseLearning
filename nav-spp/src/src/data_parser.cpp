@@ -69,7 +69,7 @@ ns_spp::MessageItem::tryParseMessage(const ns_spp::Byte *buffer,
     MessageHeader header = MessageHeader::parsing(buffer, buffer[3]);
 
     auto dataSize = header.headerLength + header.messageLength;
-    LOG_VAR(header);
+
     if (bytesUsed != nullptr) {
         *bytesUsed = dataSize + 4;
     }
@@ -83,17 +83,22 @@ ns_spp::MessageItem::tryParseMessage(const ns_spp::Byte *buffer,
     switch (header.messageID) {
         case RANGE:
             messageItem = std::make_shared<RANGEMessage>(header);
+            LOG_VAR("--RANGE--");
             break;
         case GPSEPHEM:
             messageItem = std::make_shared<GPSEPHEMMessage>(header);
+            LOG_VAR("--GPSEPHEM--");
             break;
         case BDSEPHEMERIS:
             messageItem = std::make_shared<BDSEPHEMERISMessage>(header);
+            LOG_VAR("--BDSEPHEMERIS--");
             break;
-        case BESTPOS:
-            messageItem = std::make_shared<BESTPOSMessage>(header);
+        case PSRPOS:
+            messageItem = std::make_shared<PSRPOSMessage>(header);
+            LOG_VAR("--PSRPOS--");
             break;
         default:
+            LOG_VAR("Unknown");
             break;
     }
     if (messageItem != nullptr) {
@@ -113,7 +118,22 @@ ns_spp::RANGEMessage::RANGEMessage(const ns_spp::MessageHeader &header)
         : MessageItem(header) {}
 
 void ns_spp::RANGEMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
-
+    using namespace ns_spp;
+    this->obsNum = BufferHelper::fromByte<ULong>(buffer);
+    this->obsVec.resize(this->obsNum);
+    for (int i = 0; i < obsNum; ++i) {
+        auto &obs = this->obsVec[i];
+        obs.PRN = BufferHelper::fromByte<UShort>(buffer + i * 44 + 4);
+        obs.gloFreq = BufferHelper::fromByte<UShort>(buffer + i * 44 + 6);
+        obs.psr = BufferHelper::fromByte<Double>(buffer + i * 44 + 8);
+        obs.psrSigma = BufferHelper::fromByte<Float>(buffer + i * 44 + 16);
+        obs.adr = BufferHelper::fromByte<Double>(buffer + i * 44 + 20);
+        obs.adrSigma = BufferHelper::fromByte<Float>(buffer + i * 44 + 28);
+        obs.dopp = BufferHelper::fromByte<Float>(buffer + i * 44 + 32);
+        obs.C_No = BufferHelper::fromByte<Float>(buffer + i * 44 + 36);
+        obs.lockTime = BufferHelper::fromByte<Float>(buffer + i * 44 + 40);
+        obs.ch_tr_status = BufferHelper::fromByte<ULong>(buffer + i * 44 + 44);
+    }
 }
 
 /*
@@ -123,7 +143,50 @@ ns_spp::GPSEPHEMMessage::GPSEPHEMMessage(const ns_spp::MessageHeader &header)
         : MessageItem(header) {}
 
 void ns_spp::GPSEPHEMMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
+    this->ephem.PRN = BufferHelper::fromByte<ULong>(buffer);
+    this->ephem.tow = BufferHelper::fromByte<Double>(buffer + 4);
+    this->ephem.health = BufferHelper::fromByte<ULong>(buffer + 12);
 
+    this->ephem.IODE1 = BufferHelper::fromByte<ULong>(buffer + 16);
+    this->ephem.IODE2 = BufferHelper::fromByte<ULong>(buffer + 20);
+
+    this->ephem.week = BufferHelper::fromByte<ULong>(buffer + 24);
+    this->ephem.zWeek = BufferHelper::fromByte<ULong>(buffer + 28);
+
+    this->ephem.toe = BufferHelper::fromByte<Double>(buffer + 32);
+    this->ephem.A = BufferHelper::fromByte<Double>(buffer + 40);
+    this->ephem.DeltaN = BufferHelper::fromByte<Double>(buffer + 48);
+    this->ephem.M_0 = BufferHelper::fromByte<Double>(buffer + 56);
+    this->ephem.ecc = BufferHelper::fromByte<Double>(buffer + 64);
+    this->ephem.omega = BufferHelper::fromByte<Double>(buffer + 72);
+
+    this->ephem.cuc = BufferHelper::fromByte<Double>(buffer + 80);
+    this->ephem.cus = BufferHelper::fromByte<Double>(buffer + 88);
+
+    this->ephem.crc = BufferHelper::fromByte<Double>(buffer + 96);
+    this->ephem.crs = BufferHelper::fromByte<Double>(buffer + 104);
+
+    this->ephem.cic = BufferHelper::fromByte<Double>(buffer + 112);
+    this->ephem.cis = BufferHelper::fromByte<Double>(buffer + 120);
+
+    this->ephem.i_0 = BufferHelper::fromByte<Double>(buffer + 128);
+    this->ephem.i_u0 = BufferHelper::fromByte<Double>(buffer + 136);
+
+    this->ephem.omega_0 = BufferHelper::fromByte<Double>(buffer + 144);
+    this->ephem.omegaDot = BufferHelper::fromByte<Double>(buffer + 152);
+
+    this->ephem.iodc = BufferHelper::fromByte<ULong>(buffer + 160);
+
+    this->ephem.toc = BufferHelper::fromByte<Double>(buffer + 164);
+    this->ephem.tgd = BufferHelper::fromByte<Double>(buffer + 172);
+
+    this->ephem.a_f0 = BufferHelper::fromByte<Double>(buffer + 180);
+    this->ephem.a_f1 = BufferHelper::fromByte<Double>(buffer + 188);
+    this->ephem.a_f2 = BufferHelper::fromByte<Double>(buffer + 196);
+
+    this->ephem.AS = BufferHelper::fromByte<Bool>(buffer + 204);
+    this->ephem.N = BufferHelper::fromByte<Double>(buffer + 208);
+    this->ephem.URA = BufferHelper::fromByte<Double>(buffer + 216);
 }
 
 /*
@@ -133,16 +196,84 @@ ns_spp::BDSEPHEMERISMessage::BDSEPHEMERISMessage(const ns_spp::MessageHeader &he
         : MessageItem(header) {}
 
 void ns_spp::BDSEPHEMERISMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
+    this->ephem.satID = BufferHelper::fromByte<ULong>(buffer);
+    this->ephem.week = BufferHelper::fromByte<ULong>(buffer + 4);
+    this->ephem.URA = BufferHelper::fromByte<Double>(buffer + 8);
+    this->ephem.health = BufferHelper::fromByte<ULong>(buffer + 16);
 
+    this->ephem.tgd1 = BufferHelper::fromByte<Double>(buffer + 20);
+    this->ephem.tgd2 = BufferHelper::fromByte<Double>(buffer + 28);
+
+    this->ephem.AODC = BufferHelper::fromByte<ULong>(buffer + 36);
+    this->ephem.toc = BufferHelper::fromByte<ULong>(buffer + 40);
+
+    this->ephem.a_0 = BufferHelper::fromByte<Double>(buffer + 44);
+    this->ephem.a_1 = BufferHelper::fromByte<Double>(buffer + 52);
+    this->ephem.a_2 = BufferHelper::fromByte<Double>(buffer + 60);
+
+    this->ephem.AODE = BufferHelper::fromByte<ULong>(buffer + 68);
+    this->ephem.toe = BufferHelper::fromByte<ULong>(buffer + 72);
+
+    this->ephem.rootA = BufferHelper::fromByte<Double>(buffer + 76);
+    this->ephem.ecc = BufferHelper::fromByte<Double>(buffer + 84);
+    this->ephem.omega = BufferHelper::fromByte<Double>(buffer + 92);
+    this->ephem.DeltaN = BufferHelper::fromByte<Double>(buffer + 100);
+    this->ephem.M_0 = BufferHelper::fromByte<Double>(buffer + 108);
+
+    this->ephem.Omega_0 = BufferHelper::fromByte<Double>(buffer + 116);
+    this->ephem.OmegaDot = BufferHelper::fromByte<Double>(buffer + 124);
+
+    this->ephem.i_0 = BufferHelper::fromByte<Double>(buffer + 132);
+    this->ephem.IDOT = BufferHelper::fromByte<Double>(buffer + 140);
+
+    this->ephem.cuc = BufferHelper::fromByte<Double>(buffer + 148);
+    this->ephem.cus = BufferHelper::fromByte<Double>(buffer + 156);
+
+    this->ephem.crc = BufferHelper::fromByte<Double>(buffer + 164);
+    this->ephem.crs = BufferHelper::fromByte<Double>(buffer + 172);
+
+    this->ephem.cic = BufferHelper::fromByte<Double>(buffer + 180);
+    this->ephem.cis = BufferHelper::fromByte<Double>(buffer + 188);
 }
 
 /*
- * BESTPOSMessage
+ * PSRPOSMessage
  */
-ns_spp::BESTPOSMessage::BESTPOSMessage(const ns_spp::MessageHeader &header)
+ns_spp::PSRPOSMessage::PSRPOSMessage(const ns_spp::MessageHeader &header)
         : MessageItem(header) {}
 
-void ns_spp::BESTPOSMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
+void ns_spp::PSRPOSMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t len) {
+    this->psrpos.solStatus = BufferHelper::fromByte<ULong>(buffer);
+    this->psrpos.posType = BufferHelper::fromByte<ULong>(buffer + 4);
+
+    this->psrpos.lat = BufferHelper::fromByte<Double>(buffer + 8);
+    this->psrpos.lon = BufferHelper::fromByte<Double>(buffer + 16);
+    this->psrpos.height = BufferHelper::fromByte<Double>(buffer + 24);
+
+    this->psrpos.undulation = BufferHelper::fromByte<Float>(buffer + 32);
+    this->psrpos.datumID = BufferHelper::fromByte<ULong>(buffer + 36);
+
+    this->psrpos.latSigma = BufferHelper::fromByte<Float>(buffer + 40);
+    this->psrpos.lonSigma = BufferHelper::fromByte<Float>(buffer + 44);
+    this->psrpos.heightSigma = BufferHelper::fromByte<Float>(buffer + 48);
+
+    this->psrpos.stnID[0] = BufferHelper::fromByte<Char>(buffer + 52);
+    this->psrpos.stnID[1] = BufferHelper::fromByte<Char>(buffer + 53);
+    this->psrpos.stnID[2] = BufferHelper::fromByte<Char>(buffer + 54);
+    this->psrpos.stnID[3] = BufferHelper::fromByte<Char>(buffer + 55);
+
+    this->psrpos.diffAge = BufferHelper::fromByte<Float>(buffer + 56);
+    this->psrpos.solAge = BufferHelper::fromByte<Float>(buffer + 60);
+
+    this->psrpos.SVs = BufferHelper::fromByte<UChar>(buffer + 64);
+    this->psrpos.solnSvs = BufferHelper::fromByte<UChar>(buffer + 65);
+
+    this->psrpos.reserved.field0 = BufferHelper::fromByte<UChar>(buffer + 66);
+    this->psrpos.reserved.field1 = BufferHelper::fromByte<UChar>(buffer + 67);
+    this->psrpos.reserved.field2 = BufferHelper::fromByte<Byte>(buffer + 68);
+
+    this->psrpos.EXT_SOL_STATUS = BufferHelper::fromByte<Byte>(buffer + 69);
+    this->psrpos.GALILEO_BEIDOU_SIG_MASK = BufferHelper::fromByte<Byte>(buffer + 70);
+    this->psrpos.GPS_GLONASS_SIG_MASK = BufferHelper::fromByte<Byte>(buffer + 71);
 
 }
-

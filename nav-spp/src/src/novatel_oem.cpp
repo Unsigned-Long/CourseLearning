@@ -18,12 +18,12 @@ ns_spp::NovAtelOEMFileHandler::NovAtelOEMFileHandler(const std::string &binFileP
     using namespace ns_spp;
     this->bufferSize = BufferHelper::readBuffer(&this->buffer, binFilePath);
 
-    for (int i = 0; i != bufferSize - 3;) {
+    for (int i = 0; i < bufferSize - 3;) {
         LOG_VAR(i);
         if (buffer[i + 0] == MessageHeader::firSync &&
             buffer[i + 1] == MessageHeader::sedSync &&
             buffer[i + 2] == MessageHeader::trdSync) {
-            std::size_t byteUsed;
+            std::size_t byteUsed = 1;
             auto messageItem = MessageItem::tryParseMessage(buffer + i, &byteUsed);
             if (messageItem != nullptr) {
                 this->msgVector.push_back(messageItem);
@@ -32,6 +32,5 @@ ns_spp::NovAtelOEMFileHandler::NovAtelOEMFileHandler(const std::string &binFileP
         } else {
             ++i;
         }
-        std::cin.get();
     }
 }
