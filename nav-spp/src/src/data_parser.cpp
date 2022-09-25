@@ -325,6 +325,7 @@ ns_spp::ChannelTrackingStatus::ChannelTrackingStatus(ns_spp::ULong data) : data(
 
     val = (data >> 31);
     this->channelAssignment = EnumCast::integerToEnum<ChannelAssignmentFlag>(val);
+
 }
 
 ns_spp::ChannelTrackingStatus::ChannelTrackingStatus() {}

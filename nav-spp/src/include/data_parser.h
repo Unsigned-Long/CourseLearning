@@ -210,58 +210,58 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
     struct ChannelTrackingStatus {
     public:
         enum class TrackingState {
-            Idle = 0,
-            SkySearch,
-            WideFrequencyBandPullIn,
-            NarrowFrequencyBBandPullIn,
-            PhaseLockLoop,
-            ChannelSteering = 6,
-            FrequencyLockLoop,
-            ChannelAlignment = 9,
-            CodeSearch,
-            AidedPhaseLockLoop,
-            SidePeakDetection = 23,
-            FFTSkySearch
+            IDLE = 0,
+            SKY_SEARCH,
+            WIDE_FREQUENCY_BAND_PULL_IN,
+            NARROW_FREQUENCY_BAND_PULL_IN,
+            PHASE_LOCK_LOOP,
+            CHANNEL_STEERING = 6,
+            FREQUENCY_LOCK_LOOP,
+            CHANNEL_ALIGNMENT = 9,
+            CODE_SEARCH,
+            AIDED_PHASE_LOCK_LOOP,
+            SIDE_PEAK_DETECTION = 23,
+            FFT_SKY_SEARCH
         };
         enum class LockFlag {
-            NotLocked = 0,
-            Locked
+            NOT_LOCKED = 0,
+            LOCKED
         };
         enum class KnownFlag {
-            NotKnown = 0,
-            Known
+            NOT_KNOWN = 0,
+            KNOWN
         };
         enum class CorrelatorType {
             NA = 0,
 
             // spacing = 1 chip
-            StandardCorrelator,
+            STANDARD_CORRELATOR,
 
             // spacing < 1 chip
-            NarrowCorrelator,
+            NARROW_CORRELATOR,
             NONE_1,
             // Pulse Aperture Correlator
             PAC,
-            NarrowPAC,
+            NARROW_PAC,
             NONE_2
         };
         enum class SatSystem {
-            GPS = 0, GLONASS, SBAS, Galileo, BeiDou, QZSS, NavIC, Other
+            GPS = 0, GLONASS, SBAS, GALILEO, BEI_DOU, QZSS, NAV_IC, OTHER
         };
         enum class GroupingFlag {
-            NotGrouped = 0, Grouped
+            NOT_GROUPED = 0, GROUPED
         };
         enum class PrimaryFlag {
-            NotPrimary = 0, Primary
+            NOT_PRIMARY = 0, PRIMARY
         };
         enum class CarrierPhaseHalfCycleFlag {
-            NotAdded = 0, Added
+            NOT_ADDED = 0, ADDED
         };
         enum class DigitalFilteringFlag {
-            NoDigitalFilter = 0, DigitalFilter
+            NO_DIGITAL_FILTER = 0, DIGITAL_FILTER
         };
         enum class ChannelAssignmentFlag {
-            Automatic = 0, Forced
+            AUTOMATIC = 0, FORCED
         };
     public:
         ULong data;
