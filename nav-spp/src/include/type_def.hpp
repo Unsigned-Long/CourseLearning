@@ -21,6 +21,7 @@ namespace ns_spp {
     using Double = double;
     using Float = float;
     using String = std::string;
+    using Bool = int;
 }
 
 #endif //SPP_TYPE_DEF_HPP
