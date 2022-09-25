@@ -19,7 +19,6 @@ ns_spp::NovAtelOEMFileHandler::NovAtelOEMFileHandler(const std::string &binFileP
     this->bufferSize = BufferHelper::readBuffer(&this->buffer, binFilePath);
 
     for (int i = 0; i < bufferSize - 3;) {
-        LOG_VAR(i);
         if (buffer[i + 0] == MessageHeader::firSync &&
             buffer[i + 1] == MessageHeader::sedSync &&
             buffer[i + 2] == MessageHeader::trdSync) {

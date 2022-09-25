@@ -278,9 +278,7 @@ void ns_spp::PSRPOSMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t
     this->psrpos.EXT_SOL_STATUS = BufferHelper::fromByte<Byte>(buffer + 69);
     this->psrpos.GALILEO_BEIDOU_SIG_MASK = BufferHelper::fromByte<Byte>(buffer + 70);
     this->psrpos.GPS_GLONASS_SIG_MASK = BufferHelper::fromByte<Byte>(buffer + 71);
-
 }
-
 
 ns_spp::ChannelTrackingStatus::ChannelTrackingStatus(ns_spp::ULong data) : data(data) {
     auto val = (data << 27) >> 27;
@@ -325,7 +323,6 @@ ns_spp::ChannelTrackingStatus::ChannelTrackingStatus(ns_spp::ULong data) : data(
 
     val = (data >> 31);
     this->channelAssignment = EnumCast::integerToEnum<ChannelAssignmentFlag>(val);
-
 }
 
 ns_spp::ChannelTrackingStatus::ChannelTrackingStatus() {}
