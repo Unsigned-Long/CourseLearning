@@ -207,6 +207,105 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
 
     };
 
+    struct ChannelTrackingStatus {
+    public:
+        enum class TrackingState {
+            Idle = 0,
+            SkySearch,
+            WideFrequencyBandPullIn,
+            NarrowFrequencyBBandPullIn,
+            PhaseLockLoop,
+            ChannelSteering = 6,
+            FrequencyLockLoop,
+            ChannelAlignment = 9,
+            CodeSearch,
+            AidedPhaseLockLoop,
+            SidePeakDetection = 23,
+            FFTSkySearch
+        };
+        enum class LockFlag {
+            NotLocked = 0,
+            Locked
+        };
+        enum class KnownFlag {
+            NotKnown = 0,
+            Known
+        };
+        enum class CorrelatorType {
+            NA = 0,
+
+            // spacing = 1 chip
+            StandardCorrelator,
+
+            // spacing < 1 chip
+            NarrowCorrelator,
+            NONE_1,
+            // Pulse Aperture Correlator
+            PAC,
+            NarrowPAC,
+            NONE_2
+        };
+        enum class SatSystem {
+            GPS = 0, GLONASS, SBAS, Galileo, BeiDou, QZSS, NavIC, Other
+        };
+        enum class GroupingFlag {
+            NotGrouped = 0, Grouped
+        };
+        enum class PrimaryFlag {
+            NotPrimary = 0, Primary
+        };
+        enum class CarrierPhaseHalfCycleFlag {
+            NotAdded = 0, Added
+        };
+        enum class DigitalFilteringFlag {
+            NoDigitalFilter = 0, DigitalFilter
+        };
+        enum class ChannelAssignmentFlag {
+            Automatic = 0, Forced
+        };
+    public:
+        ULong data;
+
+        TrackingState trackingState;
+        UShort SVChannelNumber;
+        LockFlag phaseLock;
+        KnownFlag parityKnown;
+        LockFlag codeLock;
+        CorrelatorType correlatorType;
+        SatSystem satSystem;
+
+        GroupingFlag grouping;
+        UShort signalType;
+        PrimaryFlag primaryL1Channel;
+        CarrierPhaseHalfCycleFlag carrierPhaseHalfCycle;
+        DigitalFilteringFlag digitalFiltering;
+        LockFlag PRNLock;
+        ChannelAssignmentFlag channelAssignment;
+
+        ChannelTrackingStatus();
+
+        ChannelTrackingStatus(ULong data);
+
+        friend std::ostream &operator<<(std::ostream &os, const ChannelTrackingStatus &status) {
+            os << "data: " << status.data
+               << " trackingState: " << EnumCast::enumToString(status.trackingState)
+               << " SVChannelNumber: " << status.SVChannelNumber
+               << " phaseLock: " << EnumCast::enumToString(status.phaseLock)
+               << " parityKnown: " << EnumCast::enumToString(status.parityKnown)
+               << " codeLock: " << EnumCast::enumToString(status.codeLock)
+               << " correlatorType: " << EnumCast::enumToString(status.correlatorType)
+               << " satSystem: " << EnumCast::enumToString(status.satSystem)
+               << " grouping: " << EnumCast::enumToString(status.grouping)
+               << " signalType: " << status.signalType
+               << " primaryL1Channel: " << EnumCast::enumToString(status.primaryL1Channel)
+               << " carrierPhaseHalfCycle: " << EnumCast::enumToString(status.carrierPhaseHalfCycle)
+               << " digitalFiltering: " << EnumCast::enumToString(status.digitalFiltering)
+               << " PRNLock: " << EnumCast::enumToString(status.PRNLock)
+               << " channelAssignment: " << EnumCast::enumToString(status.channelAssignment);
+            return os;
+        }
+    };
+
     struct RANGEMessage : public MessageItem {
     public:
 
@@ -230,14 +329,14 @@ BOOST_PP_SEQ_ENUM(SEQ_WITH_TAIL_WITHOUT_ZERO(count, name, tail))
             // Number of seconds of continuous tracking (no cycle slipping)
             Float lockTime;
             // Tracking status
-            ULong ch_tr_status;
+            ChannelTrackingStatus channelTrackingStatus;
 
             friend std::ostream &operator<<(std::ostream &os, const Observation &observation) {
                 os << "PRN: " << observation.PRN << " gloFreq: " << observation.gloFreq
                    << " psr: " << observation.psr << " psrSigma: " << observation.psrSigma
                    << " adr: " << observation.adr << " adrSigma: " << observation.adrSigma
                    << " dopp: " << observation.dopp << " C_No: " << observation.C_No
-                   << " lockTime: " << observation.lockTime << " ch_tr_status: " << observation.ch_tr_status;
+                   << " lockTime: " << observation.lockTime << " ch_tr_status: " << observation.channelTrackingStatus;
                 return os;
             }
         };

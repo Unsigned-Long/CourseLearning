@@ -5,6 +5,7 @@
 #include "fstream"
 #include "artwork/logger/logger.h"
 #include "utils/buffer.hpp"
+#include "bitset"
 
 unsigned int ns_spp::CRC32::calBuffCRC32(const ns_spp::Byte *buff, std::size_t len) {
     int i, j;
@@ -132,7 +133,9 @@ void ns_spp::RANGEMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t 
         obs.dopp = BufferHelper::fromByte<Float>(buffer + i * 44 + 32);
         obs.C_No = BufferHelper::fromByte<Float>(buffer + i * 44 + 36);
         obs.lockTime = BufferHelper::fromByte<Float>(buffer + i * 44 + 40);
-        obs.ch_tr_status = BufferHelper::fromByte<ULong>(buffer + i * 44 + 44);
+        obs.channelTrackingStatus = ChannelTrackingStatus(
+                BufferHelper::fromByte<ULong>(buffer + i * 44 + 44)
+        );
     }
 }
 
@@ -277,3 +280,51 @@ void ns_spp::PSRPOSMessage::parseMessage(const ns_spp::Byte *buffer, std::size_t
     this->psrpos.GPS_GLONASS_SIG_MASK = BufferHelper::fromByte<Byte>(buffer + 71);
 
 }
+
+
+ns_spp::ChannelTrackingStatus::ChannelTrackingStatus(ns_spp::ULong data) : data(data) {
+    auto val = (data << 27) >> 27;
+
+    this->trackingState = EnumCast::integerToEnum<TrackingState>(val);
+
+    val = ((data << 22) >> 27);
+    this->SVChannelNumber = val;
+
+    val = ((data << 21) >> 31);
+    this->phaseLock = EnumCast::integerToEnum<LockFlag>(val);
+
+    val = ((data << 20) >> 31);
+    this->parityKnown = EnumCast::integerToEnum<KnownFlag>(val);
+
+    val = ((data << 19) >> 31);
+    this->codeLock = EnumCast::integerToEnum<LockFlag>(val);
+
+    val = ((data << 16) >> 29);
+    this->correlatorType = EnumCast::integerToEnum<CorrelatorType>(val);
+
+    val = ((data << 13) >> 29);
+    this->satSystem = EnumCast::integerToEnum<SatSystem>(val);
+
+    val = ((data << 11) >> 31);
+    this->grouping = EnumCast::integerToEnum<GroupingFlag>(val);
+
+    val = ((data << 6) >> 27);
+    this->signalType = val;
+
+    val = ((data << 4) >> 31);
+    this->primaryL1Channel = EnumCast::integerToEnum<PrimaryFlag>(val);
+
+    val = ((data << 3) >> 31);
+    this->phaseLock = EnumCast::integerToEnum<LockFlag>(val);
+
+    val = ((data << 2) >> 31);
+    this->digitalFiltering = EnumCast::integerToEnum<DigitalFilteringFlag>(val);
+
+    val = ((data << 1) >> 31);
+    this->PRNLock = EnumCast::integerToEnum<LockFlag>(val);
+
+    val = (data >> 31);
+    this->channelAssignment = EnumCast::integerToEnum<ChannelAssignmentFlag>(val);
+}
+
+ns_spp::ChannelTrackingStatus::ChannelTrackingStatus() {}
